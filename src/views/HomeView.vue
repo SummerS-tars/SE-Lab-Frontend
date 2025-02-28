@@ -1,25 +1,24 @@
 <script setup>
-import { addv1,getv1 } from "@/request/api.js"
-import {ref, onMounted} from "vue"
+import { addv1,getv1 } from '@/request/api.js';
+import {ref, onMounted} from 'vue';
 
-let v1=ref(0)
+let v1=ref(0);
 
 onMounted(()=>{
-  reflesh()
-})
+  reflesh();
+});
 
 const add=()=>{
-  addv1()
-  getv1().then(res=>{
-    v1.value=res.value
-  })
-}
+  addv1().then(res=>{
+    v1.value=res.value;
+  });
+};
 
 const reflesh=()=>{
   getv1().then(res=>{
-    v1.value=res.value
-  })
-}
+    v1.value=res.value;
+  });
+};
 
 </script>
 
