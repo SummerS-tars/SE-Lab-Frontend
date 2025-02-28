@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const request = axios.create({
     baseURL: '',
@@ -7,17 +7,17 @@ const request = axios.create({
     headers: {
         'Content-Type': 'application/json',
 
-    }
-})
+    },
+});
 request.defaults.withCredentials = true;
 
 
 request.interceptors.response.use(
     response => {
-        return response.data
+        return response.data;
     },
     error => {
-        return Promise.reject(error)
-    }
-)
+        return Promise.reject(error);
+    },
+);
 export default request
