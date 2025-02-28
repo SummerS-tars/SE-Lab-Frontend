@@ -30,8 +30,8 @@ export default defineConfig({
     strictPort: false,
     /** 接口代理 */
     proxy: {
-        "/api/": {
-            target: "http://127.0.0.1:4523/m1/5923172-5610251-default/",
+        '/api/': {
+            target: 'http://127.0.0.1:4523/m1/5923172-5610251-default/',
             // target: "http://127.0.0.1:8080/",
             ws: true,
             /** 是否允许跨域 */
