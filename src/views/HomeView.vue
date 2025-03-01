@@ -5,7 +5,7 @@ import {ref, onMounted} from 'vue';
 let v1=ref(0);
 
 onMounted(()=>{
-  reflesh();
+  refresh();
 });
 
 const add=()=>{
@@ -14,7 +14,7 @@ const add=()=>{
   });
 };
 
-const reflesh=()=>{
+const refresh=()=>{
   getv1().then(res=>{
     v1.value=res.value;
   });
@@ -28,7 +28,7 @@ const reflesh=()=>{
         <div class="background">
           <p>{{ v1 }}</p>
           <button @click="add()">Add</button>
-          <button @click="reflesh()">Refresh</button>
+          <button @click="refresh()">Refresh</button>
         </div>
       </div>
   </main>
