@@ -3,9 +3,8 @@
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import request from '@/request/http';
-import { useTokenStore } from '@/stores/token';
-
-const tokenStore = useTokenStore();
+import { useUserStore } from '@/stores/user';
+import router from '@/router';
 
 const ruleFormRef = ref();
 
@@ -44,7 +43,8 @@ const submitForm = (formEl) => {
 			let res=await request.post("/api/login", ruleForm);
 			if(res.message=='success'){
 				ElMessage.success('登录成功')
-				useTokenStore().setToken(res.token);
+				useUserStore().setToken(res.token);
+				useUserStore().setUsername(ruleForm.username);
 				await router.push('/');
 			}
 			else{

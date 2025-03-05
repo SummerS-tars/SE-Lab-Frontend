@@ -1,6 +1,9 @@
 <script setup>
-import { useTokenStore } from '@/stores/token';
+
+import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
+import request from '@/request/http';
+import { useUserStore } from '@/stores/user';
 
 const ruleFormRef = ref();
 
@@ -45,7 +48,8 @@ const submitForm = (formEl) => {
 			let res=await request.post("/api/register", ruleForm);
 			if(res.message=='success'){
 				ElMessage.success('注册成功')
-				useTokenStore().setToken(res.token);
+				useUserStore().setToken(res.token);
+				useUserStore().setUsername(ruleForm.username);
 				await router.push('/');
 			}
 			else{

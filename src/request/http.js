@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 
 const request = axios.create({
@@ -11,6 +12,18 @@ const request = axios.create({
 });
 request.defaults.withCredentials = true;
 
+request.interceptors.request.use(
+    config =>{
+        const token= useUserStore().token;
+        if(token){
+            config.headers['Authorization']=`Bearer ${token}`;
+        }
+        return config;
+    },
+    error =>{
+        return Promise.reject(error);
+    }
+)
 
 request.interceptors.response.use(
     response => {
