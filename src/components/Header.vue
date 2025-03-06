@@ -4,6 +4,9 @@ import { User, Setting} from '@element-plus/icons-vue';
 import { useUserStore } from '@/stores/user';
 import request from '@/request/http';
 import router from '@/router';
+import { nextTick, ref, watch } from 'vue';
+import Cherry from 'cherry-markdown';
+import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 
 const logout = () =>{
 	request.post("/api/logout").then(res=>{
@@ -18,6 +21,8 @@ const logout = () =>{
 		}
 	});
 };
+
+const EditBox = ref();
 
 </script>
 
@@ -36,34 +41,41 @@ const logout = () =>{
 			</div>
 		</template>
 		<template v-else>
-			<div>
-				<el-popover :width="80"
-				popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
-				>
-					<template #reference>
-						<div style="font-weight: bold; font-size: 24px; margin-right: 40px;">
-							Hello,
-							<router-link to="/user" class="nav-user">
-								{{ useUserStore().username }}
-							</router-link>
-						</div>
-					</template>
-					<el-form style="text-align: center;">
-						<div style="margin-bottom: 10px;padding-bottom:5px;border-bottom: 1px; border-style: solid;">
-							<el-text style="font-size: 20px;">{{ useUserStore().username }}</el-text>
-							<hr style="border-bottom: 1px; border-style: solid; padding-bottom: 10px;"/>
-							<br/>
-							<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/user">
-								<el-icon><User/></el-icon>个人主页
-							</el-link>
-							<br/>
-							<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/user/setting">
-								<el-icon><Setting/></el-icon>个人设置
-							</el-link>
-						</div>
-						<el-button type="info" @click="logout" style="width:100% ">登出</el-button>
-					</el-form>
-				</el-popover>
+			<div style="align-items:center; display: flex;">
+				<span style="margin-right: 30px;">
+					<el-button type="primary" round @click="EditBox.open()">提问</el-button>
+					<QuestionEditBoxForm ref="EditBox"></QuestionEditBoxForm>
+				</span>
+				<span>
+					<el-popover :width="80"
+					popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
+					>
+						<template #reference>
+							<div style="font-weight: bold; font-size: 24px; margin-right: 40px;">
+								Hello,
+								<router-link to="/user" class="nav-user">
+									{{ useUserStore().username }}
+								</router-link>
+							</div>
+						</template>
+						<el-form style="text-align: center;">
+							<div style="margin-bottom: 10px;padding-bottom:5px;border-bottom: 1px; border-style: solid;">
+								<el-text style="font-size: 20px;">{{ useUserStore().username }}</el-text>
+								<hr style="border-bottom: 1px; border-style: solid; padding-bottom: 10px;"/>
+								<br/>
+								<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/user">
+									<el-icon><User/></el-icon>个人主页
+								</el-link>
+								<br/>
+								<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/user/setting">
+									<el-icon><Setting/></el-icon>个人设置
+								</el-link>
+							</div>
+							<el-button type="info" @click="logout" style="width:100% ">登出</el-button>
+						</el-form>
+					</el-popover>
+				</span>
+				
 			</div>
 		</template>
 	</div>
