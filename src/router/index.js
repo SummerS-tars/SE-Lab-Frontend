@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/Home/HomeView.vue';
-import Login from '@/views/Login/Login.vue';
+import QuestionView from '@/views/Question/QuestionView.vue';
+import QuestionList from '@/views/User/QuestionList/QuestionList.vue';
+import AnswerList from '@/views/User/AnswerList/AnswerList.vue';
+import FollowerList from '@/views/User/FollowerList/FollowerList.vue';
+import FollowingList from '@/views/User/FollowingList/FollowingList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +17,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: () => import('@/views/Login/Login.vue'),
     },
     {
       path: '/register',
@@ -23,16 +27,18 @@ const router = createRouter({
     {
       path: '/question/:id',
       name: 'question',
-      component: () => import('@/views/Question/QuestionView.vue')
+      component: QuestionView,
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue'),
-    // },
+    {
+      path: '/user/profile/:id',
+      component: () => import('@/views/User/UserView.vue'),
+      children:[
+          {path:'',         name:'QuestionList',  component:QuestionList},
+          {path:'answer',   name:'AnswerList',    component:AnswerList},
+          {path:'follower', name:'FollowerList',  component:FollowerList},
+          {path:'following',name:'FollowingList', component:FollowingList},
+      ]
+    }
   ],
 })
 

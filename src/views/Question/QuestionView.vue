@@ -1,35 +1,32 @@
 <script setup>
 import request from '@/request/http';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
-import Cherry from 'cherry-markdown';
+import { useUserStore } from '@/stores/user';
+import AnswerCardList from './AnswerCardList.vue';
+import { timePickerDefaultProps } from 'element-plus';
+import FollowButton from '../User/FollowButton.vue';
+import MarkdownContent from '@/components/MarkdownContent.vue';
 
 const router = useRouter();
 const questionid =  router.currentRoute.value.params.id;
 
-const questionInfo = ref({});
+const questionInfo = ref({
+  title: '',
+  createAt: '',
+  content: '',
+  author:{default:{id:'',username:'',liked:false}},
+});
 
-let cherryInstance = null;
+let tableData= ref([]);
 
 onMounted(async() => {
 	let res=await request.get(`/api/question/byId/${questionid}`);
   questionInfo.value.title = res.title;
   questionInfo.value.createAt = res.createAt;
   questionInfo.value.author = res.author;
-
-  console.log(res);
-
-  cherryInstance = new Cherry({
-    id: 'question-content',
-    value: res.content,
-    editor:{
-      defaultModel: 'previewOnly',
-    }
-  });
-
-  cherryInstance.wrapperDom.style.boxShadow = 'none';
-  cherryInstance.previewer.getDom().style.border = 'none';
+  questionInfo.value.content = res.content;
 });
 
 
@@ -51,22 +48,19 @@ onMounted(async() => {
                   <br/>
                   <span style="font-size: 14px;color: #999;margin-left: 8%;"> {{ questionInfo.createAt }}</span>
                 </div>
-
                 <div style="font-weight: bold; font-size: 16px; margin-right: 40px;">
 								created by 
-								<router-link :to="`/user/${questionInfo.author}`" class="nav-user">
-									{{ questionInfo.author }}
+								<router-link :to="`/user/profile/${questionInfo.author.id}`" class="nav-user">
+									{{ questionInfo.author.username }}
 								</router-link>
+                <FollowButton :author="questionInfo.author"></FollowButton>
                 </div>
-
               </div>
-              <div @click.prevent.stop>
-                <div id="question-content"></div>
-              </div>
+              <MarkdownContent :id="`question-content`" :content="questionInfo.content"></MarkdownContent>
             </div>
           </template>
           
-          
+          <AnswerCardList :id="questionid"></AnswerCardList>
 
         </el-card>
       </el-main>
@@ -87,6 +81,8 @@ onMounted(async() => {
 
 .nav-user{
 	/* text-decoration: none; */
+  font-size: large;
 	color: black;
+  margin-right: 20px;
 }
 </style>

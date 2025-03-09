@@ -1,13 +1,30 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
+const jwtparse = (token)=>{
+    const parts =token.split('.');
+
+    const payloadBase64Url = parts[1];
+    const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    const payload = JSON.parse(payloadJson);
+    return payload;
+}
+
 export const useUserStore = defineStore('token',()=>{
     const token = computed(() => localStorage.getItem('token'));
-    const username = computed(() => localStorage.getItem('userInfo.username'));
-
-    const setUsername = (username) =>{
-        localStorage.setItem('userInfo.username',username);
-    }
+    const username = computed(() => {
+        return jwtparse(token.value).username;
+    });
+    const id = computed(()=>{
+        return jwtparse(token.value).id;
+    });
+    const isadmin = computed(()=>{
+        return jwtparse(token.value).isadmin;
+    });
     const setToken = (token) => {
         localStorage.setItem('token',token);
     };
@@ -20,5 +37,5 @@ export const useUserStore = defineStore('token',()=>{
         localStorage.removeItem('userInfo');
     };
 
-    return {token,username,setToken,delToken,logout,setUsername};
+    return {token,username,id,isadmin,setToken,delToken,logout};
 });

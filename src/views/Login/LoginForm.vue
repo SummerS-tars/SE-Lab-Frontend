@@ -44,7 +44,6 @@ const submitForm = (formEl) => {
 			if(res.message=='success'){
 				ElMessage.success('登录成功')
 				useUserStore().setToken(res.token);
-				useUserStore().setUsername(ruleForm.username);
 				await router.push('/');
 			}
 			else{

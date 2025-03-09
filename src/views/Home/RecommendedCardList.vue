@@ -8,7 +8,6 @@ const tableData = ref([])
 
 onMounted(async()=>{
 	let res=await request.get("/api/question/mostlikes",{limit:10});
-	console.log(res);
 	res.forEach(item=>{
         tableData.value.push({
             title:item.title,

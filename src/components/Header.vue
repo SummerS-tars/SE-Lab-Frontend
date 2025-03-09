@@ -9,7 +9,7 @@ import Cherry from 'cherry-markdown';
 import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 
 const logout = () =>{
-	request.post("/api/logout").then(res=>{
+	request.post("/api/auth/logout").then(res=>{
 		console.log(res);
 		if(res.message=="success"){
 			ElMessage.success("成功退出登录");
@@ -53,7 +53,7 @@ const EditBox = ref();
 						<template #reference>
 							<div style="font-weight: bold; font-size: 24px; margin-right: 40px;">
 								Hello,
-								<router-link to="/user" class="nav-user">
+								<router-link :to="`/user/profile/${useUserStore().id}`" class="nav-user">
 									{{ useUserStore().username }}
 								</router-link>
 							</div>
@@ -63,7 +63,7 @@ const EditBox = ref();
 								<el-text style="font-size: 20px;">{{ useUserStore().username }}</el-text>
 								<hr style="border-bottom: 1px; border-style: solid; padding-bottom: 10px;"/>
 								<br/>
-								<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/user">
+								<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" :href="`/user/profile/${useUserStore().id}`">
 									<el-icon><User/></el-icon>个人主页
 								</el-link>
 								<br/>
