@@ -5,6 +5,8 @@ import QuestionList from '@/views/User/QuestionList/QuestionList.vue';
 import AnswerList from '@/views/User/AnswerList/AnswerList.vue';
 import FollowerList from '@/views/User/FollowerList/FollowerList.vue';
 import FollowingList from '@/views/User/FollowingList/FollowingList.vue';
+import LoginForm from '@/views/Login/LoginForm.vue';
+import RegisterForm from '@/views/Login/RegisterForm.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,14 +17,12 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Login/Login.vue'),
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/Login/Register.vue'),
+      path: '/',
+      component: () => import('@/views/Login/LoginView.vue'),
+      children:[
+        {path:'login',         name:'Login',  component:LoginForm},
+        {path:'register',     name:'Register',component:RegisterForm},
+      ],
     },
     {
       path: '/question/:id',
@@ -33,10 +33,10 @@ const router = createRouter({
       path: '/user/profile/:id',
       component: () => import('@/views/User/UserView.vue'),
       children:[
-          {path:'',         name:'QuestionList',  component:QuestionList},
-          {path:'answer',   name:'AnswerList',    component:AnswerList},
-          {path:'follower', name:'FollowerList',  component:FollowerList},
-          {path:'following',name:'FollowingList', component:FollowingList},
+        {path:'',         name:'QuestionList',  component:QuestionList},
+        {path:'answer',   name:'AnswerList',    component:AnswerList},
+        {path:'follower', name:'FollowerList',  component:FollowerList},
+        {path:'following',name:'FollowingList', component:FollowingList},
       ]
     }
   ],

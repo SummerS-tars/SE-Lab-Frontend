@@ -16,21 +16,26 @@ const ruleForm = reactive({
 const rules = reactive({
 	username: [{
 		validator: (rule, value, callback) => {
-			if (value === "") {
-				callback(new Error("请输入用户名"));
-			} else {
-				callback();
-			}
+			const regex = /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$/;
+			if (value === "") callback(new Error("请输入用户名"));
+			else if(value.length<2) callback(new Error("用户名过短"));
+			else if(value.length>20) callback(new Error("用户名过长"));
+			else if(!regex.test(value)) callback(new Error("存在非法字符"));
+			else callback();
 		},
 		trigger: "blur",
 	}],
 	password: [{
 		validator: (rule, value, callback) => {
-			if (value === "") {
-				callback(new Error("请输入密码"));
-			} else {
-				callback();
-			}
+			const regex = /^[a-zA-Z0-9_]{8,}$/;
+			const hasLetter = /[a-zA-Z]/.test(value);
+			const hasNumber = /[0-9]/.test(value);
+			if (value === "") callback(new Error("请输入密码"));
+			else if(value.length<8) callback(new Error("密码过短"));
+			else if(!regex.test(value)) callback(new Error("存在非法字符"));
+			else if(!hasLetter) callback(new Error("密码必须包含字母"));
+			else if(!hasNumber) callback(new Error("密码必须包含数字"));
+			else callback();
 		},
 		trigger: "blur"
 	}],
@@ -49,15 +54,11 @@ const submitForm = (formEl) => {
 			if(res.message=='success'){
 				ElMessage.success('注册成功')
 				useUserStore().setToken(res.token);
-				useUserStore().setUsername(ruleForm.username);
 				await router.push('/');
 			}
 			else{
 				ElMessage.error(res.message)
 			}
-		}
-		else{
-			ElMessage.error('注册失败,信息不完整')
 		}
 	});
 }
@@ -70,7 +71,7 @@ const submitForm = (formEl) => {
 		ref="ruleFormRef"
 		:model="ruleForm"
 		:rules="rules"
-		style="max-width: 300px"
+		style="max-width: 300px; margin: 0 auto;"
 		label-width="auto"
 		class="demo-ruleForm">
 
@@ -79,11 +80,29 @@ const submitForm = (formEl) => {
 		</div>
 
 		<el-form-item label="用户名" prop="username">
-			<el-input v-model="ruleForm.username" type="text" autocomplete="off"/>
+			<el-popover
+				placement="right"
+				trigger="hover"
+				content="2至20位中英文字符、数字与下划线"
+				width="260"
+			>
+				<template #reference>
+				<el-input v-model="ruleForm.username" type="text" autocomplete="off"/>
+				</template>
+			</el-popover>
 		</el-form-item>
 
 		<el-form-item label="密码" prop="password">
-			<el-input v-model="ruleForm.password" type="password" autocomplete="off"/>
+			<el-popover
+				placement="right"
+				trigger="hover"
+				content="不少于8位英文字符、数字与下划线，至少需要同时包含英文字符和数字"
+				width="260"
+			>
+				<template #reference>
+				<el-input v-model="ruleForm.password" type="password" autocomplete="off"/>
+				</template>
+			</el-popover>
 		</el-form-item>
 
 		<el-form-item label="邮箱" prop="email">
@@ -95,7 +114,8 @@ const submitForm = (formEl) => {
 		</el-form-item>
 
 		<el-form-item>
-			<el-text>已有账号？</el-text><el-link href="/login" type="primary">登录</el-link>
+			<el-text>已有账号？</el-text>
+			<router-link class="el-link el-link--primary is-underline" to="/login">登录</router-link>
 		</el-form-item>
 
     </el-form>

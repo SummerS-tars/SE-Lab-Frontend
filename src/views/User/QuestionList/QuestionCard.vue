@@ -1,13 +1,48 @@
 <script setup>
-import IconLike from '@/components/icons/IconLike.vue';
+import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
+import request from '@/request/http';
+import { useUserStore } from '@/stores/user';
+import { ElMessage } from 'element-plus';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const userid =  route.params.id;
 
 const props=defineProps({
-	title:{default:''},
-	content:{default:''},
 	id:{default:''},
-    createAt:{default:''},
+	removethis:{default:()=>{}}
 })
+
+let questionInfo=ref({
+	numAnswer:0,
+});
+
+onMounted(async()=>{
+	let res= await request.get(`/api/question/byId/${props.id}`);
+	if(res.message=='success'){
+		questionInfo.value={
+			title:res.title,
+			content:res.content,
+			createAt:res.createAt,
+			numAnswer:res.numAnswer,
+		}
+	}
+})
+
+const deleteQuestion=async()=>{
+	if(questionInfo.value.numAnswer>0){
+		ElMessage.error('问题已存在回答，不能删除');
+		return;
+	}
+	if(!confirm('确定删除吗？'))return;
+	let res=await request.post(`/api/auth/question/delete`,{id:props.id});
+	props.removethis();
+	ElMessage.success('删除成功');
+}
+
+const EditBox = ref();
 
 </script>
 
@@ -15,17 +50,31 @@ const props=defineProps({
 	<el-card style="margin:10px;border:0px">
 		<template #header>
 			<a class="link" :href="`/question/${id}`">
-				<span style="font-weight: bold;">{{ $props.title }}</span>
+				<span style="font-weight: bold;">{{ questionInfo.title }}</span>
 			</a>
             <br/>
-			<span style="font-size: 14px;color: #999;"> {{ $props.createAt }}</span>
+			<span style="font-size: 14px;color: #999;"> {{ questionInfo.createAt }}</span>
 		</template>
-        <MarkdownContent :id="id+` problem-content`" :content="props.content"/>
+        <MarkdownContent :id="` problem-content`+id" :content="questionInfo.content"/>
 		<template #footer>
-			<div class="card-footer" style="display: flex;justify-content: flex-end">
-                <el-button type="primary" plain>编辑</el-button>
+			<div class="card-footer" style="display: flex;justify-content: space-between">
+				<span style="font-size: 16px;font-weight: bold;"> 回答数： {{ questionInfo.numAnswer }}</span>
+				<div>
+					<template v-if="useUserStore().token&&userid==useUserStore().id">
+						<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>
+						<el-button type="danger" plain @click="deleteQuestion">删除</el-button>
+					</template>
+					<QuestionEditBoxForm 
+						ref="EditBox" 
+						:id = "props.id"
+						:EditBoxid="`question-editbox-${props.id}`" 
+						v-model:title="questionInfo.title" 
+						v-model:content="questionInfo.content">
+					</QuestionEditBoxForm>
+				</div>
 			</div>
 		</template>
+		
 	</el-card>
 
 </template>

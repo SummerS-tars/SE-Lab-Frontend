@@ -1,27 +1,41 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import request from '@/request/http.js'
-import { ElMessage } from 'element-plus';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import FollowingCard from './FollowingCard.vue';
+import { usePageInfiniteScroll } from '@/components/pageInfiniteScroll';
 
 const tableData = ref([])
 
-const router = useRouter();
-const userid =  router.currentRoute.value.params.id;
+const route = useRoute();
+const userid =  route.params.id;
+
+let page=1;
 
 onMounted(async()=>{
-    let res=await request.get(`/api/user/byId/${userid}/follower`,{page_num:0,page_cnt:10});
+  let res=await request.get(`/api/user/byId/${userid}/following`,{page_num:0,page_cnt:10});
 	if(res.message=='success'){
 		res.data.forEach(item=>{
 			tableData.value.push({
-                username:item.username,
+        username:item.username,
 				id:item.id,
 			});
 		});
 	}
-	
 });
+
+usePageInfiniteScroll(async(done)=>{
+	let res=await request.get(`/api/user/byId/${userid}/following`,{page_num:page++,page_cnt:10});
+	if(res.message=='success'){
+		res.data.forEach(item=>{
+			tableData.value.push({
+        username:item.username,
+				id:item.id,
+			});
+		});
+	}
+	done();
+})
 
 </script>
 

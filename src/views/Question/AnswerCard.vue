@@ -6,31 +6,35 @@ import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import FollowButton from '../User/FollowButton.vue';
+import LikeButton from './LikeButton.vue';
+import MarkdownContent from '@/components/MarkdownContent.vue';
 
 const props=defineProps({
 	id:{default:''},
-	author:{default:{id:'',username:'',liked:false}},
-	createAt:{default:''},
-	content:{default:''},
 });
 
-const router = useRouter();
+const answerInfo=ref({
+	author:{id:'',username:''},
+});
 
-let cherryInstance = ref(null);
-
-let tableData= ref([]);
+const like=ref(false);
 
 onMounted(async()=>{
-  cherryInstance = new Cherry({
-    id: `answer-content${props.id}`,
-    value: props.content,
-    editor:{
-      defaultModel: 'previewOnly',
-    }
-  });
-
-  cherryInstance.wrapperDom.style.boxShadow = 'none';
-  cherryInstance.previewer.getDom().style.border = 'none';
+	request.get(`/api/public/answer/byId/${props.id}`).then(res=>{
+		answerInfo.value.author={
+			id:res.authorid,
+			username:res.author,
+		};
+		answerInfo.value.createAt=res.createAt;
+		answerInfo.value.content=res.content;
+		answerInfo.value.likes=res.likes;
+	});
+	if(useUserStore().token){
+		request.get(`/api/auth/user/answer/like`,{id:props.id}).then(res=>{
+			like.value=res;
+		});
+	}
+	
 });
 
 </script>
@@ -41,27 +45,25 @@ onMounted(async()=>{
 			<div style="justify-content: space-between;display: flex;align-items: center;">
 				<div>
 					answer by
-					<a class="link" :href="`/user/profile/${props.author.id}`">
-						<span style="font-weight: bold;"> {{ $props.author.username }}</span>
+					<a class="link" :href="`/user/profile/${answerInfo.author.id}`">
+						<span style="font-weight: bold;"> {{ answerInfo.author.username }}</span>
 					</a>
 					<br/>
-					<span style="font-size: 14px;color: #999;"> {{ $props.createAt }}</span>
+					<span style="font-size: 14px;color: #999;"> {{ answerInfo.createAt }}</span>
 				</div>
 				<div>
-					<FollowButton :author="props.author"></FollowButton>
+					<FollowButton :author="answerInfo.author"></FollowButton>
 				</div>
 			</div>
 			
 		</template>
+
+		<MarkdownContent :id="`answer-content${props.id}`" :content="answerInfo.content"></MarkdownContent>
 		
-		<div @click.prevent.stop>
-			<div :id="`answer-content${props.id}`"></div>
-		</div>
 		<template #footer>
 			<div class="card-footer">
 				<span>
-					<IconLike :like='like'/>
-					<!-- {{$props.likes}} -->
+					<LikeButton :like="like" :likes="answerInfo.likes"></LikeButton>
 				</span>
 			</div>
 		</template>

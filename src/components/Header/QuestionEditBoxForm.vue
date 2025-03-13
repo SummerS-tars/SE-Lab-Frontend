@@ -1,8 +1,10 @@
 <script setup>
 import request from '@/request/http';
+import { uploadFile } from '@/request/upload';
 import Cherry from 'cherry-markdown';
 import { ElMessage } from 'element-plus';
 import { nextTick, onMounted, reactive, ref, watch } from 'vue';
+import MarkdownEditBox from './MarkdownEditBox.vue';
 
 const visible = ref(false);
 
@@ -12,23 +14,15 @@ const close = () =>{visible.value = false;};
 
 defineExpose({open, close});
 
-let cherryInstance=null;
+const EditBox = ref();
 
 watch(visible,async(newValue)=>{
 	if(newValue){
 		await nextTick();
-		if (!cherryInstance) {
-      cherryInstance = new Cherry({
-        id: 'markdown-container',
-        value: '# title',
-      });
-    }
+		EditBox.value.init();
 	}
 	else {
-		if (cherryInstance) {
-			cherryInstance.destroy();
-			cherryInstance = null;
-		}
+		EditBox.value.destroy();
 	}
 });
 
@@ -41,33 +35,28 @@ const ruleForm = reactive({
 const rules = reactive({
 	title: [{
 		validator: (rule, value, callback) => {
-			if (title === "") {
-				callback(new Error("请输入标题"));
-			} else {
-				callback();
-			}
+			if (value === "") callback(new Error("请输入标题"));
+			else if(value.length>50) callback(new Error("标题长度不能超过50"));	
+			else if(value[value.length-1]!='?'&&value[value.length-1]!='？')callback(new Error("标题必须以问号结尾"));
+			else callback();
 		},
 		trigger: "blur",
 	}],
 });
 
 const submitForm = (formEl) => {
-	if(!formEl) return;
+	if(!formEl) return false;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post("/api/question/create", {title:ruleForm.title, content:cherryInstance.getMarkdown()});
+			let res=await request.post("/api/auth/question/create", {title:ruleForm.title, content:EditBox.value.getContent()});
 			if(res.message=='success'){
 				ElMessage.success('发布成功');
-				return true;
+				close();
 			}
 			else{
 				ElMessage.error(res.message);
 			}
 		}
-		else{
-			ElMessage.error('发布失败，内容不完整');
-		}
-		return false;
 	});
 } ;
 
@@ -83,18 +72,16 @@ const submitForm = (formEl) => {
 		label-width="auto"
 		class="demo-ruleForm">
 
-			<el-form-item label="标题" prop="username">
+			<el-form-item label="标题" prop="title">
 				<el-input v-model="ruleForm.title" type="text" autocomplete="off"/>
 			</el-form-item>
 			<el-form-item>
-				<div @click.prevent.stop style="margin: auto;">
-					<div id="markdown-container"></div>
-				</div>
+				<MarkdownEditBox ref="EditBox" id="question-editbox" content="##example"></MarkdownEditBox>
 			</el-form-item>
 		</el-form>
 
 	<template #footer>
-		<el-button type="primary" @click="if(submitForm(ruleFormRef))close();">发布</el-button>
+		<el-button type="primary" @click="submitForm(ruleFormRef)">发布</el-button>
 		<el-button @click="close()">取消</el-button>
 	</template>
 

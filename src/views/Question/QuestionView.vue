@@ -2,12 +2,12 @@
 import request from '@/request/http';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Header from '@/components/Header.vue';
+import Header from '@/components/Header/Header.vue';
 import { useUserStore } from '@/stores/user';
 import AnswerCardList from './AnswerCardList.vue';
-import { timePickerDefaultProps } from 'element-plus';
 import FollowButton from '../User/FollowButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
+import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 
 const router = useRouter();
 const questionid =  router.currentRoute.value.params.id;
@@ -17,18 +17,23 @@ const questionInfo = ref({
   createAt: '',
   content: '',
   author:{default:{id:'',username:'',liked:false}},
+  answerCount: 0,
 });
-
-let tableData= ref([]);
 
 onMounted(async() => {
-	let res=await request.get(`/api/question/byId/${questionid}`);
+	let res=await request.get(`/api/public/question/byId/${questionid}`);
   questionInfo.value.title = res.title;
   questionInfo.value.createAt = res.createAt;
-  questionInfo.value.author = res.author;
+  questionInfo.value.author = {
+    id: res.authorid,
+    username: res.author,
+  };
   questionInfo.value.content = res.content;
+  questionInfo.value.answerCount = res.answerCount;
 });
 
+
+const answerEditBox = ref();
 
 </script>
 
@@ -36,7 +41,9 @@ onMounted(async() => {
 <template>
 	<div class="common-layout">
     <el-container>
-      <el-header style="padding: 0;"><Header style="width:100%"></Header></el-header>
+      <el-header style="padding: 0;">
+        <Header style="width:100%"></Header>
+      </el-header>
 
       <el-main>
         <el-card style="max-width: 800px;margin: 0 auto;">
@@ -44,19 +51,26 @@ onMounted(async() => {
             <div class="card-header">
               <div class="nav">
                 <div>
-                  <span style="font-weight: bold;font-size: x-large;margin-left: 8%;">{{questionInfo.title}}</span>
+                  <div style="margin-left: 20px;">
+                    <span class="question-title">{{questionInfo.title}}</span>
+                  </div>
                   <br/>
                   <span style="font-size: 14px;color: #999;margin-left: 8%;"> {{ questionInfo.createAt }}</span>
                 </div>
-                <div style="font-weight: bold; font-size: 16px; margin-right: 40px;">
-								created by 
-								<router-link :to="`/user/profile/${questionInfo.author.id}`" class="nav-user">
-									{{ questionInfo.author.username }}
-								</router-link>
-                <FollowButton :author="questionInfo.author"></FollowButton>
+                <div style="font-weight: bold; font-size: 16px; margin-right: 30px;">
+                  created by 
+                  <router-link :to="`/user/profile/${questionInfo.author.id}`" class="nav-user">
+                    {{ questionInfo.author.username }}
+                  </router-link>
+                  <FollowButton :author="questionInfo.author"></FollowButton>
                 </div>
               </div>
               <MarkdownContent :id="`question-content`" :content="questionInfo.content"></MarkdownContent>
+              <div style="margin: 20px 0px 0px 20px">
+                <el-button type="primary" plain @click="answerEditBox.open()">写回答</el-button>
+					      <AnswerEditBoxForm ref="answerEditBox"></AnswerEditBoxForm>
+                <span style="font-size: 14px;color: #999;margin-left: 8%;"> 回答数 {{ questionInfo.answerCount }}</span>
+              </div>
             </div>
           </template>
           
@@ -84,5 +98,12 @@ onMounted(async() => {
   font-size: large;
 	color: black;
   margin-right: 20px;
+}
+
+.question-title{
+  font-weight: bold;
+  font-size: x-large;
+  width: 400px;
+  white-space: normal;
 }
 </style>

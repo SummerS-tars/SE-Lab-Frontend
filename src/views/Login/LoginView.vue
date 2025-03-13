@@ -1,29 +1,27 @@
 <script setup>
 import {ref, onMounted} from 'vue';
 
-import Header from '@/components/Header.vue';
-import LoginForm from './LoginForm.vue';
+import Header from '@/components/Header/Header.vue';
 
 </script>
 
 <template>
+  <div class="common-layout">
     <el-container style="height: 100vh;">
-      <el-header>
-        <Header></Header>
+      <el-header style="padding: 0;">
+        <Header style="width:100%;height: 100%;"></Header>
       </el-header>
 
       <el-main class="container">
         <div class="background">
-          <LoginForm class="form-container"></LoginForm>
+          <RouterView class="form-container"></RouterView>
         </div>
       </el-main> 
     </el-container>
+  </div>
 </template>
 
 <style scoped>
-*{
-  box-sizing: border-box;
-}
 
 .container{
   background-image: url("@/assets/Mu_Silk.png");

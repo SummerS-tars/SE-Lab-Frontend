@@ -1,6 +1,11 @@
 <script setup>
 import IconLike from '@/components/icons/IconLike.vue';
 import FollowButton from '../FollowButton.vue';
+import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+
+const route = useRoute();
+const userid =  route.params.id;
 
 const props=defineProps({
   username:{default:''},
@@ -14,14 +19,15 @@ const props=defineProps({
 		<div class="FollowingCard">
 			<div>
 				<a class="link" :href="`/user/profile/${id}`">
-						<span style="font-weight: bold;">{{ $props.username }}</span>
+					<span style="font-weight: bold;">{{ $props.username }}</span>
 				</a>
 			</div>
 			<div>
-					<FollowButton/>
+				<template v-if="useUserStore().token&&useUserStore().id==userid">
+					<FollowButton :author="{liked:true}"/>
+				</template>
 			</div>
 		</div>
-		
 	</el-card>
 
 </template>

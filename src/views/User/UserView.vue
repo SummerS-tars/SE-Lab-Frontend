@@ -1,21 +1,21 @@
 <script setup >
-import Header from '@/components/Header.vue';
+import Header from '@/components/Header/Header.vue';
 import request from '@/request/http'
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
-import { onBeforeMount, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, onBeforeMount, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import FollowButton from './FollowButton.vue';
 
 const router = useRouter();
-const userid =  router.currentRoute.value.params.id;
+const route = useRoute();
+const userid =  route.params.id;
 
 const user=ref({
 	username:'',
 	email:'',
 	follower: 0,
 	following: 0,
-	self:false,
 	followed:false,
 })
 
@@ -34,28 +34,29 @@ onBeforeMount(async()=>{
 		else{
 			ElMessage.error(res.message);
 		}
-
-		if(useUserStore().token&&useUserStore().id==userid){
-			user.value.self=true;
-		}
 	}
 });
 
-const activeIndex = ref('0')
+const nameToIndexMap = {
+  ['QuestionList']: '0',
+  ['AnswerList']: '1',
+  ['FollowerList']: '2',
+  ['FollowingList']: '3',
+};
+
+const activeIndex = ref(computed(()=>{
+	return nameToIndexMap[route.name] || '0';
+}))
 
 const handleSelect = (key, keyPath) => {
-	if(key=='0'){
-		router.push(`/user/profile/${userid}`);
-	}
-	else if(key=='1'){
-		router.push(`/user/profile/${userid}/answer`);
-	}
+	if(key=='0')router.push(`/user/profile/${userid}`);
+	else if(key=='1')router.push(`/user/profile/${userid}/answer`);
 }
 
 </script>
 
 <template>
-	<el-container>
+	<el-container style="min-height: 101vh;">
       <el-header style="padding: 0;"><Header style="width:100%"></Header></el-header>
       <el-main>
 				<el-card style="max-width: 1000px;margin: 0 auto; margin-bottom: 10px;">
@@ -76,8 +77,8 @@ const handleSelect = (key, keyPath) => {
 									<span class="followlink_item">{{ user.following }}</span>
 								</router-link>
 							</div>
-							<template v-if="user.self">
-								<el-button type="primary" plain>编辑个人资料</el-button>
+							<template v-if="useUserStore().token&&useUserStore().id==userid">
+								<!-- <el-button type="primary" plain>编辑个人资料</el-button> -->
 							</template>
 							<template v-else>
 								<FollowButton :author="{username:user.username,id:user.id}"></FollowButton>

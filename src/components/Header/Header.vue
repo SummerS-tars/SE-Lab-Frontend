@@ -5,7 +5,6 @@ import { useUserStore } from '@/stores/user';
 import request from '@/request/http';
 import router from '@/router';
 import { nextTick, ref, watch } from 'vue';
-import Cherry from 'cherry-markdown';
 import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 
 const logout = () =>{
@@ -30,7 +29,7 @@ const EditBox = ref();
 	<div class="nav">
 		<div>
 			<el-link href="/" :underline="false">
-				<img src="@/assets/Mu_Silk.png" alt="logo" style="height: 50px; margin-right: 15px;">
+				<img src="@/assets/Mu_Silk.png" alt="logo" style="height: 60px; margin-right: 15px;">
 				<el-text type="primary" style="margin: left;font-size:20px; text-align: center;">矢呼</el-text>
 			</el-link>
 		</div>
@@ -53,9 +52,9 @@ const EditBox = ref();
 						<template #reference>
 							<div style="font-weight: bold; font-size: 24px; margin-right: 40px;">
 								Hello,
-								<router-link :to="`/user/profile/${useUserStore().id}`" class="nav-user">
+								<a :href="`/user/profile/${useUserStore().id}`" class="nav-user">
 									{{ useUserStore().username }}
-								</router-link>
+								</a>
 							</div>
 						</template>
 						<el-form style="text-align: center;">

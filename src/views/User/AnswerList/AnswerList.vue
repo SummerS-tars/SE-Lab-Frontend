@@ -1,16 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import request from '@/request/http.js'
-import { ElMessage } from 'element-plus';
 import AnswerCard from './AnswerCard.vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { usePageInfiniteScroll } from '@/components/pageInfiniteScroll';
 
 const tableData = ref([])
 
-const router = useRouter();
-const userid =  router.currentRoute.value.params.id;
+const route = useRoute();
+const userid =  route.params.id;
 
-onMounted(async()=>{
+let page=1;
+
+const init=async()=>{
+	tableData.value=[];
 	let res=await request.get(`/api/user/byId/${userid}/answer`,{page_num:0,page_cnt:10});
 	if(res.message=='success'){
 		res.data.forEach(item=>{
@@ -19,8 +22,30 @@ onMounted(async()=>{
 				answerid:item.answerid,
 			});
 		});
+		page=1;
 	}
+}
+
+onMounted(async()=>{
+	init();
 });
+
+usePageInfiniteScroll(async(done)=>{
+	let res=await request.get(`/api/user/byId/${userid}/answer`,{page_num:page++,page_cnt:10});
+	if(res.message=='success'){
+		res.data.forEach(item=>{
+			tableData.value.push({
+				questionid:item.questionid,
+				answerid:item.answerid,
+			});
+		});
+	}
+	done();
+})
+
+const itemDelete=(index)=>{
+	init();
+}
 
 </script>
 
@@ -29,9 +54,11 @@ onMounted(async()=>{
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
-		<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
-			<AnswerCard :questionid="item.questionid" :answerid="item.answerid"/>
-		</li>
+		<ul>
+			<li v-for="(item,index) in tableData" :key="answerid" style="list-style: none;" >
+				<AnswerCard :questionid="item.questionid" :answerid="item.answerid" :removethis="()=>{itemDelete(index)}"/>
+			</li>
+		</ul>
 	</template>
 
 </template>

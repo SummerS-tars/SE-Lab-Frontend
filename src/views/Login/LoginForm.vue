@@ -16,11 +16,8 @@ const ruleForm = reactive({
 const rules = reactive({
 	username: [{
 		validator: (rule, value, callback) => {
-			if (value === "") {
-				callback(new Error("请输入用户名"));
-			} else {
-				callback();
-			}
+			if (value === "") callback(new Error("请输入用户名"));
+			else callback();
 		},
 		trigger: "blur",
 	}],
@@ -40,7 +37,7 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post("/api/login", ruleForm);
+			let res=await request.post("/api/auth/login", ruleForm);
 			if(res.message=='success'){
 				ElMessage.success('登录成功')
 				useUserStore().setToken(res.token);
@@ -49,9 +46,6 @@ const submitForm = (formEl) => {
 			else{
 				ElMessage.error(res.message)
 			}
-		}
-		else{
-			ElMessage.error('登录失败,未输入用户名或密码')
 		}
 	});
 }
@@ -85,7 +79,8 @@ const submitForm = (formEl) => {
 		</el-form-item>
 
 		<el-form-item>
-			<el-text>没有账号？</el-text><el-link href="/register" type="primary">注册</el-link>
+			<el-text>没有账号？</el-text>
+			<router-link class="el-link el-link--primary is-underline" to="/register">注册</router-link>
 		</el-form-item>
 
 	</el-form>

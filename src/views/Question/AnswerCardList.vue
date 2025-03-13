@@ -4,87 +4,46 @@ import request from '@/request/http.js'
 import { ElMessage } from 'element-plus';
 import AnswerCard from './AnswerCard.vue';
 import { useUserStore } from '@/stores/user';
+import { usePageInfiniteScroll } from '@/components/pageInfiniteScroll';
 
 const props=defineProps({
 	id:{default:''},
 })
 
 const tableData = ref([])
-const page = ref(0);
+let page=1;
 
 onMounted(async()=>{
 	let flag=false;
   if(useUserStore().token){
     let res=await request.get(`/api/auth/question/byId/${props.id}/answer/mostlikes`,{page_num:0,page_size:10});
-    if(res.message==='success'){
-      res.data.forEach(item=>{
-        tableData.value.push({
-					id:item.id,
-					author:item.author,
-					createAt:item.createAt,
-          content:item.content,
-        });
-      });
-      flag=true;
-			page.value=1;
-    }
-  }
-  if(!flag){
-    let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`);
-    if(res.message==='success'){
-      res.data.forEach(item=>{
-        tableData.value.push({
-					id:item.id,
-          author:item.author,
-					createAt:item.createAt,
-          content:item.content,
-        });
-      });
-    }
-  }
-	nextTick(()=>{
-		if(flag){
-			window.scrollTo(0,0);
-			window.addEventListener('scroll',handleScroll);
-		}
-	});
-});
-
-onUnmounted(()=>{
-	window.removeEventListener('scroll',handleScroll);
-});
-
-const handleScroll = () =>{
-	const scrollPositionCurrent = window.scrollY + window.innerHeight;
-  const pageHeight = document.documentElement.scrollHeight;
-  if (scrollPositionCurrent >= pageHeight-1000) { 
-    load();
-  }
-}
-
-let onloading=ref(false);
-
-const load = async() =>{
-	if(onloading.value || !useUserStore().token)return;
-	onloading.value=true;
-	const scrollPositionCurrent = window.scrollY;
-	let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`,{page_name:tableData.length/5,page_size:5});
-	if(res.message==='success'){
 		res.data.forEach(item=>{
 			tableData.value.push({
 				id:item.id,
-				author:item.author,
-				createAt:item.createAt,
-				content:item.content,
 			});
 		});
-		page.value++;
-	}
-	nextTick(()=>{
-		window.scrollTo({left:0,top:scrollPositionCurrent});
-		onloading.value=false;
+		flag=true;
+		page=1;
+  }
+  if(!flag){
+    let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`);
+		res.data.forEach(item=>{
+			tableData.value.push({
+				id:item.id,
+			});
+		});
+  }
+});
+
+usePageInfiniteScroll(async(done)=>{
+	let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`,{page_name:page++,page_size:5});
+	res.data.forEach(item=>{
+		tableData.value.push({
+			id:item.id,
+		});
 	});
-}
+	done();
+})
 
 </script>
 
@@ -95,7 +54,7 @@ const load = async() =>{
 	<template v-else>
 		<ul>
 			<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
-				<AnswerCard :id="item.id" :author="item.author" :createAt="item.createAt" :content="item.content"></AnswerCard>
+				<AnswerCard :id="item.id"></AnswerCard>
 			</li>
 		</ul>
 	</template>
@@ -106,7 +65,7 @@ const load = async() =>{
 			</el-card>
 		</template>
 		<template v-else>
-			empty
+			<el-skeleton :rows="5"/>
 		</template>
 	</template>
 	<template v-else>
