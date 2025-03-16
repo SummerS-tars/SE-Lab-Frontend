@@ -1,5 +1,6 @@
 <script setup lang="js" name="AdminHomeView">
 import Header from '@/components/Header/Header.vue';
+import AdminSideBar from '@/views/Admin/SideBar.vue';
 
 </script>
 
@@ -12,7 +13,12 @@ import Header from '@/components/Header/Header.vue';
 
       <el-main class="container">
         <div class="background">
-          <RouterView class="admin-home-container"></RouterView>
+          <!-- TODO: 管理员主界面 -->
+          <!-- // TODO: 管理员侧边栏 -->
+          <AdminSideBar></AdminSideBar>
+          <!-- // TODO: 管理员主界面内容 -->
+            <!-- // TODO: 问题管理 -->
+            <!-- // TODO: 回答管理 -->
         </div>
       </el-main>
       
@@ -21,5 +27,5 @@ import Header from '@/components/Header/Header.vue';
 </template>
 
 <style scoped>
-  
+
 </style>
