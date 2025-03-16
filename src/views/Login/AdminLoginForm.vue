@@ -45,7 +45,7 @@ const submitForm = (formEl) => {
 			console.log(res);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);
-			await router.push('/');
+			await router.push('/admin_home');
 		}
 	});
 }
