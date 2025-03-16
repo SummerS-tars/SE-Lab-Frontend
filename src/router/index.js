@@ -7,6 +7,7 @@ import FollowerList from '@/views/User/FollowerList/FollowerList.vue';
 import FollowingList from '@/views/User/FollowingList/FollowingList.vue';
 import LoginForm from '@/views/Login/LoginForm.vue';
 import RegisterForm from '@/views/Login/RegisterForm.vue';
+import AdminLoginForm from '@/views/Login/AdminLoginForm.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,7 @@ const router = createRouter({
       children:[
         {path:'login',         name:'Login',  component:LoginForm},
         {path:'register',     name:'Register',component:RegisterForm},
+        {path:'admin_login', name:'AdminLogin', component: AdminLoginForm},
       ],
     },
     {
