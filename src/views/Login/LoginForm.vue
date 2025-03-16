@@ -37,15 +37,15 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post("/api/auth/login", ruleForm);
-			if(res.message=='success'){
-				ElMessage.success('登录成功')
-				useUserStore().setToken(res.token);
-				await router.push('/');
-			}
-			else{
-				ElMessage.error(res.message)
-			}
+			let data={
+				username:ruleForm.username, 
+				password:ruleForm.password
+			};
+			let res=await request.post(`/api/auth/login?password=${data.password}&username=${data.username}`);
+			console.log(res);
+			ElMessage.success('登录成功');
+			useUserStore().setToken(res);
+			await router.push('/');
 		}
 	});
 }

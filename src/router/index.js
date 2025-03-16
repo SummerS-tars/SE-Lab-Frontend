@@ -15,6 +15,13 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      beforeEnter: (to,from,next)=>{
+        if(localStorage.getItem('token')){
+          next()
+        }else{
+          next({name:'Login'})
+        }
+      }
     },
     {
       path: '/',
@@ -41,5 +48,7 @@ const router = createRouter({
     }
   ],
 })
+
+
 
 export default router

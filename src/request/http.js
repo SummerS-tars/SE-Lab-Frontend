@@ -1,5 +1,6 @@
 import { useUserStore } from '@/stores/user';
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
 const request = axios.create({
     baseURL: '',
@@ -15,9 +16,7 @@ request.defaults.withCredentials = true;
 request.interceptors.request.use(
     config =>{
         const token= useUserStore().token;
-        if(token){
-            config.headers['Authorization']=`Bearer ${token}`;
-        }
+        if(token)config.headers['Authorization']=`Bearer ${token}`;
         return config;
     },
     error =>{
@@ -27,9 +26,15 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
     response => {
-        return response.data;
+        return response.data.data;
     },
     error => {
+        console.log(error.response);
+        ElMessage.error(error)
+        // if(error.response.status==='401'){
+        //     useUserStore().logout();
+        //     window.location.reload();
+        // }
         return Promise.reject(error);
     },
 );

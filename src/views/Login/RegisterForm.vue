@@ -50,7 +50,11 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post("/api/register", ruleForm);
+			let res=await request.post("/api/public/register", {
+				username:ruleForm.username, 
+				password:ruleForm.password, 
+				email:ruleForm.email
+			});
 			if(res.message=='success'){
 				ElMessage.success('注册成功')
 				useUserStore().setToken(res.token);

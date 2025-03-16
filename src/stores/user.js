@@ -11,19 +11,20 @@ const jwtparse = (token)=>{
     }).join(''));
 
     const payload = JSON.parse(payloadJson);
+    console.log(payload);
     return payload;
 }
 
 export const useUserStore = defineStore('token',()=>{
     const token = computed(() => localStorage.getItem('token'));
     const username = computed(() => {
-        return jwtparse(token.value).username;
+        return jwtparse(token.value).sub;
     });
     const id = computed(()=>{
         return jwtparse(token.value).id;
     });
     const isadmin = computed(()=>{
-        return jwtparse(token.value).isadmin;
+        return jwtparse(token.value).roles === 'ROLE_ADMIN';
     });
     const setToken = (token) => {
         localStorage.setItem('token',token);
@@ -34,7 +35,6 @@ export const useUserStore = defineStore('token',()=>{
 
     const logout = () => {
         delToken();
-        localStorage.removeItem('userInfo');
     };
 
     return {token,username,id,isadmin,setToken,delToken,logout};
