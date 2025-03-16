@@ -78,10 +78,15 @@ const submitForm = (formEl) => {
 			<el-button type="primary" @click="submitForm(ruleFormRef)" style="width:300px">登录</el-button>
 		</el-form-item>
 
-		<el-form-item>
-			<el-text>没有账号？</el-text>
-			<router-link class="el-link el-link--primary is-underline" to="/register">注册</router-link>
-		</el-form-item>
+    <el-form-item style="display: flex; justify-content: space-between;">
+      <div>
+      <el-text>没有账号？</el-text>
+      <router-link class="el-link el-link--primary is-underline" to="/register">注册</router-link>
+      </div>
+      <div style="margin-left: auto;">
+      <router-link class="el-link el-link--primary is-underline" to="/admin_login">管理员登录</router-link>
+      </div>
+    </el-form-item>
 
 	</el-form>
 
