@@ -19,7 +19,7 @@ import AdminSideBar from '@/views/Admin/SideBar.vue';
 
         <el-main class="container">
           <!-- 挂载主要内容组件 -->
-          <!-- <router-view></router-view>  -->
+          <router-view></router-view> 
           
         </el-main>
       </el-container>
@@ -31,12 +31,13 @@ import AdminSideBar from '@/views/Admin/SideBar.vue';
 <style scoped>
 .sidebar {
   background-color:rgb(52, 170, 132, 0.6);
-  padding: 30px;
+  padding: 25px;
   height: 100%; /* 使侧边栏高度与el-container高度一致 */
+  overflow: auto; /* 添加滚动条 */
 }
 
 .container {
-  padding: 30px;
+  padding: 25px;
   background-color: rgb(250, 233, 209);
   height: 100%; /* 使主要内容区域高度与el-container高度一致 */
 }
