@@ -45,7 +45,12 @@ const router = createRouter({
         {path:'follower', name:'FollowerList',  component:FollowerList},
         {path:'following',name:'FollowingList', component:FollowingList},
       ]
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*', // 匹配所有未找到的路径
+      name: 'NotFound',
+      component: () => import('@/views/NotFoundView.vue'),
+    },
   ],
 })
 

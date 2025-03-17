@@ -1,16 +1,14 @@
 <script setup>
 import request from '@/request/http';
-import { onBeforeMount, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import Header from '@/components/Header/Header.vue';
-import { useUserStore } from '@/stores/user';
 import AnswerCardList from './AnswerCardList.vue';
 import FollowButton from '../User/FollowButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 
-const router = useRouter();
-const questionid =  router.currentRoute.value.params.id;
+const questionid =  useRoute.params.id;
 
 const questionInfo = ref({
   title: '',

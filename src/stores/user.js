@@ -11,7 +11,6 @@ const jwtparse = (token)=>{
     }).join(''));
 
     const payload = JSON.parse(payloadJson);
-    console.log(payload);
     return payload;
 }
 

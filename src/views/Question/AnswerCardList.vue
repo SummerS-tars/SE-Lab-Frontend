@@ -1,59 +1,67 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { nextTick, onBeforeMount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import request from '@/request/http.js'
 import { ElMessage } from 'element-plus';
 import AnswerCard from './AnswerCard.vue';
 import { useUserStore } from '@/stores/user';
-import { usePageInfiniteScroll } from '@/components/pageInfiniteScroll';
+import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
 const props=defineProps({
 	id:{default:''},
 })
 
-const tableData = ref([])
-let page=1;
-
-onMounted(async()=>{
-	let flag=false;
-  if(useUserStore().token){
-    let res=await request.get(`/api/auth/question/byId/${props.id}/answer/mostlikes`,{page_num:0,page_size:10});
-		res.forEach(item=>{
-			tableData.value.push({
-				id:item.id,
-			});
-		});
-		flag=true;
-		page=1;
-  }
-  if(!flag){
-    let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`);
-		res.forEach(item=>{
-			tableData.value.push({
-				id:item.id,
-			});
-		});
-  }
-});
-
-usePageInfiniteScroll(async(done)=>{
-	let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`,{page_name:page++,page_size:5});
+const loadpage=async(page)=>{
+	let res=await request.get(`/api/auth/question/byId/${props.id}/answer/mostlikes`,{page_num:page,page_size:10});
 	res.forEach(item=>{
 		tableData.value.push({
 			id:item.id,
 		});
 	});
-	done();
+}
+
+const infiniteScroll=ref();
+
+const tableData = ref([])
+
+onMounted(async()=>{
+	let flag=false;
+  if(useUserStore().token){
+	loadpage();
+	infiniteScroll.value.setPage(1);
+	infiniteScroll.value.setCallback(()=>{
+		loadpage();
+		infiniteScroll.value.addPage();
+	});
+	flag=true;
+  }
+  if(!flag){
+    let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`);
+	res.forEach(item=>{
+		tableData.value.push({
+			id:item.id,
+		});
+	});
+  }
+});
+
+onBeforeUpdate(()=>{
+	infiniteScroll.value.onBeforeUpdate();
+})
+
+onUpdated(()=>{
+	infiniteScroll.value.onUpdated();
 })
 
 </script>
 
 <template>
+	<PageInfiniteScroll ref="infiniteScroll"></PageInfiniteScroll>
   <template v-if="tableData.length==0">
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
 		<ul>
-			<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
+			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
 				<AnswerCard :id="item.id"></AnswerCard>
 			</li>
 		</ul>
