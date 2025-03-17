@@ -8,6 +8,9 @@ import FollowingList from '@/views/User/FollowingList/FollowingList.vue';
 import LoginForm from '@/views/Login/LoginForm.vue';
 import RegisterForm from '@/views/Login/RegisterForm.vue';
 import AdminLoginForm from '@/views/Login/AdminLoginForm.vue';
+import AdminDefaultView from '@/views/Admin/AdminDefaultView.vue';
+import QuestionManagement from '@/views/Admin/QuestionManagement.vue';
+import AnswerManagement from '@/views/Admin/AnswerManagement.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,11 +39,11 @@ const router = createRouter({
     {
       path: '/admin_home',
       component: () => import('@/views/Admin/AdminView.vue'),
-      // children:[
-      //   {path:'', name:'AdminHome'},
-      //   {path:'question', name:'AdminQuestionPanel', component:AdminQuestionPanel}, // TODO: AdminQuestionPanel.vue
-      //   {path:'answer', name:'AdminAnswerPanel', component:AdminAnswerPanel}, // TODO: AdminAnswerPanel.vue
-      // ]
+      children:[
+        {path:'', name:'AdminHome' , component:AdminDefaultView}, // TODO: AdminDefaultView.vue
+        {path:'question', name:'QuestionManagement', component:QuestionManagement}, // TODO: QuestionManagement.vue
+        {path:'answer', name:'AnswerManagement', component:AnswerManagement}, // TODO: AnswerManagement.vue
+      ]
     },
     {
       path: '/question/:id',
