@@ -16,7 +16,10 @@ request.defaults.withCredentials = true;
 request.interceptors.request.use(
     config =>{
         const token= useUserStore().token;
-        if(token)config.headers['Authorization']=`Bearer ${token}`;
+        if(token){
+            config.headers['Authorization']=`Bearer ${token}`;
+            console.log(config);
+        }
         return config;
     },
     error =>{
@@ -29,8 +32,7 @@ request.interceptors.response.use(
         return response.data.data;
     },
     error => {
-        console.log(error.response);
-        ElMessage.error(error)
+        ElMessage.error(error.response.data.message)
         // if(error.response.status==='401'){
         //     useUserStore().logout();
         //     window.location.reload();

@@ -16,9 +16,9 @@ const followUser=async(userid)=>{
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}
-	let res = await request.post('/api/auth/user/follow',{id:userid});
-	if(res.message=='success')liked.value=true;
-    else ElMessage.error(res.message);
+	request.post('/api/auth/user/follow',{id:userid}).then(res=>{
+		liked.value=true;
+	});
 };
 
 const unfollowUser=async(userid)=>{
@@ -26,9 +26,9 @@ const unfollowUser=async(userid)=>{
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}
-	let res = await request.post('/api/auth/user/unfollow',{id:userid});
-	if(res.message=='success')liked.value=false;
-    else ElMessage.error(res.message);
+	request.post('/api/auth/user/unfollow',{id:userid}).then(res=>{
+		liked.value=false;
+	});
 };
 
 </script>

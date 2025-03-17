@@ -48,14 +48,9 @@ const submitForm = (formEl) => {
 	if(!formEl) return false;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post("/api/auth/question/create", {title:ruleForm.title, content:EditBox.value.getContent()});
-			if(res.message=='success'){
-				ElMessage.success('发布成功');
-				close();
-			}
-			else{
-				ElMessage.error(res.message);
-			}
+			await request.post("/api/auth/question/create", {title:ruleForm.title, content:EditBox.value.getContent()});
+			ElMessage.success('发布成功');
+			close();
 		}
 	});
 } ;

@@ -37,11 +37,7 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let data={
-				username:ruleForm.username, 
-				password:ruleForm.password
-			};
-			let res=await request.post(`/api/auth/login?password=${data.password}&username=${data.username}`);
+			let res=await request.post(`/api/auth/login?password=${ruleForm.password}&username=${ruleForm.username}`);
 			console.log(res);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);

@@ -10,14 +10,10 @@ import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 const logout = () =>{
 	request.post("/api/auth/logout").then(res=>{
 		console.log(res);
-		if(res.message=="success"){
-			ElMessage.success("成功退出登录");
-			useUserStore().logout();
-			router.push("/");
-			window.location.reload();
-		}else{
-			ElMessage.error(res.message);
-		}
+		ElMessage.success("成功退出登录");
+		useUserStore().logout();
+		router.push("/");
+		window.location.reload();
 	});
 };
 

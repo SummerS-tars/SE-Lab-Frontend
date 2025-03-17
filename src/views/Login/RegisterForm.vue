@@ -4,6 +4,9 @@ import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
+
+let router = useRouter();
 
 const ruleFormRef = ref();
 
@@ -50,19 +53,9 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post("/api/public/register", {
-				username:ruleForm.username, 
-				password:ruleForm.password, 
-				email:ruleForm.email
-			});
-			if(res.message=='success'){
-				ElMessage.success('注册成功')
-				useUserStore().setToken(res.token);
-				await router.push('/');
-			}
-			else{
-				ElMessage.error(res.message)
-			}
+			let res=await request.post("/api/public/register", ruleForm);
+			ElMessage.success('注册成功')
+			await router.push('/login');
 		}
 	});
 }

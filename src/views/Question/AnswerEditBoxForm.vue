@@ -28,14 +28,11 @@ watch(visible,async(newValue)=>{
 });
 
 const submitForm = async() => {
-	let res=await request.post("/api/auth/answer/create", {id:props.id, content:EditBox.value.getContent()});
-	if(res.message=='success'){
-		ElMessage.success('发布成功');
-		close();
-	}
-	else{
-		ElMessage.error(res.message);
-	}
+	console.log(props.id);
+	await request.post("/api/auth/answer/create", {questionId:props.id, content:EditBox.value.getContent()});
+	ElMessage.success('发布成功');
+	close();
+	window.location.reload();
 };
 
 </script>

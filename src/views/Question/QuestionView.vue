@@ -22,6 +22,7 @@ const questionInfo = ref({
 
 onMounted(async() => {
 	let res=await request.get(`/api/public/question/byId/${questionid}`);
+  console.log(res);
   questionInfo.value.title = res.title;
   questionInfo.value.createAt = res.createAt;
   questionInfo.value.author = {
@@ -68,7 +69,7 @@ const answerEditBox = ref();
               <MarkdownContent :id="`question-content`" :content="questionInfo.content"></MarkdownContent>
               <div style="margin: 20px 0px 0px 20px">
                 <el-button type="primary" plain @click="answerEditBox.open()">写回答</el-button>
-					      <AnswerEditBoxForm ref="answerEditBox"></AnswerEditBoxForm>
+					      <AnswerEditBoxForm ref="answerEditBox" :id="questionid"></AnswerEditBoxForm>
                 <span style="font-size: 14px;color: #999;margin-left: 8%;"> 回答数 {{ questionInfo.answerCount }}</span>
               </div>
             </div>
