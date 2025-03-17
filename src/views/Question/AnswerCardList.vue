@@ -17,7 +17,7 @@ onMounted(async()=>{
 	let flag=false;
   if(useUserStore().token){
     let res=await request.get(`/api/auth/question/byId/${props.id}/answer/mostlikes`,{page_num:0,page_size:10});
-		res.data.forEach(item=>{
+		res.forEach(item=>{
 			tableData.value.push({
 				id:item.id,
 			});
@@ -27,7 +27,7 @@ onMounted(async()=>{
   }
   if(!flag){
     let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`);
-		res.data.forEach(item=>{
+		res.forEach(item=>{
 			tableData.value.push({
 				id:item.id,
 			});
@@ -37,7 +37,7 @@ onMounted(async()=>{
 
 usePageInfiniteScroll(async(done)=>{
 	let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`,{page_name:page++,page_size:5});
-	res.data.forEach(item=>{
+	res.forEach(item=>{
 		tableData.value.push({
 			id:item.id,
 		});
