@@ -4,7 +4,7 @@ import { usePagination } from '@/hooks/useQuestionPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination();
+const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage , deleteQuestion } = usePagination();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
@@ -62,7 +62,7 @@ onUnmounted(() => {
             <td>{{ question.createdTime }}</td>
             <td>
               <el-button type="primary" plain @click="showDetails(question.id)">详情</el-button>
-              <el-button type="danger" plain>删除</el-button>
+              <el-button type="danger" plain @click="deleteQuestion(question.id)">删除</el-button>
             </td>
           </tr>
         </tbody>
@@ -83,7 +83,7 @@ onUnmounted(() => {
     <el-dialog v-model="dialogVisible" title="问题详情">
       <MarkdownContent :id="'question-content'" :content="dialogContent"></MarkdownContent>
       <template #footer>
-        <el-button type="primary" @click="goToAnswerManagement">查看相关回答</el-button>
+        <el-button type="primary" @click="goToAnswerManagement">查看相关回答</el-button> // TODO: 添加此方法，不知道怎么将问题id传递过去
       </template>
     </el-dialog>
   </div>

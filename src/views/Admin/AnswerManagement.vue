@@ -80,9 +80,6 @@ onUnmounted(() => {
       <div>
         <MarkdownContent :id="'answer-content'" :content="dialogContent"></MarkdownContent>
       </div>
-      <div>
-
-      </div>
     </el-dialog>
   </div>
 </template>
