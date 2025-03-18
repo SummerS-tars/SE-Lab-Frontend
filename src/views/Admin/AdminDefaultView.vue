@@ -1,17 +1,26 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useFetchCounts } from '@/hooks/useFetchCounts';
 
 const currentTime = ref(new Date().toLocaleString());
 const { questionCount, answerCount, fetchQuestionCount, fetchAnswerCount } = useFetchCounts();
 
+let intervalId;
+
 onMounted(() => {
+  // 初始加载数据
   fetchQuestionCount();
   fetchAnswerCount();
-  setInterval(() => {
+  intervalId = setInterval(() => {
     currentTime.value = new Date().toLocaleString();
   }, 1000);
 });
+
+// 清理钩子
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
+
 </script>
 
 <template>
