@@ -2,16 +2,18 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 const jwtparse = (token)=>{
-    const parts =token.split('.');
-
-    const payloadBase64Url = parts[1];
-    const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    const payload = JSON.parse(payloadJson);
-    return payload;
+    try {
+        const parts = token.split('.');
+        const payloadBase64Url = parts[1];
+        const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(payloadJson);
+    } catch (error) {
+        console.error('Invalid token:', error);
+        return {}; // 返回一个空对象，避免异常
+    }
 }
 
 export const useUserStore = defineStore('token',()=>{

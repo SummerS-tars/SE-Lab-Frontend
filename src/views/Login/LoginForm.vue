@@ -40,10 +40,12 @@ const submitForm = (formEl) => {
 			let res = await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
 			console.log(res);
 			ElMessage.success('登录成功');
-			useUserStore().setToken(res);
 			const userStore = useUserStore();
-			
-			if (userStore.isadmin) {
+			userStore.setToken(res);
+
+      let {isadmin} = userStore;
+
+			if (isadmin) {
 				await router.push('/admin_home');
 			} else {
 				await router.push('/');
