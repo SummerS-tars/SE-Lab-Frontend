@@ -22,7 +22,9 @@ onMounted(() => {
     <br>
     <div class="info-box">
       <p>当前时间: {{ currentTime }}</p>
+      <br>
       <p>当前所有问题数量: {{ questionCount }}</p>
+      <br>
       <p>当前所有回答数量: {{ answerCount }}</p>
     </div>
   </div>
@@ -33,6 +35,5 @@ onMounted(() => {
 
 .info-box {
   font-size: 18px;
-  margin-top: 20px;
 }
 </style>
