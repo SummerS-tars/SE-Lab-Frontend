@@ -1,12 +1,22 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { usePagination } from '@/hooks/usePagination';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, nextPage, prevPage } = usePagination('/api/admin/answers');
+const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination('/api/admin/answers');
 
 onMounted(() => {
+  // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value);
 });
+
+// 清理钩子
+onUnmounted(() => {
+  currentPage.value = 1;
+  totalItems.value = 0;
+  totalPages.value = 0;
+  items.value = [];
+});
+
 </script>
 
 <template>
@@ -19,9 +29,9 @@ onMounted(() => {
       <table>
         <thead>
           <tr>
-            <th>回答ID</th>
+            <th @click="handleSort('id')">回答ID</th>
             <th>回答作者</th>
-            <th>创建时间</th>
+            <th @click="handleSort('createdTime')">创建时间</th>
             <th>操作</th>
           </tr>
         </thead>
