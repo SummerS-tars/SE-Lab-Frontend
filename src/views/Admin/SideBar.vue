@@ -18,13 +18,13 @@ const navigateTo = (routeName) => {
   <br>
   <el-menu :default-active="route.name" class="el-menu-vertical-demo">
     <el-menu-item index="AdminHome" @click="navigateTo('AdminHome')">
-      <content class="content">主页</content>
+      <span class="content">主页</span>
     </el-menu-item>
     <el-menu-item index="QuestionManagement" @click="navigateTo('QuestionManagement')">
-      <content class="content">问题管理</content>
+      <span class="content">问题管理</span>
     </el-menu-item>
     <el-menu-item index="AnswerManagement" @click="navigateTo('AnswerManagement')">
-      <content class="content">回答管理</content>
+      <span class="content">回答管理</span>
     </el-menu-item>
   </el-menu>
   </div>
@@ -47,6 +47,5 @@ const navigateTo = (routeName) => {
   height: 100%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 </style>
