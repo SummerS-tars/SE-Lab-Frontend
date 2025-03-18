@@ -1,8 +1,25 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { usePagination } from '@/hooks/usePagination';
+import MarkdownContent from '@/components/MarkdownContent.vue';
 
 const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination('/api/admin/answers');
+
+const dialogVisible = ref(false);
+const dialogContent = ref('');
+
+// 显示回答详情的浮窗
+const showDetails = async (id) => {
+  let res = await request.get(`/api/answer/byId/${id}`);
+  // if (res.message === 'success') {
+    // dialogContent.value = res.content;
+    // dialogVisible.value = true;
+    
+    // test
+    dialogContent.value = "# Hello, Cherry Markdown!";
+    dialogVisible.value = true;
+  // }
+};
 
 onMounted(() => {
   // 初始加载数据，默认按创建时间降序排列
@@ -29,9 +46,9 @@ onUnmounted(() => {
       <table>
         <thead>
           <tr>
-            <th @click="handleSort('id')">回答ID</th>
+            <th>回答ID</th>
             <th>回答作者</th>
-            <th @click="handleSort('createdTime')">创建时间</th>
+            <th @click="handleSort">创建时间</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -41,7 +58,7 @@ onUnmounted(() => {
             <td>{{ answer.author }}</td>
             <td>{{ answer.createdTime }}</td>
             <td>
-              <el-button type="primary" plain>详情</el-button>
+              <el-button type="primary" plain @click="showDetails(answer.id)">详情</el-button>
               <el-button type="danger" plain>删除</el-button>
             </td>
           </tr>
@@ -57,6 +74,10 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+    <!-- 使用MarkdownContent组件显示回答详情 -->
+    <el-dialog v-model="dialogVisible" title="回答详情">
+      <MarkdownContent :id="'answer-content'" :content="dialogContent"></MarkdownContent>
+    </el-dialog>
   </div>
 </template>
 
