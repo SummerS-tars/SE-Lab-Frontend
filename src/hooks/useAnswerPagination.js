@@ -49,6 +49,22 @@ export function usePagination() {
     }
   };
 
+  const deleteAnswer = async (id) => {
+    try {
+      let res = await request.post(`/api/auth/answer/delete`, {
+          params: { id }
+        }
+      );
+      if (res.code === 200) {
+        fetchItems(currentPage.value, sortOrder.value);
+      } else {
+        console.error(res.message);
+      }
+    } catch (error) {
+      console.error('Error deleting answer:', error);
+    }
+  };
+
   const handleSort = () => {
     sortOrder.value = sortOrder.value === 'time+' ? 'time-' : 'time+';
     currentPage.value = 1;
@@ -79,5 +95,6 @@ export function usePagination() {
     handleSort,
     nextPage,
     prevPage,
+    deleteAnswer,
   };
 }

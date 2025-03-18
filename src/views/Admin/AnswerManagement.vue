@@ -4,7 +4,7 @@ import { usePagination } from '@/hooks/useAnswerPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination();
+const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage , deleteAnswer } = usePagination();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
@@ -60,7 +60,7 @@ onUnmounted(() => {
             <td>{{ answer.createdTime }}</td>
             <td>
               <el-button type="primary" plain @click="showDetails(answer.id)">详情</el-button>
-              <el-button type="danger" plain>删除</el-button>
+              <el-button type="danger" plain @click="deleteAnswer(answer.id)">删除</el-button>
             </td>
           </tr>
         </tbody>
