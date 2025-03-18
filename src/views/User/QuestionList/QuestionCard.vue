@@ -16,28 +16,26 @@ const props=defineProps({
 })
 
 let questionInfo=ref({
-	numAnswer:0,
+	answerCount:0,
 });
 
 onMounted(async()=>{
-	let res= await request.get(`/api/question/byId/${props.id}`);
-	if(res.message=='success'){
-		questionInfo.value={
-			title:res.title,
-			content:res.content,
-			createAt:res.createAt,
-			numAnswer:res.numAnswer,
-		}
+	let res= await request.get(`/api/public/question/byId/${props.id}`);
+	questionInfo.value={
+		title:res.title,
+		content:res.content,
+		createAt:res.createdAt,
+		answerCount:res.answerCount,
 	}
 })
 
 const deleteQuestion=async()=>{
-	if(questionInfo.value.numAnswer>0){
+	if(questionInfo.value.answerCount>0){
 		ElMessage.error('问题已存在回答，不能删除');
 		return;
 	}
 	if(!confirm('确定删除吗？'))return;
-	let res=await request.post(`/api/auth/question/delete`,{id:props.id});
+	await request.post(`/api/auth/question/delete`,{id:props.id});
 	props.removethis();
 	ElMessage.success('删除成功');
 }
@@ -58,7 +56,7 @@ const EditBox = ref();
         <MarkdownContent :id="` problem-content`+id" :content="questionInfo.content"/>
 		<template #footer>
 			<div class="card-footer" style="display: flex;justify-content: space-between">
-				<span style="font-size: 16px;font-weight: bold;"> 回答数： {{ questionInfo.numAnswer }}</span>
+				<span style="font-size: 16px;font-weight: bold;"> 回答数： {{ questionInfo.answerCount }}</span>
 				<div>
 					<template v-if="useUserStore().token&&userid==useUserStore().id">
 						<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>

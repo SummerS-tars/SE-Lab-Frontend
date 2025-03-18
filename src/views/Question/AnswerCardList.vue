@@ -11,8 +11,9 @@ const props=defineProps({
 })
 
 const loadpage=async(page)=>{
-	let res=await request.get(`/api/auth/question/byId/${props.id}/answer/mostlikes`,{page_num:page,page_size:10});
-	res.forEach(item=>{
+	let res=await request.get(`/api/auth/answers/byQuestionId/${props.id}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	console.log(res.records);
+	res.records.forEach(item=>{
 		tableData.value.push({
 			id:item.id,
 		});
@@ -26,17 +27,17 @@ const tableData = ref([])
 onMounted(async()=>{
 	let flag=false;
   if(useUserStore().token){
-	loadpage();
+	loadpage(infiniteScroll.value.getPage()+1);
 	infiniteScroll.value.setPage(1);
 	infiniteScroll.value.setCallback(()=>{
-		loadpage();
+		loadpage(infiniteScroll.value.getPage()+1);
 		infiniteScroll.value.addPage();
 	});
 	flag=true;
   }
   if(!flag){
-    let res=await request.get(`/api/question/byId/${props.id}/answer/mostlikes`);
-	res.forEach(item=>{
+    let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
+	res.records.forEach(item=>{
 		tableData.value.push({
 			id:item.id,
 		});

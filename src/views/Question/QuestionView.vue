@@ -24,7 +24,7 @@ onMounted(async() => {
   questionInfo.value.title = res.title;
   questionInfo.value.createAt = res.createAt;
   questionInfo.value.author = {
-    id: res.authorid,
+    id: res.authorId,
     username: res.author,
   };
   questionInfo.value.content = res.content;
@@ -61,7 +61,7 @@ const answerEditBox = ref();
                   <router-link :to="`/user/profile/${questionInfo.author.id}`" class="nav-user">
                     {{ questionInfo.author.username }}
                   </router-link>
-                  <FollowButton :author="questionInfo.author"></FollowButton>
+                  <FollowButton :authorId="questionInfo.author.id"></FollowButton>
                 </div>
               </div>
               <MarkdownContent :id="`question-content`" :content="questionInfo.content"></MarkdownContent>

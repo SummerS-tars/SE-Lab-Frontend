@@ -13,27 +13,24 @@ const userid =  route.params.id;
 let page=1;
 
 onMounted(async()=>{
-  let res=await request.get(`/api/user/byId/${userid}/follower`,{page_num:0,page_cnt:10});
-	if(res.message=='success'){
-		res.data.forEach(item=>{
-			tableData.value.push({
-        username:item.username,
-				id:item.id,
-			});
+  let res=await request.get(`/api/public/user/byId/${userid}/follower`,{params:{page_num:1,page_size:10}});
+	res.records.forEach(item=>{
+		tableData.value.push({
+			username:item.username,
+			id:item.id,
 		});
-	}
+	});
+	console.log(res.records);
 });
 
 usePageInfiniteScroll(async(done)=>{
-	let res=await request.get(`/api/user/byId/${userid}/follower`,{page_num:page++,page_cnt:10});
-	if(res.message=='success'){
-		res.data.forEach(item=>{
-			tableData.value.push({
-                username:item.username,
-				id:item.id,
-			});
+	let res=await request.get(`/api/public/user/byId/${userid}/follower`,{params:{page_num:++page,page_cnt:10}});
+	res.records.forEach(item=>{
+		tableData.value.push({
+			username:item.username,
+			id:item.id,
 		});
-	}
+	});
 	done();
 })
 
