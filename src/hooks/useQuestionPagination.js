@@ -61,15 +61,13 @@ export function usePagination() {
 
   const deleteQuestion = async (id) => {
     try {
-      let res = await request.post(`/api/auth/question/delete`, {
-          params: { id }
-        }
-      );
-      if (res.code === 200) {
-        fetchItems(currentPage.value, sortOrder.value);
-      } else {
-        console.error(res.message);
-      }
+      await request.post(`/api/auth/question/delete`,{id});
+      fetchItems(currentPage.value, sortOrder.value);
+      // if (res.code === 200) {
+      //   fetchItems(currentPage.value, sortOrder.value);
+      // } else {
+      // console.error(res.message);
+      // }
     } catch (error) {
       console.error('Error deleting question:', error);
     }
