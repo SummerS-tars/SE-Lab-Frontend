@@ -37,11 +37,15 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
+			let data={
+				username:ruleForm.username, 
+				password:ruleForm.password
+			};
+			let res=await request.post(`/api/auth/login?password=${data.password}&username=${data.username}`);
 			console.log(res);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);
-			await router.push('/');
+			await router.push('/admin_home');
 		}
 	});
 }
@@ -62,11 +66,11 @@ const submitForm = (formEl) => {
 			<img src="@/assets/Mu_Silk.png" alt="Logo" style="height: 120px; padding-top: 20px">
 		</div>
 
-		<el-form-item label="用户名" prop="username">
+		<el-form-item label="管理员用户名" prop="username">
 			<el-input v-model="ruleForm.username" type="text" autocomplete="off"/>
 		</el-form-item>
 
-		<el-form-item label="密码" prop="password">
+		<el-form-item label="管理员密码" prop="password">
 			<el-input v-model="ruleForm.password" type="password" autocomplete="off"/>
 		</el-form-item>
 
@@ -74,15 +78,10 @@ const submitForm = (formEl) => {
 			<el-button type="primary" @click="submitForm(ruleFormRef)" style="width:300px">登录</el-button>
 		</el-form-item>
 
-    <el-form-item style="display: flex; justify-content: space-between;">
-      <div>
-      <el-text>没有账号？</el-text>
-      <router-link class="el-link el-link--primary is-underline" to="/register">注册</router-link>
-      </div>
-      <div style="margin-left: auto;">
-      <router-link class="el-link el-link--primary is-underline" to="/admin_login">管理员登录</router-link>
-      </div>
-    </el-form-item>
+		<el-form-item>
+			<el-text>不是管理员？</el-text>
+			<router-link class="el-link el-link--primary is-underline" to="/login">用户登录</router-link>
+		</el-form-item>
 
 	</el-form>
 

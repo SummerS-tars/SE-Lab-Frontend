@@ -18,11 +18,12 @@ export default defineConfig({
     },
   },
   server: {
-    // /** 设置 host: true 才可以使用 Network 的形式，以 IP 访问项目 */
-    // host: true, // host: "0.0.0.0"
-    // /** 端口号 */
-    // port: 3333,
-    // /** 是否自动打开浏览器 */
+    /** 设置 host: true 才可以使用 Network 的形式，以 IP 访问项目 */
+    host: true,
+    allowedHosts: true,
+    /** 端口号 */
+    port: 3001,
+    /** 是否自动打开浏览器 */
     // open: false,
     /** 跨域设置允许 */
     cors: true,
@@ -31,8 +32,8 @@ export default defineConfig({
     /** 接口代理 */
     proxy: {
         '/api/': {
-            // target: 'http://127.0.0.1:4523/m1/5923172-5610251-default/',
-            target: "http://127.0.0.1:8080/",
+            target: 'http://127.0.0.1:4523/m1/5923172-5610251-default',
+            // target: "http://127.0.0.1:8080/",
             ws: true,
             /** 是否允许跨域 */
             changeOrigin: true,  // 是否改变域
