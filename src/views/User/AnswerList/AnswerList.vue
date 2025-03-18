@@ -1,51 +1,57 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import request from '@/request/http.js'
 import AnswerCard from './AnswerCard.vue';
 import { useRoute } from 'vue-router';
-import { usePageInfiniteScroll } from '@/components/pageInfiniteScroll';
+import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
 const tableData = ref([])
 
 const route = useRoute();
 const userid =  route.params.id;
 
-let page=1;
-
-const init=async()=>{
-	tableData.value=[];
-	let res=await request.get(`/api/public/answers/byUserId/${userid}`,{params:{page_num:1,page_size:10,sort:'likes-'}});
+const loadpage=async(page)=>{
+	let res=await request.get(`/api/public/answers/byUserId/${userid}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	if(res.records.length===0){
+		infiniteScroll.value.finishload();
+		return;
+	}
 	res.records.forEach(item=>{
 		tableData.value.push({
 			questionid:item.questionId,
 			answerid:item.id,
 		});
 	});
-	page=1;
 }
 
 onMounted(async()=>{
-	init();
-});
-
-usePageInfiniteScroll(async(done)=>{
-	let res=await request.get(`/api/public/answers/byUserId/${userid}`,{params:{page_num:++page,page_size:10,sort:'likes-'}});
-	res.records.forEach(item=>{
-		tableData.value.push({
-			questionid:item.questionId,
-			answerid:item.answerId,
+	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+		infiniteScroll.value.setPage(1);
+	});
+	infiniteScroll.value.setCallback(()=>{
+		loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+			infiniteScroll.value.addPage();
 		});
 	});
-	done();
-})
-
+});
 const itemDelete=(index)=>{
 	init();
 }
 
+const infiniteScroll=ref();
+
+onBeforeUpdate(()=>{
+	infiniteScroll.value.onBeforeUpdate();
+})
+
+onUpdated(()=>{
+	infiniteScroll.value.onUpdated();
+})
+
 </script>
 
 <template>
+	<PageInfiniteScroll ref="infiniteScroll"></PageInfiniteScroll>
   <template v-if="tableData.length==0">
 		<el-empty></el-empty>
 	</template>

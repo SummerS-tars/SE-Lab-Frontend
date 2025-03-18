@@ -27,13 +27,12 @@ onMounted(()=>{
 })
 
 usePageInfiniteScroll(async(done)=>{
-	let res= await request.get(`/api/public/questions/byUserId/${userid}`,{params:{page_num:page++,page_size:10,sort:'time-'}});
+	let res= await request.get(`/api/public/questions/byUserId/${userid}`,{params:{page_num:++page,page_size:10,sort:'time-'}});
 	res.records.forEach(item=>{
 		tableData.value.push({
 			id:item.id,
 		});
 	});
-	page=1;
 	done();
 })
 

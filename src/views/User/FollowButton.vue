@@ -12,7 +12,7 @@ const props=defineProps({
 const followed=ref(false);
 
 onMounted(()=>{
-	if(props.authorId){
+	if(useUserStore().token&&props.authorId){
 		request.get("/api/auth/user/followed",{params:{ id:props.authorId}}).then(res=>{
 			followed.value=res.followed;
 		});
@@ -20,10 +20,11 @@ onMounted(()=>{
 })
 
 watch(()=>props.authorId,(newVal)=>{
-	console.log(newVal);
-	request.get("/api/auth/user/followed",{params:{ id:newVal}}).then(res=>{
-		followed.value=res.followed;
-	});
+	if(useUserStore().token&&newVal){
+		request.get("/api/auth/user/followed",{params:{ id:newVal}}).then(res=>{
+			followed.value=res.followed;
+		});
+	}
 });
 
 const followUser=async(userid)=>{
