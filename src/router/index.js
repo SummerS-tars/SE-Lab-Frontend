@@ -7,7 +7,6 @@ import FollowerList from '@/views/User/FollowerList/FollowerList.vue';
 import FollowingList from '@/views/User/FollowingList/FollowingList.vue';
 import LoginForm from '@/views/Login/LoginForm.vue';
 import RegisterForm from '@/views/Login/RegisterForm.vue';
-import AdminLoginForm from '@/views/Login/AdminLoginForm.vue';
 import AdminDefaultView from '@/views/Admin/AdminDefaultView.vue';
 import QuestionManagement from '@/views/Admin/QuestionManagement.vue';
 import AnswerManagement from '@/views/Admin/AnswerManagement.vue';
