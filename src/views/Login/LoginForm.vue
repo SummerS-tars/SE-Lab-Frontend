@@ -37,11 +37,17 @@ const submitForm = (formEl) => {
 	if(!formEl) return;
 	formEl.validate(async (valid) =>{
 		if(valid){
-			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
+			let res = await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
 			console.log(res);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);
-			await router.push('/');
+			const userStore = useUserStore();
+			
+			if (userStore.isadmin) {
+				await router.push('/admin_home');
+			} else {
+				await router.push('/');
+			}
 		}
 	});
 }
@@ -78,9 +84,6 @@ const submitForm = (formEl) => {
       <div>
       <el-text>没有账号？</el-text>
       <router-link class="el-link el-link--primary is-underline" to="/register">注册</router-link>
-      </div>
-      <div style="margin-left: auto;">
-      <router-link class="el-link el-link--primary is-underline" to="/admin_login">管理员登录</router-link>
       </div>
     </el-form-item>
 

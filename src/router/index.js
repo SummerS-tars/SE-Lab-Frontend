@@ -33,7 +33,6 @@ const router = createRouter({
       children:[
         {path:'login',         name:'Login',  component:LoginForm},
         {path:'register',     name:'Register',component:RegisterForm},
-        {path:'admin_login', name:'AdminLogin', component: AdminLoginForm},
       ],
     },
     {
