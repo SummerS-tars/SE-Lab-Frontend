@@ -1,10 +1,14 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import request from '@/request/http';
+import {  } from 'pinia';
+import { useFetchCounts } from './useFetchCounts';
+
+const { questionCount , fetchQuestionCount } = useFetchCounts();
 
 export function usePagination() {
   const currentPage = ref(1);
-  const totalItems = ref(0);
-  const totalPages = ref(1);
+  const totalItems = computed(() => questionCount.value);
+  const totalPages = computed(() => Math.ceil(totalItems.value / 10));
   // const items = ref([]);
   const items = ref([
     {id: 1, title: 'title1', author: 'author1', createdTime: '2021-01-01'},
@@ -14,9 +18,7 @@ export function usePagination() {
   const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
     try {
       // 获取问题数量
-      let countRes = await request.get(`/api/public/questionsNum`);
-      totalItems.value = countRes.date.count;
-      totalPages.value = Math.ceil(totalItems.value / 10);
+      fetchQuestionCount();
 
       // 获取问题ID列表，临时变量res为id列表
       let res = await request.get(`/api/auth/questions`, {
