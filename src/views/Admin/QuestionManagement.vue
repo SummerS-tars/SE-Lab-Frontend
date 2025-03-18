@@ -15,7 +15,7 @@ const selectedQuestionId = ref(null); // 存储选中的问题ID
 const showDetails = (id) => {
   const question = items.value.find(q => q.id === id);
   if (question) {
-    dialogContent.value = question.content;
+    dialogContent.value = `#${question.title}\n作者：${question.author}\n创建时间：${question.createdTime}\n${question.content}`;
     dialogVisible.value = true;
     selectedQuestionId.value = id; // 存储问题ID
   } else {
