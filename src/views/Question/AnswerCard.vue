@@ -3,11 +3,12 @@ import IconLike from '@/components/icons/IconLike.vue';
 import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import FollowButton from '../User/FollowButton.vue';
 import LikeButton from './LikeButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
+import { useAnswerStore } from '@/stores/answer';
 
 const props=defineProps({
 	id:{default:''},
@@ -17,12 +18,12 @@ const answerInfo=ref({
 	author:{id:'',username:''},
 });
 
-const like=ref(false);
-
-onMounted(async()=>{
+onMounted(()=>{
+	answerInfo.value.id=props.id;
+	answerInfo.value.like=false;
 	request.get(`/api/public/answer/byId/${props.id}`).then(res=>{
 		answerInfo.value.author={
-			id:res.authorid,
+			id:res.authorId,
 			username:res.author,
 		};
 		answerInfo.value.createAt=res.createAt;
@@ -30,11 +31,11 @@ onMounted(async()=>{
 		answerInfo.value.likes=res.likes;
 	});
 	if(useUserStore().token){
-		request.get(`/api/auth/user/answer/like`,{id:props.id}).then(res=>{
-			like.value=res;
+		request.get(`/api/auth/user/answer/like`,{params:{id:props.id}}).then(res=>{
+			answerInfo.value.liked=res.liked;
 		});
 	}
-	
+	useAnswerStore().setAnswer(answerInfo)
 });
 
 </script>
@@ -52,7 +53,7 @@ onMounted(async()=>{
 					<span style="font-size: 14px;color: #999;"> {{ answerInfo.createAt }}</span>
 				</div>
 				<div>
-					<FollowButton :author="answerInfo.author"></FollowButton>
+					<FollowButton :authorId="answerInfo.author.id"></FollowButton>
 				</div>
 			</div>
 			
@@ -63,7 +64,7 @@ onMounted(async()=>{
 		<template #footer>
 			<div class="card-footer">
 				<span>
-					<LikeButton :like="like" :likes="answerInfo.likes"></LikeButton>
+					<LikeButton :id="props.id"></LikeButton>
 				</span>
 			</div>
 		</template>

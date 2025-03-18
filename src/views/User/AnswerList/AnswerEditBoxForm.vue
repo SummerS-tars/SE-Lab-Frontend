@@ -34,7 +34,7 @@ watch(visible,async(newValue)=>{
 	}
 });
 const submitForm = async() => {
-	let res=await request.post("/api/auth/answer/modify", {id:props.id, content:EditBox.value.getContent()});
+	await request.post("/api/auth/answer/modify", {id:props.id, content:EditBox.value.getContent()});
 	ElMessage.success('修改成功');
 	emit("update:content",EditBox.value.getContent());
 	resetForm();

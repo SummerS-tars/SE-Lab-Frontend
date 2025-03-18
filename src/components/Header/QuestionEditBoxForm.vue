@@ -51,6 +51,7 @@ const submitForm = (formEl) => {
 			await request.post("/api/auth/question/create", {title:ruleForm.title, content:EditBox.value.getContent()});
 			ElMessage.success('发布成功');
 			close();
+			window.location.reload();
 		}
 	});
 } ;

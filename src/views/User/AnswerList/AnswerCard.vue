@@ -20,15 +20,13 @@ const questionInfo=ref({});
 const answerInfo=ref({});
 
 onMounted(async() =>{
-	let res = await request.get(`/api/question/byId/${props.questionid}`);
-	if(res.message=='success'){
+	request.get(`/api/public/question/byId/${props.questionid}`).then(res=>{
 		questionInfo.value.title=res.title;
-	}
-	res = await request.get(`/api/answer/byId/${props.answerid}`);
-	if(res.message=='success'){
-		answerInfo.value.createAt=res.createAt;
+	})
+	request.get(`/api/public/answer/byId/${props.answerid}`).then(res=>{
+		answerInfo.value.createAt=res.createdAt;
 		answerInfo.value.content=res.content;
-	}
+	})
 })
 
 const deleteAnswer=async()=>{

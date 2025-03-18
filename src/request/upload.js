@@ -21,7 +21,8 @@ upload.interceptors.request.use(
 
 upload.interceptors.response.use(
     response => {
-        return response.data;
+        console.log(response.data);
+        return response.data.message;
     },
     error => {
         return Promise.reject(error);

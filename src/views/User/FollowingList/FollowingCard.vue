@@ -8,7 +8,7 @@ const route = useRoute();
 const userid =  route.params.id;
 
 const props=defineProps({
-  username:{default:''},
+	username:{default:''},
 	id:{default:''},
 })
 
@@ -24,7 +24,7 @@ const props=defineProps({
 			</div>
 			<div>
 				<template v-if="useUserStore().token&&useUserStore().id==userid">
-					<FollowButton :author="{liked:true}"/>
+					<FollowButton :authorId="props.id"/>
 				</template>
 			</div>
 		</div>

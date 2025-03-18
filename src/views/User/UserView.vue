@@ -20,21 +20,12 @@ const user=ref({
 })
 
 onBeforeMount(async()=>{
-	let res = await request.get(`/api/user/byId/${userid}`);
+	let res = await request.get(`/api/public/user/byId/${userid}`);
   user.value.username=res.username;
 	user.value.email=res.email;
 	user.value.follower=res.numfollower;
 	user.value.following=res.numfollowing;
-	
-	if(useUserStore().token){
-		let res = await request.get("/api/auth/user/followed",{id:userid});
-		if(res.message=='success'){
-			user.value.followed=res.followed;
-		}
-		else{
-			ElMessage.error(res.message);
-		}
-	}
+	user.value.id=userid;
 });
 
 const nameToIndexMap = {
@@ -81,7 +72,7 @@ const handleSelect = (key, keyPath) => {
 								<!-- <el-button type="primary" plain>编辑个人资料</el-button> -->
 							</template>
 							<template v-else>
-								<FollowButton :author="{username:user.username,id:user.id}"></FollowButton>
+								<FollowButton :authorId="user.id"></FollowButton>
 							</template>
 						</div>
 					</div>

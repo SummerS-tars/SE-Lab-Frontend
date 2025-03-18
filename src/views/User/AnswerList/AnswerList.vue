@@ -14,16 +14,14 @@ let page=1;
 
 const init=async()=>{
 	tableData.value=[];
-	let res=await request.get(`/api/user/byId/${userid}/answer`,{page_num:0,page_cnt:10});
-	if(res.message=='success'){
-		res.data.forEach(item=>{
-			tableData.value.push({
-				questionid:item.questionid,
-				answerid:item.answerid,
-			});
+	let res=await request.get(`/api/public/answers/byUserId/${userid}`,{params:{page_num:1,page_size:10,sort:'likes-'}});
+	res.records.forEach(item=>{
+		tableData.value.push({
+			questionid:item.questionId,
+			answerid:item.id,
 		});
-		page=1;
-	}
+	});
+	page=1;
 }
 
 onMounted(async()=>{
@@ -31,15 +29,13 @@ onMounted(async()=>{
 });
 
 usePageInfiniteScroll(async(done)=>{
-	let res=await request.get(`/api/user/byId/${userid}/answer`,{page_num:page++,page_cnt:10});
-	if(res.message=='success'){
-		res.data.forEach(item=>{
-			tableData.value.push({
-				questionid:item.questionid,
-				answerid:item.answerid,
-			});
+	let res=await request.get(`/api/public/answers/byUserId/${userid}`,{params:{page_num:++page,page_size:10,sort:'likes-'}});
+	res.records.forEach(item=>{
+		tableData.value.push({
+			questionid:item.questionId,
+			answerid:item.answerId,
 		});
-	}
+	});
 	done();
 })
 

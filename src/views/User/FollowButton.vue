@@ -2,14 +2,29 @@
 import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 
 const props=defineProps({
-	author:{default:{id:'',username:'',liked:false}},
+	authorId:undefined,
 });
 
-const liked=ref(props.author.liked);
+const followed=ref(false);
+
+onMounted(()=>{
+	if(props.authorId){
+		request.get("/api/auth/user/followed",{params:{ id:props.authorId}}).then(res=>{
+			followed.value=res.followed;
+		});
+	}
+})
+
+watch(()=>props.authorId,(newVal)=>{
+	console.log(newVal);
+	request.get("/api/auth/user/followed",{params:{ id:newVal}}).then(res=>{
+		followed.value=res.followed;
+	});
+});
 
 const followUser=async(userid)=>{
 	if(!useUserStore().token){
@@ -17,7 +32,8 @@ const followUser=async(userid)=>{
 		return;
 	}
 	request.post('/api/auth/user/follow',{id:userid}).then(res=>{
-		liked.value=true;
+		followed.value=true;
+		window.location.reload();
 	});
 };
 
@@ -27,7 +43,8 @@ const unfollowUser=async(userid)=>{
 		return;
 	}
 	request.post('/api/auth/user/unfollow',{id:userid}).then(res=>{
-		liked.value=false;
+		followed.value=false;
+		window.location.reload();
 	});
 };
 
@@ -35,14 +52,14 @@ const unfollowUser=async(userid)=>{
 
 
 <template>
-	<template v-if="useUserStore().token && useUserStore().id===props.author.id">
+	<template v-if="useUserStore().token && useUserStore().id===props.authorId">
 		
 	</template>
-	<template v-else-if=liked>
-		<el-button type="primary" @click="unfollowUser(props.author.id)">已关注</el-button>
+	<template v-else-if=followed>
+		<el-button type="primary" @click="unfollowUser(props.authorId)">已关注</el-button>
 	</template>
 	<template v-else>
-		<el-button type="primary" @click="followUser(props.author.id)">+ 关注</el-button>
+		<el-button type="primary" @click="followUser(props.authorId)">+ 关注</el-button>
 	</template>
 </template>
 
