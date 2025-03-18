@@ -8,17 +8,18 @@ const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, next
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
-// const dialogContent = ref('# test');
+const selectedQuestionId = ref(null); // 存储选中的问题ID
 
 
 // 显示问题详情的浮窗
-const showDetails = async (id) => {
-  let res = await request.get(`/api/public/question/byId/${id}`);
-  if (res.code === 200) {
-    dialogContent.value = res.data.content;
+const showDetails = (id) => {
+  const question = items.value.find(q => q.id === id);
+  if (question) {
+    dialogContent.value = question.content;
     dialogVisible.value = true;
+    selectedQuestionId.value = id; // 存储问题ID
   } else {
-    console.error(res.message);
+    console.error('Question not found');
   }
 };
 
@@ -81,6 +82,9 @@ onUnmounted(() => {
     <!-- 使用MarkdownContent组件显示问题详情 -->
     <el-dialog v-model="dialogVisible" title="问题详情">
       <MarkdownContent :id="'question-content'" :content="dialogContent"></MarkdownContent>
+      <template #footer>
+        <el-button type="primary" @click="goToAnswerManagement">查看相关回答</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>

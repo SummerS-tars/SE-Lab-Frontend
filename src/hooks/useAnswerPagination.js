@@ -6,14 +6,16 @@ export function usePagination() {
   const totalItems = ref(0);
   const totalPages = ref(1);
   const items = ref([
-    {id: 1, author: 'author1', createdTime: '2021-01-01'},
+    {id: 1, questionId: 1 , author: 'author1', createdTime: '2021-01-01'},
   ]);
   const sortOrder = ref('time-');
 
-  const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
+  const fetchItems = async (page = currentPage.value, order = sortOrder.value, questionId = '') => {
     try {
       // 获取回答数量
-      let countRes = await request.get(`/api/public/answers/sum`);
+      let countRes = await request.get(`/api/public/answersNum`, {
+        params: { questionId }
+      });
       totalItems.value = countRes;
       totalPages.value = Math.ceil(totalItems.value / 10);
 
@@ -33,6 +35,7 @@ export function usePagination() {
           if (detailRes.code === 200) {
             items.value.push({
               id: detailRes.data.id,
+              questionId: detailRes.data.questionId,
               author: detailRes.data.author,
               createdTime: detailRes.data.timestamp,
             });

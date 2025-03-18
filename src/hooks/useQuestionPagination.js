@@ -5,17 +5,17 @@ export function usePagination() {
   const currentPage = ref(1);
   const totalItems = ref(0);
   const totalPages = ref(1);
-  const items = ref([]);
-  // const items = ref([
-  //   {id: 1, title: 'title1', author: 'author1', createdTime: '2021-01-01'},
-  // ]);
+  // const items = ref([]);
+  const items = ref([
+    {id: 1, title: 'title1', author: 'author1', createdTime: '2021-01-01'},
+  ]);
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
     try {
       // 获取问题数量
-      let countRes = await request.get(`/api/public/questions/sum`);
-      totalItems.value = countRes;
+      let countRes = await request.get(`/api/public/questionsNum`);
+      totalItems.value = countRes.date.count;
       totalPages.value = Math.ceil(totalItems.value / 10);
 
       // 获取问题ID列表，临时变量res为id列表
@@ -37,6 +37,7 @@ export function usePagination() {
               title: detailRes.data.title,
               author: detailRes.data.author,
               createdTime: detailRes.data.timestamp,
+              content: detailRes.data.content,
             });
           }
         }
