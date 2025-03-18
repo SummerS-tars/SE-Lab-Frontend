@@ -21,7 +21,8 @@ export function usePagination() {
       fetchQuestionCount();
 
       // 获取问题ID列表，临时变量res为id列表
-      let res = await request.get(`/api/auth/questions`, {
+      items.value = [];
+      let questionRes = await request.get(`/api/auth/questions`, {
         params: {
           page_num: page,
           page_size: 10,
@@ -29,23 +30,30 @@ export function usePagination() {
         }
       });
 
-      if (res.code === 200) {
-        items.value = [];
-        for (let id of res.data) {
-          let detailRes = await request.get(`/api/public/question/byId/${id}`);
-          if (detailRes.code === 200) {
-            items.value.push({
-              id: detailRes.data.id,
-              title: detailRes.data.title,
-              author: detailRes.data.author,
-              createdTime: detailRes.data.timestamp,
-              content: detailRes.data.content,
-            });
-          }
-        }
-      } else {
-        console.error(res.message);
+      // test
+      console.log('res:',questionRes);
+
+      for(let question of questionRes.records){
+        items.value.push({
+          id: question.id,
+          title: question.title,
+          author: question.author,
+          createdTime: question.createdAt,
+          content: question.content,
+        });
       }
+
+
+      // for (let id of res) {
+      //   let detailRes = await request.get(`/api/public/question/byId/${id}`);
+      //   items.value.push({
+      //     id: detailRes.id,
+      //     title: detailRes.title,
+      //     author: detailRes.author,
+      //     createdTime: detailRes.createdAt,
+      //     content: detailRes.content,
+      //   });
+      // }
     } catch (error) {
       console.error('Error fetching items:', error);
     }
