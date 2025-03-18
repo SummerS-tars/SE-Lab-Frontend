@@ -10,13 +10,13 @@ const dialogVisible = ref(false);
 const dialogContent = ref('');
 
 // 显示回答详情的浮窗
-const showDetails = async (id) => {
-  let res = await request.get(`/api/public/answer/byId/${id}`);
-  if (res.code === 200) {
-    dialogContent.value = res.data.content;
+const showDetails = (id) => {
+  const answer = items.value.find((item) => item.id === id);
+  if (answer) {
+    dialogContent.value = answer.content;
     dialogVisible.value = true;
   } else {
-    console.error(res.message);
+    console.error('Answer not found');
   }
 };
 

@@ -38,6 +38,7 @@ export function usePagination() {
               questionId: detailRes.data.questionId,
               author: detailRes.data.author,
               createdTime: detailRes.data.timestamp,
+              content: detailRes.data.content,
             });
           }
         }
