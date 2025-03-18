@@ -1,9 +1,38 @@
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useFetchCounts } from '@/hooks/useFetchCounts';
 
+const currentTime = ref(new Date().toLocaleString());
+const { questionCount, answerCount, fetchQuestionCount, fetchAnswerCount } = useFetchCounts();
+
+onMounted(() => {
+  fetchQuestionCount();
+  fetchAnswerCount();
+  setInterval(() => {
+    currentTime.value = new Date().toLocaleString();
+  }, 1000);
+});
 </script>
 
 <template>
   <div>
-    
+    <div class="head" style="font-weight: bold;">
+      管理主页
+    </div>
+    <br>
+    <div class="info-box">
+      <p>当前时间: {{ currentTime }}</p>
+      <p>当前所有问题数量: {{ questionCount }}</p>
+      <p>当前所有回答数量: {{ answerCount }}</p>
+    </div>
   </div>
 </template>
+
+<style scoped>
+@import '../../assets/styles/adminMainView.css';
+
+.info-box {
+  font-size: 18px;
+  margin-top: 20px;
+}
+</style>
