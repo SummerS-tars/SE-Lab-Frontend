@@ -1,28 +1,43 @@
 import { ref } from 'vue';
 import request from '@/request/http';
 
-export function usePagination(apiEndpoint) {
+export function usePagination() {
   const currentPage = ref(1);
   const totalItems = ref(0);
-  const totalPages = ref(0);
+  const totalPages = ref(1);
   const items = ref([
-    {id: 1, title: 'title1', author: 'author1', createdTime: '2021-01-01'},
+    {id: 1, author: 'author1', createdTime: '2021-01-01'},
   ]);
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
     try {
-      let res = await request.get(apiEndpoint, {
+      // 获取回答数量
+      let countRes = await request.get(`/api/public/answers/sum`);
+      totalItems.value = countRes;
+      totalPages.value = Math.ceil(totalItems.value / 10);
+
+      // 获取回答ID列表，临时变量res为id列表
+      let res = await request.get(`/api/auth/answers`, {
         params: {
           page_num: page,
           page_size: 10,
           sort: order
         }
       });
+
       if (res.code === 200) {
-        items.value = res.data.items;
-        totalItems.value = res.data.totalItems;
-        totalPages.value = Math.ceil(res.data.totalItems / 10);
+        items.value = [];
+        for (let id of res) {
+          let detailRes = await request.get(`/api/public/answer/byId/${id}`);
+          if (detailRes.code === 200) {
+            items.value.push({
+              id: detailRes.data.id,
+              author: detailRes.data.author,
+              createdTime: detailRes.data.timestamp,
+            });
+          }
+        }
       } else {
         console.error(res.message);
       }

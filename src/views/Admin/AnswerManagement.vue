@@ -4,7 +4,7 @@ import { usePagination } from '@/hooks/useAnswerPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination('/api/admin/answers');
+const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
@@ -46,6 +46,7 @@ onUnmounted(() => {
         <thead>
           <tr>
             <th>回答ID</th>
+            <th>相关问题ID</th>
             <th>回答作者</th>
             <th @click="handleSort">创建时间</th>
             <th>操作</th>
@@ -54,6 +55,7 @@ onUnmounted(() => {
         <tbody>
           <tr v-for="answer in items" :key="answer.id">
             <td>{{ answer.id }}</td>
+            <td>{{ answer.questionId }}</td>
             <td>{{ answer.author }}</td>
             <td>{{ answer.createdTime }}</td>
             <td>
@@ -69,13 +71,18 @@ onUnmounted(() => {
         <div class="page-controls">
           <el-button @click="prevPage" :disabled="currentPage === 1"><</el-button>
           <span>{{ currentPage }}</span>
-          <el-button @click="nextPage" :disabled="currentPage === totalPages">></el-button>
+          <el-button @click="nextPage" :disabled="currentPage >= totalPages">></el-button>
         </div>
       </div>
     </div>
     <!-- 使用MarkdownContent组件显示回答详情 -->
     <el-dialog v-model="dialogVisible" title="回答详情">
-      <MarkdownContent :id="'answer-content'" :content="dialogContent"></MarkdownContent>
+      <div>
+        <MarkdownContent :id="'answer-content'" :content="dialogContent"></MarkdownContent>
+      </div>
+      <div>
+
+      </div>
     </el-dialog>
   </div>
 </template>

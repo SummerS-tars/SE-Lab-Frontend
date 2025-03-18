@@ -8,6 +8,8 @@ const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, next
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
+// const dialogContent = ref('# test');
+
 
 // 显示问题详情的浮窗
 const showDetails = async (id) => {
@@ -29,7 +31,7 @@ onMounted(() => {
 onUnmounted(() => {
   currentPage.value = 1;
   totalItems.value = 0;
-  totalPages.value = 0;
+  totalPages.value = 2;
   items.value = [];
 });
 </script>
@@ -70,10 +72,12 @@ onUnmounted(() => {
         <div class="page-controls">
           <el-button @click="prevPage" :disabled="currentPage === 1"><</el-button>
           <span>{{ currentPage }}</span>
-          <el-button @click="nextPage" :disabled="currentPage === totalPages">></el-button>
+          <el-button @click="nextPage" :disabled="currentPage >= totalPages">></el-button>
         </div>
       </div>
     </div>
+
+    
     <!-- 使用MarkdownContent组件显示问题详情 -->
     <el-dialog v-model="dialogVisible" title="问题详情">
       <MarkdownContent :id="'question-content'" :content="dialogContent"></MarkdownContent>
