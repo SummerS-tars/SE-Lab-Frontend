@@ -19,7 +19,9 @@ import AdminSideBar from '@/views/Admin/SideBar.vue';
 
         <el-main class="container">
           <!-- 挂载主要内容组件 -->
-          <router-view></router-view> 
+          <div class="content-box">
+            <router-view></router-view>
+          </div>
           
         </el-main>
       </el-container>
@@ -40,5 +42,12 @@ import AdminSideBar from '@/views/Admin/SideBar.vue';
   padding: 25px;
   background-color: rgb(250, 233, 209);
   height: 100%; /* 使主要内容区域高度与el-container高度一致 */
+}
+
+.content-box {
+  background-color: rgb(240, 240, 240 , 0.5);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 94%;
 }
 </style>
