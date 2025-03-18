@@ -8,7 +8,7 @@ import FollowButton from '../User/FollowButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 
-const questionid =  useRoute.params.id;
+const questionid =  useRoute().params.id;
 
 const questionInfo = ref({
   title: '',
