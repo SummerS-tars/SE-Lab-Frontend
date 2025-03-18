@@ -22,7 +22,7 @@ upload.interceptors.request.use(
 upload.interceptors.response.use(
     response => {
         console.log(response.data);
-        return response.data.message;
+        return response.data.data;
     },
     error => {
         return Promise.reject(error);

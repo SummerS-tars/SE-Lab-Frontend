@@ -7,6 +7,8 @@ import AnswerCardList from './AnswerCardList.vue';
 import FollowButton from '../User/FollowButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
+import { useUserStore } from '@/stores/user';
+import { ElMessage } from 'element-plus';
 
 const questionid =  useRoute().params.id;
 
@@ -33,6 +35,14 @@ onMounted(async() => {
 
 
 const answerEditBox = ref();
+
+const writeAnswer = () =>{
+  if(!useUserStore().token){
+    ElMessage.error('请先登录后再进行操作');
+    return;
+  }
+  answerEditBox.value.open()
+}
 
 </script>
 
@@ -66,7 +76,7 @@ const answerEditBox = ref();
               </div>
               <MarkdownContent :id="`question-content`" :content="questionInfo.content"></MarkdownContent>
               <div style="margin: 20px 0px 0px 20px">
-                <el-button type="primary" plain @click="answerEditBox.open()">写回答</el-button>
+                <el-button type="primary" plain @click="writeAnswer">写回答</el-button>
 					      <AnswerEditBoxForm ref="answerEditBox" :id="questionid"></AnswerEditBoxForm>
                 <span style="font-size: 14px;color: #999;margin-left: 8%;"> 回答数 {{ questionInfo.answerCount }}</span>
               </div>

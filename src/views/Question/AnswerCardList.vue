@@ -12,7 +12,10 @@ const props=defineProps({
 
 const loadpage=async(page)=>{
 	let res=await request.get(`/api/auth/answers/byQuestionId/${props.id}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
-	console.log(res.records);
+	if(res.records.length===0){
+		infiniteScroll.value.finishload();
+		return;
+	}
 	res.records.forEach(item=>{
 		tableData.value.push({
 			id:item.id,
@@ -27,21 +30,23 @@ const tableData = ref([])
 onMounted(async()=>{
 	let flag=false;
   if(useUserStore().token){
-	loadpage(infiniteScroll.value.getPage()+1);
-	infiniteScroll.value.setPage(1);
+	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+		infiniteScroll.value.setPage(1);
+	});
 	infiniteScroll.value.setCallback(()=>{
-		loadpage(infiniteScroll.value.getPage()+1);
-		infiniteScroll.value.addPage();
+		loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+			infiniteScroll.value.addPage();
+		})
 	});
 	flag=true;
   }
   if(!flag){
     let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
-	res.records.forEach(item=>{
-		tableData.value.push({
-			id:item.id,
+		res.forEach(item=>{
+			tableData.value.push({
+				id:item.id,
+			});
 		});
-	});
   }
 });
 
