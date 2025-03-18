@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
-import { usePagination } from '@/hooks/usePagination';
+import { usePagination } from '@/hooks/useAnswerPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
+import request from '@/request/http';
 
 const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination('/api/admin/answers');
 
@@ -10,15 +11,13 @@ const dialogContent = ref('');
 
 // 显示回答详情的浮窗
 const showDetails = async (id) => {
-  let res = await request.get(`/api/answer/byId/${id}`);
-  // if (res.message === 'success') {
-    // dialogContent.value = res.content;
-    // dialogVisible.value = true;
-    
-    // test
-    dialogContent.value = "# Hello, Cherry Markdown!";
+  let res = await request.get(`/api/public/answer/byId/${id}`);
+  if (res.code === 200) {
+    dialogContent.value = res.data.content;
     dialogVisible.value = true;
-  // }
+  } else {
+    console.error(res.message);
+  }
 };
 
 onMounted(() => {

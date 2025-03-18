@@ -1,19 +1,22 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
-import { usePagination } from '@/hooks/usePagination';
+import { usePagination } from '@/hooks/useQuestionPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
+import request from '@/request/http';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination('/api/admin/questions');
+const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage } = usePagination();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
 
 // 显示问题详情的浮窗
 const showDetails = async (id) => {
-  let res = await request.get(`/api/question/byId/${id}`);
-  if (res.message === 'success') {
-    dialogContent.value = res.content;
+  let res = await request.get(`/api/public/question/byId/${id}`);
+  if (res.code === 200) {
+    dialogContent.value = res.data.content;
     dialogVisible.value = true;
+  } else {
+    console.error(res.message);
   }
 };
 
@@ -29,7 +32,6 @@ onUnmounted(() => {
   totalPages.value = 0;
   items.value = [];
 });
-
 </script>
 
 <template>

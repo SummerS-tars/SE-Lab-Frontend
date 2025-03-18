@@ -7,23 +7,33 @@ export function usePagination(apiEndpoint) {
   const totalPages = ref(0);
   const items = ref([
     {id: 1, title: 'title1', author: 'author1', createdTime: '2021-01-01'},
-]);
+  ]);
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
-    // 假设有接口可以获取列表，并支持排序参数
-    // let res = await request.get(`${apiEndpoint}?page=${page}&sortOrder=${order}`);
-    // items.value = res.data;
-    // totalItems.value = res.total;
-    // totalPages.value = Math.ceil(res.total / 10);
+    try {
+      let res = await request.get(apiEndpoint, {
+        params: {
+          page_num: page,
+          page_size: 10,
+          sort: order
+        }
+      });
+      if (res.code === 200) {
+        items.value = res.data.items;
+        totalItems.value = res.data.totalItems;
+        totalPages.value = Math.ceil(res.data.totalItems / 10);
+      } else {
+        console.error(res.message);
+      }
+    } catch (error) {
+      console.error('Error fetching items:', error);
+    }
   };
 
   const handleSort = () => {
-    // 切换排序顺序
     sortOrder.value = sortOrder.value === 'time+' ? 'time-' : 'time+';
-    // 将当前页面设置为1
     currentPage.value = 1;
-    // 根据新的排序顺序获取数据
     fetchItems(currentPage.value, sortOrder.value);
   };
 
