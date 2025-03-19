@@ -7,6 +7,7 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FollowButton from './FollowButton.vue';
 import { useProfileStore } from '@/stores/profile';
+import Copyright from '@/components/Copyright.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -80,6 +81,7 @@ const handleSelect = (key, keyPath) => {
 
 				</el-card>
 			</el-main>
+		<Copyright></Copyright>
 	</el-container>
     
 </template>

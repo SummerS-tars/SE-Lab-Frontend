@@ -10,6 +10,7 @@ import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import { useQuestionStore } from '@/stores/question';
+import Copyright from '@/components/Copyright.vue';
 
 const questionid =  useRoute().params.id;
 
@@ -68,7 +69,7 @@ const writeAnswer = () =>{
 
         </el-card>
       </el-main>
-
+      <Copyright></Copyright>
     </el-container>
   </div>
 </template>
