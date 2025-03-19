@@ -18,17 +18,17 @@ const getNomore = ()=>{return nomore};
 const finishload = ()=>{
     nomore = true;
     window.removeEventListener('scroll',handleScroll);
-}
+};
 
 const onBeforeUpdate = ()=>{
     scrollPositionCurrent = window.scrollY;
-}
+};
 
 const onUpdated = ()=>{
     nextTick(()=>{
         window.scrollTo(0, scrollPositionCurrent);
-    })
-}
+    });
+};
 
 defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated});
 
@@ -41,7 +41,7 @@ const handleScroll = ()=>{
         callback();
         loading = false;
     }
-}
+};
 
 onMounted(()=>{
     window.addEventListener('scroll',handleScroll);
@@ -49,7 +49,7 @@ onMounted(()=>{
 
 onUnmounted(()=>{
     window.removeEventListener('scroll',handleScroll);
-})
+});
 
 </script>
 
