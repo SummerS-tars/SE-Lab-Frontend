@@ -28,13 +28,13 @@ onMounted(() => {
   fetchItems(currentPage.value);
 });
 
-// 清理钩子
-onUnmounted(() => {
-  currentPage.value = 1;
-  totalItems.value = 0;
-  totalPages.value = 2;
-  items.value = [];
-});
+// 清理钩子：不需要，离开此页面会自动清理
+// onUnmounted(() => {
+//   currentPage.value = 1;
+//   totalItems.value = 0;
+//   totalPages.value = 2;
+//   items.value = [];
+// });
 </script>
 
 <template>
