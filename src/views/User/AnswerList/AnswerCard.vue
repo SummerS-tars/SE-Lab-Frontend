@@ -1,7 +1,7 @@
 <script setup>
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
@@ -30,10 +30,11 @@ onMounted(async() =>{
 })
 
 const deleteAnswer=async()=>{
-	if(!confirm('确定删除吗？'))return;
-	let res=await request.post(`/api/auth/answer/delete`,{id:props.answerid});
-	props.removethis();
-	ElMessage.success('删除成功');
+	ElMessageBox.confirm('确认删除吗?').then(async()=>{
+		await request.post(`/api/auth/answer/delete`,{id:props.answerid});
+		props.removethis();
+		ElMessage.success('删除成功');
+	});
 }
 
 const EditBox = ref();

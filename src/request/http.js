@@ -17,7 +17,7 @@ request.interceptors.request.use(
     config =>{
         const token= useUserStore().token;
         if(token){
-            config.headers['Authorization']=`Bearer ${token}`;
+            config.headers.Authorization=`Bearer ${token}`;
         }
         return config;
     },
@@ -32,10 +32,6 @@ request.interceptors.response.use(
     },
     error => {
         ElMessage.error(error.response.data.message)
-        // if(error.response.status==='401'){
-        //     useUserStore().logout();
-        //     window.location.reload();
-        // }
         return Promise.reject(error);
     },
 );

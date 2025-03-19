@@ -6,7 +6,7 @@ const jwtparse = (token)=>{
 
     const payloadBase64Url = parts[1];
     const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map(function(c) {
+    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map((c)=>{
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 

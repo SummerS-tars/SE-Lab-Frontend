@@ -45,7 +45,7 @@ onUpdated(()=>{
 })
 
 const itemDelete=(index)=>{
-	init();
+	window.location.reload();
 }
 
 

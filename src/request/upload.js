@@ -10,7 +10,7 @@ upload.interceptors.request.use(
     config =>{
         const token= useUserStore().token;
         if(token){
-            config.headers['Authorization']=`Bearer ${token}`;
+            config.headers.Authorization=`Bearer ${token}`;
         }
         return config;
     },
