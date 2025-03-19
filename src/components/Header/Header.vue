@@ -61,10 +61,12 @@ const EditBox = ref();
 								<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" :href="`/user/profile/${useUserStore().id}`">
 									<el-icon><User/></el-icon>个人主页
 								</el-link>
-								<br/>
-								<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/user/setting">
-									<el-icon><Setting/></el-icon>个人设置
-								</el-link>
+								<template v-if="useUserStore().isadmin">
+									<br/>
+									<el-link :underline="false" style="font-size: 15px; margin-bottom: 10px;" href="/admin_home">
+										<el-icon><Setting/></el-icon>管理员设置
+									</el-link>
+								</template>
 							</div>
 							<el-button type="info" @click="logout" style="width:100% ">登出</el-button>
 						</el-form>

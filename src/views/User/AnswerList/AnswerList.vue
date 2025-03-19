@@ -51,13 +51,13 @@ onUpdated(()=>{
 </script>
 
 <template>
-	<PageInfiniteScroll ref="infiniteScroll"></PageInfiniteScroll>
+	<PageInfiniteScroll ref="infiniteScroll"/>
   <template v-if="tableData.length==0">
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
 		<ul>
-			<li v-for="(item,index) in tableData" :key="answerid" style="list-style: none;" >
+			<li v-for="(item,index) in tableData" :key="item.answerid" style="list-style: none;" >
 				<AnswerCard :questionid="item.questionid" :answerid="item.answerid" :removethis="()=>{itemDelete(index)}"/>
 			</li>
 		</ul>

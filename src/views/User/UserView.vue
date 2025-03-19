@@ -3,30 +3,16 @@ import Header from '@/components/Header/Header.vue';
 import request from '@/request/http'
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FollowButton from './FollowButton.vue';
+import { useProfileStore } from '@/stores/profile';
 
 const router = useRouter();
 const route = useRoute();
 const userid =  route.params.id;
 
-const user=ref({
-	username:'',
-	email:'',
-	follower: 0,
-	following: 0,
-	followed:false,
-})
-
-onBeforeMount(async()=>{
-	let res = await request.get(`/api/public/user/byId/${userid}`);
-  user.value.username=res.username;
-	user.value.email=res.email;
-	user.value.follower=res.numfollower;
-	user.value.following=res.numfollowing;
-	user.value.id=userid;
-});
+const user=useProfileStore().getProfile(userid);
 
 const nameToIndexMap = {
   ['QuestionList']: '0',

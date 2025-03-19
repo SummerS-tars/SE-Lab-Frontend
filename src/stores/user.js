@@ -23,7 +23,7 @@ export const useUserStore = defineStore('token',()=>{
         return jwtparse(token.value).id;
     });
     const isadmin = computed(()=>{
-        return jwtparse(token.value).roles === 'ROLE_ADMIN';
+        return jwtparse(token.value).roles[0].authority==='ROLE_ADMIN';
     });
     const setToken = (token) => {
         localStorage.setItem('token',token);

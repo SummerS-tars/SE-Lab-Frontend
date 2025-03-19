@@ -24,7 +24,7 @@ onMounted(async()=>{
 	questionInfo.value={
 		title:res.title,
 		content:res.content,
-		createAt:res.createdAt,
+		createdAt:res.createdAt,
 		answerCount:res.answerCount,
 	}
 })
@@ -51,7 +51,7 @@ const EditBox = ref();
 				<span style="font-weight: bold;">{{ questionInfo.title }}</span>
 			</a>
             <br/>
-			<span style="font-size: 14px;color: #999;"> {{ questionInfo.createAt }}</span>
+			<span style="font-size: 14px;color: #999;">创建时间: {{ questionInfo.createdAt }}</span>
 		</template>
         <MarkdownContent :id="` problem-content`+id" :content="questionInfo.content"/>
 		<template #footer>

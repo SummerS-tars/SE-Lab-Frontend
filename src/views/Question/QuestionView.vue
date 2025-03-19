@@ -9,30 +9,11 @@ import MarkdownContent from '@/components/MarkdownContent.vue';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
+import { useQuestionStore } from '@/stores/question';
 
 const questionid =  useRoute().params.id;
 
-const questionInfo = ref({
-  title: '',
-  createAt: '',
-  content: '',
-  author:{default:{id:'',username:'',liked:false}},
-  answerCount: 0,
-});
-
-onMounted(async() => {
-	let res=await request.get(`/api/public/question/byId/${questionid}`);
-  console.log(res);
-  questionInfo.value.title = res.title;
-  questionInfo.value.createAt = res.createAt;
-  questionInfo.value.author = {
-    id: res.authorId,
-    username: res.author,
-  };
-  questionInfo.value.content = res.content;
-  questionInfo.value.answerCount = res.answerCount;
-});
-
+const questionInfo = useQuestionStore().getQuestion(questionid);
 
 const answerEditBox = ref();
 
@@ -64,7 +45,7 @@ const writeAnswer = () =>{
                     <span class="question-title">{{questionInfo.title}}</span>
                   </div>
                   <br/>
-                  <span style="font-size: 14px;color: #999;margin-left: 8%;"> {{ questionInfo.createAt }}</span>
+                  <span style="font-size: 14px;color: #999;margin-left: 8%;">创建时间: {{ questionInfo.createdAt }}</span>
                 </div>
                 <div style="font-weight: bold; font-size: 16px; margin-right: 30px;">
                   created by 

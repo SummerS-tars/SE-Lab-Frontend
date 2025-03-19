@@ -24,7 +24,7 @@ onMounted(async() =>{
 		questionInfo.value.title=res.title;
 	})
 	request.get(`/api/public/answer/byId/${props.answerid}`).then(res=>{
-		answerInfo.value.createAt=res.createdAt;
+		answerInfo.value.createdAt=res.createdAt;
 		answerInfo.value.content=res.content;
 	})
 })
@@ -43,11 +43,11 @@ const EditBox = ref();
 <template>
 	<el-card style="margin:10px;border:0px">
 		<template #header>
-			<a class="link" :href="`/question/${id}`">
+			<a class="link" :href="`/question/${props.questionid}`">
 				<span style="font-weight: bold;">{{ questionInfo.title }}</span>
 			</a>
             <br/>
-			<span style="font-size: 14px;color: #999;">回答时间: {{  answerInfo.createAt }}</span>
+			<span style="font-size: 14px;color: #999;">回答时间: {{  answerInfo.createdAt }}</span>
 		</template>
         <MarkdownContent :id="props.answerid+` answer-content`" :content="answerInfo.content"/>
 		<template #footer>
