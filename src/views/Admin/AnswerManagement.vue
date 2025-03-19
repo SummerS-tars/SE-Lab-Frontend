@@ -3,11 +3,14 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { usePagination } from '@/hooks/useAnswerPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
+import { useRoute } from 'vue-router';
 
 const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage , deleteAnswer } = usePagination();
+const route = useRoute();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
+const relatedQuestionId = ref(null); // 存储选中的问题ID，0表示不限制问题ID
 
 // 显示回答详情的浮窗
 const showDetails = (id) => {
@@ -21,6 +24,11 @@ const showDetails = (id) => {
 };
 
 onMounted(() => {
+  relatedQuestionId.value = Number(route.params.questionId) ;
+
+  // // test
+  // console.log('relatedQuestionId: ', relatedQuestionId.value);
+
   // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value);
 });

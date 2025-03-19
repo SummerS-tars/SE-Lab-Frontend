@@ -3,8 +3,10 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { usePagination } from '@/hooks/useQuestionPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
+import { useRouter } from 'vue-router';
 
 const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage , deleteQuestion } = usePagination();
+const router = useRouter();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
@@ -18,10 +20,22 @@ const showDetails = (id) => {
     dialogContent.value = `#${question.title}\n作者：${question.author}\n创建时间：${question.createdTime}\n${question.content}`;
     dialogVisible.value = true;
     selectedQuestionId.value = id; // 存储问题ID
+    
+    //test
+    console.log('selectedQuestionId: ', selectedQuestionId.value);
   } else {
     console.error('Question not found');
   }
 };
+
+const goToAnswerManagement = () => {
+  router.push({
+    name: 'AnswerManagement',
+    params: {
+      questionId: selectedQuestionId.value
+    }
+  });
+}
 
 onMounted(() => {
   // 初始加载数据，默认按创建时间降序排列

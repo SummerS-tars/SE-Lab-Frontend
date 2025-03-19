@@ -40,7 +40,7 @@ const router = createRouter({
       children:[
         {path:'', name:'AdminHome' , component:AdminDefaultView}, // TODO: AdminDefaultView.vue
         {path:'question', name:'QuestionManagement', component:QuestionManagement}, // TODO: QuestionManagement.vue
-        {path:'answer', name:'AnswerManagement', component:AnswerManagement}, // TODO: AnswerManagement.vue
+        {path:'answer/:questionId', name:'AnswerManagement', component:AnswerManagement}, // TODO: AnswerManagement.vue
       ]
     },
     {
