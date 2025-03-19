@@ -46,7 +46,7 @@ onUnmounted(() => {
 <template>
   <div>
     <div class="head" style="font-weight: bold;">
-      回答管理页面
+      {{ relatedQuestionId ? `问题id ${relatedQuestionId} 的回答管理` : '回答管理页面' }}
     </div>
     <br>
     <div class="info-box">
