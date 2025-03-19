@@ -8,12 +8,12 @@ let page = 0;
 
 let callback=()=>{};
 
-const setCallback = (call) =>{callback = call;};
+const setCallback = (call) =>{callback = call};
 const setPage = (p)=>{page = p};
-const getPage = ()=>{return page;};
-const addPage = ()=>{page++;};
+const getPage = ()=>{return page};
+const addPage = ()=>{page++};
 
-const getNomore = ()=>{return nomore;};
+const getNomore = ()=>{return nomore};
 
 const finishload = ()=>{
     nomore = true;
