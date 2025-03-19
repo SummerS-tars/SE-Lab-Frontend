@@ -22,10 +22,15 @@ export function useFetchCounts() {
     }
   };
 
-  const fetchAnswerCount = async () => {
+  const fetchAnswerCount = async (id = 0) => {
     try {
+      if( id !== 0 ){
+        let countRes = await request.get(`/api/auth/answerNum/${id}`, );
+        answerCount.value = countRes.total;
+      } else {
       let countRes = await request.get(`/api/public/answerNum`);
       answerCount.value = countRes.count;
+      }
     } catch (error) {
       console.error('Error fetching answer count:', error);
     }  
