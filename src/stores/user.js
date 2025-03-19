@@ -14,8 +14,8 @@ const jwtparse = (token)=>{
     return payload;
 }
 
-export const useUserStore = defineStore('token',()=>{
-    const token = computed(() => localStorage.getItem('token'));
+export const useUserStore = defineStore('user',()=>{
+    const token = computed(() => localStorage.getItem('user-tn'));
     const username = computed(() => {
         return jwtparse(token.value).sub;
     });
@@ -26,10 +26,10 @@ export const useUserStore = defineStore('token',()=>{
         return jwtparse(token.value).roles[0].authority==='ROLE_ADMIN';
     });
     const setToken = (token) => {
-        localStorage.setItem('token',token);
+        localStorage.setItem('user-tn',token);
     };
     const delToken = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('user-tn');
     };
 
     const logout = () => {

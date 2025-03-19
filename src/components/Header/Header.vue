@@ -7,14 +7,19 @@ import router from '@/router';
 import { nextTick, ref, watch } from 'vue';
 import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 
-const logout = () =>{
-	request.post("/api/auth/logout").then(res=>{
-		console.log(res);
+const logout = async() =>{
+	try{
+		await request.post("/api/auth/logout");
 		ElMessage.success("成功退出登录");
+	}
+	catch(e){
+		ElMessage.error(e);
+	}
+	finally{
 		useUserStore().logout();
 		router.push("/");
 		window.location.reload();
-	});
+	}
 };
 
 const EditBox = ref();
