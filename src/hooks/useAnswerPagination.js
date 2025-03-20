@@ -80,6 +80,11 @@ export function usePagination() {
     }
   };
 
+  const fetchPage = (page) => {
+    currentPage.value = page;
+    fetchItems(currentPage.value, sortOrder.value);
+  }
+
   return {
     currentPage,
     totalItems,
@@ -88,6 +93,7 @@ export function usePagination() {
     sortOrder,
     fetchItems,
     handleSort,
+    fetchPage,
     nextPage,
     prevPage,
     deleteAnswer,

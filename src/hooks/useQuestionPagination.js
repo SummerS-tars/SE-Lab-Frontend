@@ -38,6 +38,7 @@ export function usePagination() {
           title: question.title,
           author: question.author,
           createdTime: question.createdAt,
+          answerCount: question.answerCount,
           content: question.content,
         });
       }
@@ -79,19 +80,10 @@ export function usePagination() {
     fetchItems(currentPage.value, sortOrder.value);
   };
 
-  const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-      currentPage.value++;
-      fetchItems(currentPage.value, sortOrder.value);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage.value > 1) {
-      currentPage.value--;
-      fetchItems(currentPage.value, sortOrder.value);
-    }
-  };
+  const fetchPage = (page) => {
+    currentPage.value = page;
+    fetchItems(currentPage.value, sortOrder.value);
+  }
 
   return {
     currentPage,
@@ -101,8 +93,7 @@ export function usePagination() {
     sortOrder,
     fetchItems,
     handleSort,
-    nextPage,
-    prevPage,
+    fetchPage,
     deleteQuestion,
   };
 }
