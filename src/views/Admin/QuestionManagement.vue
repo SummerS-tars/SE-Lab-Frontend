@@ -101,7 +101,7 @@ onMounted(() => {
     <el-dialog v-model="dialogVisible" title="问题详情">
       <MarkdownContent :id="'question-content'" :content="dialogContent"></MarkdownContent>
       <template #footer>
-        <el-button type="primary" @click="goToAnswerManagement">查看相关回答</el-button> // TODO: 添加此方法，不知道怎么将问题id传递过去
+        <el-button type="primary" @click="goToAnswerManagement">查看相关回答</el-button>
       </template>
     </el-dialog>
   </div>

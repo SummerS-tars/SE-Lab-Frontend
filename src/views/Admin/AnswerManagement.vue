@@ -10,7 +10,6 @@ const route = useRoute();
 
 const dialogVisible = ref(false);
 const dialogContent = ref('');
-const relatedQuestionId = ref(null); // 存储选中的问题ID，0表示不限制问题ID
 
 // 显示回答详情的浮窗
 const showDetails = (id) => {
@@ -30,7 +29,7 @@ onMounted(() => {
   // console.log('relatedQuestionId: ', relatedQuestionId.value);
 
   // 初始加载数据，默认按创建时间降序排列
-  fetchItems(currentPage.value);
+  fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
 });
 
 // 清理钩子：没必要，离开会自动清除

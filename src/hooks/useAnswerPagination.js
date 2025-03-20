@@ -49,15 +49,12 @@ export function usePagination() {
 
   const deleteAnswer = async (id) => {
     try {
-      let res = await request.post(`/api/auth/answer/delete`, {
+      await request.post(`/api/auth/answer/delete`, {
           params: { id }
         }
       );
-      if (res.code === 200) {
-        fetchItems(currentPage.value, sortOrder.value);
-      } else {
-        console.error(res.message);
-      }
+      alert('删除成功');
+      fetchItems(currentPage.value, sortOrder.value);
     } catch (error) {
       console.error('Error deleting answer:', error);
     }
