@@ -105,6 +105,12 @@ const router = createRouter({
           userInfo.value.following=res.numfollowing;
           userInfo.value.id=userId;
 
+          res = await request.get( `/api/public/questionNum/byUserId/${userId}`); 
+          userInfo.value.questionCount=res.count;
+
+          res = await request.get( `/api/public/answerNum/byUserId/${userId}`); 
+          userInfo.value.answerCount=res.count;
+
           useProfileStore().setProfile(userInfo);
           next();
         }catch(e){

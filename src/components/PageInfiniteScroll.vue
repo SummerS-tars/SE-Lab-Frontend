@@ -6,7 +6,7 @@ let nomore = false;
 let scrollPositionCurrent = 0;
 let page = 0;
 
-let callback=()=>{};
+let callback=async()=>{};
 
 const setCallback = (call) =>{callback = call};
 const setPage = (p)=>{page = p};
@@ -32,13 +32,13 @@ const onUpdated = ()=>{
 
 defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated});
 
-const handleScroll = ()=>{
+const handleScroll = async()=>{
     if(loading) return;
     const scrollPosition = window.scrollY + window.innerHeight;
     const pageHeight = document.documentElement.scrollHeight;
     if (scrollPosition >= pageHeight-1000) { 
         loading = true;
-        callback();
+        await callback();
         loading = false;
     }
 };

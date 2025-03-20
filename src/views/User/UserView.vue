@@ -73,8 +73,8 @@ const handleSelect = (key, keyPath) => {
 						mode="horizontal"
 						@select="handleSelect"
 					>
-						<el-menu-item index="0">问题</el-menu-item>
-						<el-menu-item index="1">回答</el-menu-item>
+						<el-menu-item index="0">问题 {{ user.questionCount}}</el-menu-item>
+						<el-menu-item index="1">回答 {{ user.answerCount}}</el-menu-item>
 					</el-menu>
 
 					<RouterView></RouterView>

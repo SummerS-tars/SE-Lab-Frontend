@@ -33,7 +33,8 @@ export default defineConfig({
     proxy: {
         '/api/': {
             // target: 'http://127.0.0.1:4523/m1/5923172-5610251-default',
-            target: "http://127.0.0.1:8080/",
+            // target: "http://127.0.0.1:8080/",
+            target: "http://thesumst.top:7009/",
             ws: true,
             /** 是否允许跨域 */
             changeOrigin: true,  // 是否改变域
