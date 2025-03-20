@@ -15,7 +15,7 @@ const dialogContent = ref('');
 const showDetails = (id) => {
   const answer = items.value.find((item) => item.id === id);
   if (answer) {
-    dialogContent.value = `相关问题id：${answer.questionId}\n作者：${answer.author}\n创建时间：${answer.createdTime}\n${answer.content}`;
+    dialogContent.value = `相关问题id：${answer.questionId}\n作者：${answer.author}\n创建时间：${answer.createdTime}\n#回答内容\n${answer.content}`;
     dialogVisible.value = true;
   } else {
     console.error('Answer not found');
@@ -25,21 +25,9 @@ const showDetails = (id) => {
 onMounted(() => {
   relatedQuestionId.value = Number(route.params.questionId) ;
 
-  // // test
-  // console.log('relatedQuestionId: ', relatedQuestionId.value);
-
   // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
 });
-
-// 清理钩子：没必要，离开会自动清除
-// onUnmounted(() => {
-//   currentPage.value = 1;
-//   totalItems.value = 0;
-//   totalPages.value = 0;
-//   items.value = [];
-// });
-
 </script>
 
 <template>

@@ -7,11 +7,9 @@ import { useRouter } from 'vue-router';
 
 const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, nextPage, prevPage , deleteQuestion } = usePagination();
 const router = useRouter();
-
 const dialogVisible = ref(false);
 const dialogContent = ref('');
 const selectedQuestionId = ref(null); // 存储选中的问题ID
-
 
 // 显示问题详情的浮窗
 const showDetails = (id) => {
@@ -20,9 +18,6 @@ const showDetails = (id) => {
     dialogContent.value = `#${question.title}\n作者：${question.author}\n创建时间：${question.createdTime}\n${question.content}`;
     dialogVisible.value = true;
     selectedQuestionId.value = id; // 存储问题ID
-    
-    //test
-    console.log('selectedQuestionId: ', selectedQuestionId.value);
   } else {
     console.error('Question not found');
   }
@@ -41,14 +36,6 @@ onMounted(() => {
   // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value);
 });
-
-// 清理钩子：不需要，离开此页面会自动清理
-// onUnmounted(() => {
-//   currentPage.value = 1;
-//   totalItems.value = 0;
-//   totalPages.value = 2;
-//   items.value = [];
-// });
 </script>
 
 <template>
@@ -96,7 +83,6 @@ onMounted(() => {
       </div>
     </div>
 
-    
     <!-- 使用MarkdownContent组件显示问题详情 -->
     <el-dialog v-model="dialogVisible" title="问题详情">
       <MarkdownContent :id="'question-content'" :content="dialogContent"></MarkdownContent>

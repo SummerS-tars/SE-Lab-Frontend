@@ -10,7 +10,6 @@ const navigateTo = (routeName, params = {}) => {
     params: params,
   });
 };
-
 </script>
 
 <template>

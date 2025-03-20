@@ -52,9 +52,9 @@ const router = createRouter({
       path: '/admin_home',
       component: () => import('@/views/Admin/AdminView.vue'),
       children:[
-        {path:'', name:'AdminHome' , component:AdminDefaultView}, // TODO: AdminDefaultView.vue
-        {path:'question', name:'QuestionManagement', component:QuestionManagement}, // TODO: QuestionManagement.vue
-        {path:'answer/:questionId', name:'AnswerManagement', component:AnswerManagement}, // TODO: AnswerManagement.vue
+        {path:'', name:'AdminHome' , component:AdminDefaultView},
+        {path:'question', name:'QuestionManagement', component:QuestionManagement},
+        {path:'answer/:questionId', name:'AnswerManagement', component:AnswerManagement},
       ],
       beforeEnter: (to,from,next)=>{
         if(useUserStore().isadmin){
