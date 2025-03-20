@@ -11,8 +11,6 @@ watch(()=>props.content,()=>{
   cherryInstance.value.setValue(props.content);
 });
 
-
-
 const cherryInstance=ref(null);
 
 onBeforeMount(async()=>{

@@ -10,6 +10,12 @@ import RegisterForm from '@/views/Login/RegisterForm.vue';
 import AdminDefaultView from '@/views/Admin/AdminDefaultView.vue';
 import QuestionManagement from '@/views/Admin/QuestionManagement.vue';
 import AnswerManagement from '@/views/Admin/AnswerManagement.vue';
+import request from '@/request/http';
+import { ref } from 'vue';
+import { useQuestionStore } from '@/stores/question';
+import { useProfileStore } from '@/stores/profile';
+import { useUserStore } from '@/stores/user';
+import { ElMessage } from 'element-plus';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +25,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       beforeEnter: (to,from,next)=>{
-        if(localStorage.getItem('token')){
+        if(useUserStore().token){
           next()
         }else{
           next({name:'Login'})
@@ -41,12 +47,41 @@ const router = createRouter({
         {path:'', name:'AdminHome' , component:AdminDefaultView}, // TODO: AdminDefaultView.vue
         {path:'question', name:'QuestionManagement', component:QuestionManagement}, // TODO: QuestionManagement.vue
         {path:'answer/:questionId', name:'AnswerManagement', component:AnswerManagement}, // TODO: AnswerManagement.vue
-      ]
+      ],
+      beforeEnter: (to,from,next)=>{
+        if(useUserStore().isadmin){
+          next()
+        }else{
+          next(from)
+          ElMessage.error('没有管理员权限')
+        }
+      }
     },
     {
       path: '/question/:id',
       name: 'question',
       component: QuestionView,
+      beforeEnter: async(to,from,next)=>{
+        const questionId=to.params.id;
+        try{
+          let res=await request.get(`/api/public/question/byId/${questionId}`);
+          const questionInfo = ref({})
+          questionInfo.value.id = questionId;
+          questionInfo.value.title = res.title;
+          questionInfo.value.createdAt = res.createdAt;
+          questionInfo.value.author = {
+            id: res.authorId,
+            username: res.author,
+          };
+          questionInfo.value.content = res.content;
+          questionInfo.value.answerCount = res.answerCount;
+          useQuestionStore().setQuestion(questionInfo);
+          next();
+        }catch(e){
+          console.log(e);
+          next({path: '/notFound'});
+        }
+      }
     },
     {
       path: '/user/profile/:id',
@@ -56,10 +91,34 @@ const router = createRouter({
         {path:'answer',   name:'AnswerList',    component:AnswerList},
         {path:'follower', name:'FollowerList',  component:FollowerList},
         {path:'following',name:'FollowingList', component:FollowingList},
-      ]
+      ],
+      beforeEnter: async(to,from,next)=>{
+        const userId=to.params.id;
+        try{
+          let res = await request.get(`/api/public/user/byId/${userId}`);
+          const userInfo=ref({})
+          userInfo.value.username=res.username;
+          userInfo.value.email=res.email;
+          userInfo.value.follower=res.numfollower;
+          userInfo.value.following=res.numfollowing;
+          userInfo.value.id=userId;
+
+          res = await request.get( `/api/public/questionNum/byUserId/${userId}`); 
+          userInfo.value.questionCount=res.count;
+
+          res = await request.get( `/api/public/answerNum/byUserId/${userId}`); 
+          userInfo.value.answerCount=res.count;
+
+          useProfileStore().setProfile(userInfo);
+          next();
+        }catch(e){
+          console.log(e);
+          next({path: '/notFound'});
+        }
+      }
     },
     {
-      path: '/:pathMatch(.*)*', // 匹配所有未找到的路径
+      path: '/:pathMatch(.*)*', 
       name: 'NotFound',
       component: () => import('@/views/NotFoundView.vue'),
     },

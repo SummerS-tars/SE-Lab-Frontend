@@ -1,6 +1,7 @@
 <script setup>
 import Header from '@/components/Header/Header.vue';
 import RecommandedCardList from './RecommendedCardList.vue';
+import Copyright from '@/components/Copyright.vue';
 
 </script>
 
@@ -19,6 +20,8 @@ import RecommandedCardList from './RecommendedCardList.vue';
           <RecommandedCardList></RecommandedCardList>
         </el-card>
       </el-main>
+
+      <Copyright/>
 
     </el-container>
   </div>

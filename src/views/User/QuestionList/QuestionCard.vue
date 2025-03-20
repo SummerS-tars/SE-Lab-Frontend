@@ -3,7 +3,7 @@ import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -24,7 +24,7 @@ onMounted(async()=>{
 	questionInfo.value={
 		title:res.title,
 		content:res.content,
-		createAt:res.createdAt,
+		createdAt:res.createdAt,
 		answerCount:res.answerCount,
 	}
 })
@@ -34,10 +34,11 @@ const deleteQuestion=async()=>{
 		ElMessage.error('问题已存在回答，不能删除');
 		return;
 	}
-	if(!confirm('确定删除吗？'))return;
-	await request.post(`/api/auth/question/delete`,{id:props.id});
-	props.removethis();
-	ElMessage.success('删除成功');
+	ElMessageBox.confirm('确认删除吗?').then(async()=>{
+		await request.post(`/api/auth/question/delete`,{id:props.id});
+		props.removethis();
+		ElMessage.success('删除成功');
+	});	
 }
 
 const EditBox = ref();
@@ -51,7 +52,7 @@ const EditBox = ref();
 				<span style="font-weight: bold;">{{ questionInfo.title }}</span>
 			</a>
             <br/>
-			<span style="font-size: 14px;color: #999;"> {{ questionInfo.createAt }}</span>
+			<span style="font-size: 14px;color: #999;">创建时间: {{ questionInfo.createdAt }}</span>
 		</template>
         <MarkdownContent :id="` problem-content`+id" :content="questionInfo.content"/>
 		<template #footer>

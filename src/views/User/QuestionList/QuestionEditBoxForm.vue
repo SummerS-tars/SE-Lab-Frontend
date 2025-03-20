@@ -15,11 +15,9 @@ const emit = defineEmits(['update:title','update:content']);
 
 const visible = ref(false);
 
-const resetForm = () => {
-	ruleForm.title=props.title;
-}
-const open = () =>{visible.value = true;resetForm();};
-const close = () =>{visible.value = false;};
+const resetForm = () => {ruleForm.title=props.title};
+const open = () =>{visible.value = true;resetForm()};
+const close = () =>{visible.value = false};
 
 defineExpose({open, close});
 

@@ -24,18 +24,20 @@ const loadpage=async(page)=>{
 	});
 }
 
+
+
 onMounted(async()=>{
 	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
 		infiniteScroll.value.setPage(1);
 	});
-	infiniteScroll.value.setCallback(()=>{
-		loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+	infiniteScroll.value.setCallback(async()=>{
+		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
 			infiniteScroll.value.addPage();
 		});
 	});
 });
 const itemDelete=(index)=>{
-	init();
+	window.location.reload();
 }
 
 const infiniteScroll=ref();
@@ -51,13 +53,13 @@ onUpdated(()=>{
 </script>
 
 <template>
-	<PageInfiniteScroll ref="infiniteScroll"></PageInfiniteScroll>
+	<PageInfiniteScroll ref="infiniteScroll"/>
   <template v-if="tableData.length==0">
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
 		<ul>
-			<li v-for="(item,index) in tableData" :key="answerid" style="list-style: none;" >
+			<li v-for="(item,index) in tableData" :key="item.answerid" style="list-style: none;" >
 				<AnswerCard :questionid="item.questionid" :answerid="item.answerid" :removethis="()=>{itemDelete(index)}"/>
 			</li>
 		</ul>

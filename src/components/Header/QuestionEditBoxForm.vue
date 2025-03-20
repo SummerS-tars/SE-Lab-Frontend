@@ -8,9 +8,9 @@ import MarkdownEditBox from './MarkdownEditBox.vue';
 
 const visible = ref(false);
 
-const resetForm = () => {ruleForm.title='';}
-const open = () =>{visible.value = true;resetForm();};
-const close = () =>{visible.value = false;};
+const resetForm = () => {ruleForm.title=''};
+const open = () =>{visible.value = true;resetForm()};
+const close = () =>{visible.value = false};
 
 defineExpose({open, close});
 

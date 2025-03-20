@@ -1,39 +1,59 @@
 <script setup>
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
-import { ElMessage } from 'element-plus';
-import { onMounted, ref } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 import { useUserStore } from '@/stores/user';
+import LikeButton from '@/views/Question/LikeButton.vue';
+import { useAnswerStore } from '@/stores/answer';
 
 const route = useRoute();
 const userid =  route.params.id;
 
 const props=defineProps({
-    questionid:{default:''},
-    answerid:{default:''},
+    questionid:{default:undefined},
+    answerid:{default:undefined},
 	removethis:{default:()=>{}}
 })
 
 const questionInfo=ref({});
 const answerInfo=ref({});
 
-onMounted(async() =>{
+const fetchData=async()=>{
+	if(!props.questionid||!props.answerid) return;
 	request.get(`/api/public/question/byId/${props.questionid}`).then(res=>{
 		questionInfo.value.title=res.title;
 	})
+
+	answerInfo.value.id=props.answerid;
 	request.get(`/api/public/answer/byId/${props.answerid}`).then(res=>{
-		answerInfo.value.createAt=res.createdAt;
+		answerInfo.value.author={
+			id:res.authorId,
+			username:res.author,
+		};
+		answerInfo.value.createdAt=res.createdAt;
 		answerInfo.value.content=res.content;
+		answerInfo.value.likes=res.likes;
 	})
-})
+	if(useUserStore().token){
+		request.get(`/api/auth/user/answer/like`,{params:{id:props.answerid}}).then(res=>{
+			answerInfo.value.liked=res.liked;
+		});
+	}
+	useAnswerStore().setAnswer(answerInfo);
+}
+
+onMounted(()=>{fetchData()});
+watch(()=>props,()=>{fetchData()});
 
 const deleteAnswer=async()=>{
-	if(!confirm('确定删除吗？'))return;
-	let res=await request.post(`/api/auth/answer/delete`,{id:props.answerid});
-	props.removethis();
-	ElMessage.success('删除成功');
+	ElMessageBox.confirm('确认删除吗?').then(async()=>{
+		await request.post(`/api/auth/answer/delete`,{id:props.answerid});
+		props.removethis();
+		ElMessage.success('删除成功');
+	});
 }
 
 const EditBox = ref();
@@ -43,26 +63,32 @@ const EditBox = ref();
 <template>
 	<el-card style="margin:10px;border:0px">
 		<template #header>
-			<a class="link" :href="`/question/${id}`">
+			<a class="link" :href="`/question/${props.questionid}`">
 				<span style="font-weight: bold;">{{ questionInfo.title }}</span>
 			</a>
-            <br/>
-			<span style="font-size: 14px;color: #999;">回答时间: {{  answerInfo.createAt }}</span>
+      <br/>
+			<span style="font-size: 14px;color: #999;">回答时间: {{  answerInfo.createdAt }}</span>
 		</template>
         <MarkdownContent :id="props.answerid+` answer-content`" :content="answerInfo.content"/>
 		<template #footer>
-			<div class="card-footer" style="display: flex;justify-content: flex-end">
-                <template v-if="useUserStore().token&&userid==useUserStore().id">
-					<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>
-					<el-button type="danger" plain @click="deleteAnswer">删除</el-button>
-				</template>
-				<AnswerEditBoxForm
-					ref="EditBox"
-					:id= "props.answerid"
-					:EditBoxid="`answer-editbox-${props.answerid}`"
-					v-model:content="answerInfo.content">
-				</AnswerEditBoxForm>
+			<div class="card-footer" style="display: flex;justify-content: space-between;">
+				<div>
+					<LikeButton :id="props.answerid"></LikeButton>
+				</div>
+				<div style="display: flex;justify-content: flex-end">
+					<template v-if="useUserStore().token&&userid==useUserStore().id">
+						<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>
+						<el-button type="danger" plain @click="deleteAnswer">删除</el-button>
+					</template>
+					<AnswerEditBoxForm
+						ref="EditBox"
+						:id= "props.answerid"
+						:EditBoxid="`answer-editbox-${props.answerid}`"
+						v-model:content="answerInfo.content">
+					</AnswerEditBoxForm>
+				</div>
 			</div>
+			
 		</template>
 	</el-card>
 

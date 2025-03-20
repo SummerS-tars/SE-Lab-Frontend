@@ -26,7 +26,7 @@ onMounted(()=>{
 			id:res.authorId,
 			username:res.author,
 		};
-		answerInfo.value.createAt=res.createAt;
+		answerInfo.value.createdAt=res.createdAt;
 		answerInfo.value.content=res.content;
 		answerInfo.value.likes=res.likes;
 	});
@@ -50,7 +50,7 @@ onMounted(()=>{
 						<span style="font-weight: bold;"> {{ answerInfo.author.username }}</span>
 					</a>
 					<br/>
-					<span style="font-size: 14px;color: #999;"> {{ answerInfo.createAt }}</span>
+					<span style="font-size: 14px;color: #999;">回答时间: {{ answerInfo.createdAt }}</span>
 				</div>
 				<div>
 					<FollowButton :authorId="answerInfo.author.id"></FollowButton>

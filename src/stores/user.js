@@ -2,22 +2,20 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 const jwtparse = (token)=>{
-    try {
-        const parts = token.split('.');
-        const payloadBase64Url = parts[1];
-        const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(payloadJson);
-    } catch (error) {
-        console.error('Invalid token:', error);
-        return {}; // 返回一个空对象，避免异常
-    }
+    const parts =token.split('.');
+
+    const payloadBase64Url = parts[1];
+    const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map((c)=>{
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    const payload = JSON.parse(payloadJson);
+    return payload;
 }
 
-export const useUserStore = defineStore('token',()=>{
-    const token = computed(() => localStorage.getItem('token'));
+export const useUserStore = defineStore('user',()=>{
+    const token = computed(() => localStorage.getItem('user-tn'));
     const username = computed(() => {
         return jwtparse(token.value).sub;
     });
@@ -25,13 +23,13 @@ export const useUserStore = defineStore('token',()=>{
         return jwtparse(token.value).id;
     });
     const isadmin = computed(()=>{
-        return jwtparse(token.value).roles === 'ROLE_ADMIN';
+        return jwtparse(token.value).roles[0].authority==='ROLE_ADMIN';
     });
-    const setToken = (token) => {
-        localStorage.setItem('token',token);
+    const setToken = (user_tn) => {
+        localStorage.setItem('user-tn',user_tn);
     };
     const delToken = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('user-tn');
     };
 
     const logout = () => {

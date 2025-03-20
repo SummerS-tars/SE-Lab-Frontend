@@ -1,5 +1,6 @@
 <script setup>
 import request from '@/request/http';
+import { useProfileStore } from '@/stores/profile';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref, watch } from 'vue';
@@ -34,7 +35,9 @@ const followUser=async(userid)=>{
 	}
 	request.post('/api/auth/user/follow',{id:userid}).then(res=>{
 		followed.value=true;
-		window.location.reload();
+		if(useProfileStore().getProfile(userid)){
+			useProfileStore().getProfile(userid).value.follower+=1;
+		}
 	});
 };
 
@@ -45,7 +48,9 @@ const unfollowUser=async(userid)=>{
 	}
 	request.post('/api/auth/user/unfollow',{id:userid}).then(res=>{
 		followed.value=false;
-		window.location.reload();
+		if(useProfileStore().getProfile(userid)){
+			useProfileStore().getProfile(userid).value.follower-=1;
+		}
 	});
 };
 

@@ -2,6 +2,7 @@
 import {ref, onMounted} from 'vue';
 
 import Header from '@/components/Header/Header.vue';
+import Copyright from '@/components/Copyright.vue';
 
 </script>
 
@@ -18,6 +19,7 @@ import Header from '@/components/Header/Header.vue';
         </div>
       </el-main> 
     </el-container>
+    <Copyright></Copyright>
   </div>
 </template>
 
