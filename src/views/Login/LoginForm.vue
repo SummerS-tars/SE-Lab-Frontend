@@ -38,18 +38,14 @@ const submitForm = (formEl) => {
 	formEl.validate(async (valid) =>{
 		if(valid){
 			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
-			console.log(res);
 			ElMessage.success('登录成功');
-			const userStore = useUserStore();
-			userStore.setToken(res);
+			useUserStore().setToken(res);
+		}
 
-      let {isadmin} = userStore;
-
-			if (isadmin) {
-				await router.push('/admin_home');
-			} else {
-				await router.push('/');
-			}
+		if(useUserStore().isadmin) {
+			await router.push('/admin_home');
+		} else {
+			await router.push('/');
 		}
 	});
 }
