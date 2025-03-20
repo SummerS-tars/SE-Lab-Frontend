@@ -1,9 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { usePagination } from '@/hooks/useAnswerPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
 const route = useRoute();
@@ -22,8 +22,15 @@ const showDetails = (id) => {
   }
 };
 
+onBeforeRouteUpdate((to, from, next)=>{
+  relatedQuestionId.value = to.query.questionId||0 ;
+  fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
+  next();
+}) 
+
+
 onMounted(() => {
-  relatedQuestionId.value = Number(route.params.questionId) ;
+  relatedQuestionId.value = route.query.questionId||0 ;
 
   // // test
   // console.log('relatedQuestionId: ', relatedQuestionId.value);

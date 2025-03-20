@@ -31,8 +31,8 @@ const showDetails = (id) => {
 const goToAnswerManagement = () => {
   router.push({
     name: 'AnswerManagement',
-    params: {
-      questionId: selectedQuestionId.value
+    query:{
+      questionId:selectedQuestionId.value
     }
   });
 }
