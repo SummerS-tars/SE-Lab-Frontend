@@ -16,7 +16,7 @@ const relatedQuestionId = ref(null); // 存储选中的问题ID，0表示不限�
 const showDetails = (id) => {
   const answer = items.value.find((item) => item.id === id);
   if (answer) {
-    dialogContent.value = answer.content;
+    dialogContent.value = `相关问题id：${answer.questionId}\n作者：${answer.author}\n创建时间：${answer.createdTime}\n${answer.content}`;
     dialogVisible.value = true;
   } else {
     console.error('Answer not found');
@@ -33,13 +33,13 @@ onMounted(() => {
   fetchItems(currentPage.value);
 });
 
-// 清理钩子
-onUnmounted(() => {
-  currentPage.value = 1;
-  totalItems.value = 0;
-  totalPages.value = 0;
-  items.value = [];
-});
+// 清理钩子：没必要，离开会自动清除
+// onUnmounted(() => {
+//   currentPage.value = 1;
+//   totalItems.value = 0;
+//   totalPages.value = 0;
+//   items.value = [];
+// });
 
 </script>
 
@@ -56,7 +56,11 @@ onUnmounted(() => {
             <th>回答ID</th>
             <th>相关问题ID</th>
             <th>回答作者</th>
-            <th @click="handleSort">创建时间</th>
+            <th @click="handleSort">
+              创建时间
+              <span v-if="sortOrder === 'time-'">↓</span>
+              <span v-else-if="sortOrder === 'time+'">↑</span>
+            </th>
             <th>操作</th>
           </tr>
         </thead>

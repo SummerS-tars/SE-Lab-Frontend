@@ -5,7 +5,7 @@ import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { useRouter } from 'vue-router';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage , deleteQuestion } = usePagination();
+const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, nextPage, prevPage , deleteQuestion } = usePagination();
 const router = useRouter();
 
 const dialogVisible = ref(false);
@@ -64,7 +64,11 @@ onMounted(() => {
             <th>问题ID</th>
             <th>问题标题</th>
             <th>问题作者</th>
-            <th @click="handleSort">创建时间</th>
+            <th @click="handleSort">
+              创建时间
+              <span v-if="sortOrder === 'time-'">↓</span>
+              <span v-else-if="sortOrder === 'time+'">↑</span>
+            </th>
             <th>操作</th>
           </tr>
         </thead>
