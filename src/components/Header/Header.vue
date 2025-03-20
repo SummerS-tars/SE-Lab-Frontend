@@ -34,7 +34,7 @@ const EditBox = ref();
 				<el-text type="primary" style="margin: left;font-size:20px; text-align: center;">矢呼</el-text>
 			</el-link>
 		</div>
-		<template v-if="!useUserStore().token">
+		<template v-if="!useUserStore().token()">
 			<div>
 				<el-link href="/login">登录</el-link>
 				<el-link href="/register">注册</el-link>

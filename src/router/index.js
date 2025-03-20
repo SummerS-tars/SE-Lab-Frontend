@@ -25,7 +25,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       beforeEnter: (to,from,next)=>{
-        if(useUserStore().token){
+        if(useUserStore().token()){
           next()
         }else{
           next({name:'Login'})
@@ -36,7 +36,15 @@ const router = createRouter({
       path: '/',
       component: () => import('@/views/Login/LoginView.vue'),
       children:[
-        {path:'login',         name:'Login',  component:LoginForm},
+        {path:'login',         name:'Login',  component:LoginForm,
+          beforeEnter: (to,from,next)=>{
+            if(useUserStore().token()){
+              next(from)
+            }else{
+              next()
+            }
+          }
+        },
         {path:'register',     name:'Register',component:RegisterForm},
       ],
     },

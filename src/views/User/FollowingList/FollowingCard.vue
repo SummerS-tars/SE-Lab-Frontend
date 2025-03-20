@@ -23,7 +23,7 @@ const props=defineProps({
 				</a>
 			</div>
 			<div>
-				<template v-if="useUserStore().token&&useUserStore().id==userid">
+				<template v-if="useUserStore().token()&&useUserStore().id==userid">
 					<FollowButton :authorId="props.id"/>
 				</template>
 			</div>
