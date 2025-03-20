@@ -1,50 +1,47 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import request from '@/request/http';
+import { useFetchCounts } from './useFetchCounts';
+
+const { answerCount, fetchAnswerCount } = useFetchCounts();
 
 export function usePagination() {
   const currentPage = ref(1);
-  const totalItems = ref(0);
-  const totalPages = ref(1);
-  const items = ref([
-    {id: 1, questionId: 1 , author: 'author1', createdTime: '2021-01-01'},
-  ]);
+  const totalItems = computed(() => answerCount.value);
+  const totalPages = computed(() => Math.ceil(totalItems.value / 10));
+  const relatedQuestionId = ref(0);
+  const items = ref([]) ;
+  // const items = ref([
+  //   {id: 1, questionId: 1 , author: 'author1', createdTime: '2021-01-01'},
+  // ]);
   const sortOrder = ref('time-');
 
-  const fetchItems = async (page = currentPage.value, order = sortOrder.value, questionId = '') => {
+  const fetchItems = async (page = currentPage.value, order = sortOrder.value, questionId = relatedQuestionId.value) => {
     try {
-      // 获取回答数量
-      let countRes = await request.get(`/api/public/answersNum`, {
-        params: { questionId }
-      });
-      totalItems.value = countRes;
-      totalPages.value = Math.ceil(totalItems.value / 10);
+      fetchAnswerCount(questionId);
 
-      // 获取回答ID列表，临时变量res为id列表
-      let res = await request.get(`/api/auth/answers`, {
+      let answerQueryApi = `/api/public/answers`;
+      if(questionId !== 0) {
+        answerQueryApi = `/api/auth/answers/byQuestionId/${questionId}`;
+      }
+
+      items.value = [];
+      let res = await request.get(answerQueryApi, {
         params: {
           page_num: page,
           page_size: 10,
           sort: order
         }
       });
-
-      if (res.code === 200) {
-        items.value = [];
-        for (let id of res) {
-          let detailRes = await request.get(`/api/public/answer/byId/${id}`);
-          if (detailRes.code === 200) {
-            items.value.push({
-              id: detailRes.data.id,
-              questionId: detailRes.data.questionId,
-              author: detailRes.data.author,
-              createdTime: detailRes.data.timestamp,
-              content: detailRes.data.content,
-            });
-          }
-        }
-      } else {
-        console.error(res.message);
+      for(let answer of res.records){
+        items.value.push({
+          id: answer.id,
+          questionId: answer.questionId,
+          author: answer.author,
+          createdTime: answer.createdAt,
+          content: answer.content,
+        });
       }
+
     } catch (error) {
       console.error('Error fetching items:', error);
     }
@@ -97,5 +94,6 @@ export function usePagination() {
     nextPage,
     prevPage,
     deleteAnswer,
+    relatedQuestionId,
   };
 }

@@ -5,7 +5,7 @@ import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { useRoute } from 'vue-router';
 
-const { currentPage, totalItems, totalPages, items, fetchItems, handleSort, nextPage, prevPage , deleteAnswer } = usePagination();
+const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, nextPage, prevPage , deleteAnswer , relatedQuestionId} = usePagination();
 const route = useRoute();
 
 const dialogVisible = ref(false);
