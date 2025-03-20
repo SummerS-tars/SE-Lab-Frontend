@@ -26,7 +26,7 @@ const likes=computed(()=>{
 })
 
 const onClick=()=>{
-	if(!useUserStore().token)return;
+	if(!useUserStore().token())return;
 	if(liked.value){
 		request.post('/api/auth/user/answer/unlike',{id:props.id}).then(res=>{
 			answerInfo.value.liked=false;

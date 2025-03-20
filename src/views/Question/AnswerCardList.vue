@@ -29,7 +29,7 @@ const tableData = ref([])
 
 onMounted(async()=>{
 	let flag=false;
-  if(useUserStore().token){
+  if(useUserStore().token()){
 	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
 		infiniteScroll.value.setPage(1);
 	});
@@ -72,7 +72,7 @@ onUpdated(()=>{
 			</li>
 		</ul>
 	</template>
-	<template v-if="useUserStore().token">
+	<template v-if="useUserStore().token()">
 		<template v-if="onloading">
 			<el-card style="margin:10px;border:0px">
 				<el-skeleton :rows="5"/>

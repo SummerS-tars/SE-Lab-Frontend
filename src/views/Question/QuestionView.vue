@@ -19,7 +19,7 @@ const questionInfo = useQuestionStore().getQuestion(questionid);
 const answerEditBox = ref();
 
 const writeAnswer = () =>{
-  if(!useUserStore().token){
+  if(!useUserStore().token()){
     ElMessage.error('请先登录后再进行操作');
     return;
   }

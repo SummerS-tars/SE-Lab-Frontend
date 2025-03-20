@@ -59,7 +59,7 @@ const EditBox = ref();
 			<div class="card-footer" style="display: flex;justify-content: space-between">
 				<span style="font-size: 16px;font-weight: bold;"> 回答数： {{ questionInfo.answerCount }}</span>
 				<div>
-					<template v-if="useUserStore().token&&userid==useUserStore().id">
+					<template v-if="useUserStore().token()&&userid==useUserStore().id">
 						<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>
 						<el-button type="danger" plain @click="deleteQuestion">删除</el-button>
 					</template>

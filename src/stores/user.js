@@ -15,15 +15,15 @@ const jwtparse = (token)=>{
 }
 
 export const useUserStore = defineStore('user',()=>{
-    const token = computed(() => localStorage.getItem('user-tn'));
+    const token = () => localStorage.getItem('user-tn');
     const username = computed(() => {
-        return jwtparse(token.value).sub;
+        return jwtparse(token()).sub;
     });
     const id = computed(()=>{
-        return jwtparse(token.value).id;
+        return jwtparse(token()).id;
     });
     const isadmin = computed(()=>{
-        return jwtparse(token.value).roles[0].authority==='ROLE_ADMIN';
+        return jwtparse(token()).roles[0].authority==='ROLE_ADMIN';
     });
     const setToken = (user_tn) => {
         localStorage.setItem('user-tn',user_tn);

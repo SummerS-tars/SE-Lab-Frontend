@@ -37,7 +37,7 @@ const fetchData=async()=>{
 		answerInfo.value.content=res.content;
 		answerInfo.value.likes=res.likes;
 	})
-	if(useUserStore().token){
+	if(useUserStore().token()){
 		request.get(`/api/auth/user/answer/like`,{params:{id:props.answerid}}).then(res=>{
 			answerInfo.value.liked=res.liked;
 		});
@@ -76,7 +76,7 @@ const EditBox = ref();
 					<LikeButton :id="props.answerid"></LikeButton>
 				</div>
 				<div style="display: flex;justify-content: flex-end">
-					<template v-if="useUserStore().token&&userid==useUserStore().id">
+					<template v-if="useUserStore().token()&&userid==useUserStore().id">
 						<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>
 						<el-button type="danger" plain @click="deleteAnswer">删除</el-button>
 					</template>
