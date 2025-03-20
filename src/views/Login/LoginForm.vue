@@ -38,10 +38,9 @@ const submitForm = (formEl) => {
 	formEl.validate(async (valid) =>{
 		if(valid){
 			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
-			console.log(res);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);
-			await router.push('/');
+			router.push('/');
 		}
 	});
 }

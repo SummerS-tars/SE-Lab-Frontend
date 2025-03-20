@@ -24,6 +24,8 @@ const loadpage=async(page)=>{
 	});
 }
 
+
+
 onMounted(async()=>{
 	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
 		infiniteScroll.value.setPage(1);

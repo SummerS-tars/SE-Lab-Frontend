@@ -26,7 +26,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       beforeEnter: (to,from,next)=>{
-        if(localStorage.getItem('token')){
+        if(useUserStore().token){
           next()
         }else{
           next({name:'Login'})
