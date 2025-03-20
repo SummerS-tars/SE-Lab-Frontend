@@ -1,5 +1,5 @@
 <script setup lang="js" name="AdminHomeView">
-import Header from '@/components/Header/AdminHeader.vue';
+import Header from '@/components/Header/Header.vue';
 import AdminSideBar from '@/views/Admin/SideBar.vue';
 
 </script>
