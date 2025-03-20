@@ -40,7 +40,7 @@ const submitForm = (formEl) => {
 			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);
-			router.push('/');
+			await router.push('/');
 		}
 	});
 }
