@@ -52,9 +52,9 @@ const router = createRouter({
       path: '/admin_home',
       component: () => import('@/views/Admin/AdminView.vue'),
       children:[
-        {path:'', name:'AdminHome' , component:AdminDefaultView}, // TODO: AdminDefaultView.vue
-        {path:'question', name:'QuestionManagement', component:QuestionManagement}, // TODO: QuestionManagement.vue
-        {path:'answer', name:'AnswerManagement', component:AnswerManagement}, // TODO: AnswerManagement.vue
+        {path:'', name:'AdminHome' , component:AdminDefaultView},
+        {path:'question', name:'QuestionManagement', component:QuestionManagement}, 
+        {path:'answer', name:'AnswerManagement', component:AnswerManagement}, 
       ],
       beforeEnter: (to,from,next)=>{
         if(useUserStore().isadmin){
@@ -86,7 +86,6 @@ const router = createRouter({
           useQuestionStore().setQuestion(questionInfo);
           next();
         }catch(e){
-          console.log(e);
           next({path: '/notFound'});
         }
       }
@@ -120,7 +119,6 @@ const router = createRouter({
           useProfileStore().setProfile(userInfo);
           next();
         }catch(e){
-          console.log(e);
           next({path: '/notFound'});
         }
       }

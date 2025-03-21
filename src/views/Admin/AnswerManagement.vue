@@ -33,7 +33,6 @@ onMounted(() => {
   relatedQuestionId.value = route.query.questionId||0 ;
 
   // // test
-  // console.log('relatedQuestionId: ', relatedQuestionId.value);
 
   // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);

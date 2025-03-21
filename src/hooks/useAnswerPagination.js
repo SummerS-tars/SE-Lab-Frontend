@@ -10,9 +10,6 @@ export function usePagination() {
   const totalPages = computed(() => Math.ceil(totalItems.value / 10));
   const relatedQuestionId = ref(0);
   const items = ref([]) ;
-  // const items = ref([
-  //   {id: 1, questionId: 1 , author: 'author1', createdTime: '2021-01-01'},
-  // ]);
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value, questionId = relatedQuestionId.value) => {
@@ -66,20 +63,6 @@ export function usePagination() {
     fetchItems(currentPage.value, sortOrder.value);
   };
 
-  const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-      currentPage.value++;
-      fetchItems(currentPage.value, sortOrder.value);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage.value > 1) {
-      currentPage.value--;
-      fetchItems(currentPage.value, sortOrder.value);
-    }
-  };
-
   const fetchPage = (page) => {
     currentPage.value = page;
     fetchItems(currentPage.value, sortOrder.value);
@@ -94,8 +77,6 @@ export function usePagination() {
     fetchItems,
     handleSort,
     fetchPage,
-    nextPage,
-    prevPage,
     deleteAnswer,
     relatedQuestionId,
   };

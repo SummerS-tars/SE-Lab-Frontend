@@ -22,9 +22,7 @@ const showDetails = (id) => {
     selectedQuestionId.value = id; // 存储问题ID
     
     //test
-    console.log('selectedQuestionId: ', selectedQuestionId.value);
   } else {
-    console.error('Question not found');
   }
 };
 

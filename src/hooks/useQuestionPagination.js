@@ -9,9 +9,6 @@ export function usePagination() {
   const totalItems = computed(() => questionCount.value);
   const totalPages = computed(() => Math.ceil(totalItems.value / 10));
   const items = ref([]);
-  // const items = ref([
-  //   {id: 1, title: 'title1', author: 'author1', createdTime: '2021-01-01',},
-  // ]);
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
@@ -29,8 +26,6 @@ export function usePagination() {
         }
       });
 
-      // test
-      // console.log('res:',questionRes);
 
       for(let question of questionRes.records){
         items.value.push({
@@ -42,18 +37,6 @@ export function usePagination() {
           content: question.content,
         });
       }
-
-
-      // for (let id of res) {
-      //   let detailRes = await request.get(`/api/public/question/byId/${id}`);
-      //   items.value.push({
-      //     id: detailRes.id,
-      //     title: detailRes.title,
-      //     author: detailRes.author,
-      //     createdTime: detailRes.createdAt,
-      //     content: detailRes.content,
-      //   });
-      // }
     } catch (error) {
       console.error('Error fetching items:', error);
     }
@@ -64,11 +47,6 @@ export function usePagination() {
       await request.post(`/api/auth/question/delete`,{id});
       alert('删除成功');
       fetchItems(currentPage.value, sortOrder.value);
-      // if (res.code === 200) {
-      //   fetchItems(currentPage.value, sortOrder.value);
-      // } else {
-      // console.error(res.message);
-      // }
     } catch (error) {
       console.error('Error deleting question:', error);
     }

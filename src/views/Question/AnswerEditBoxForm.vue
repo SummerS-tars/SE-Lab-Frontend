@@ -28,7 +28,6 @@ watch(visible,async(newValue)=>{
 });
 
 const submitForm = async() => {
-	console.log(props.id);
 	await request.post("/api/auth/answer/create", {questionId:props.id, content:EditBox.value.getContent()});
 	ElMessage.success('发布成功');
 	close();
