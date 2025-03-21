@@ -13,44 +13,36 @@ export function usePagination() {
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value) => {
-    try {
-      // 获取问题数量
-      fetchQuestionCount();
+    // 获取问题数量
+    fetchQuestionCount();
 
-      // 获取问题ID列表，临时变量res为id列表
-      items.value = [];
-      let questionRes = await request.get(`/api/auth/questions`, {
-        params: {
-          page_num: page,
-          page_size: 10,
-          sort: order
-        }
-      });
-
-
-      for(let question of questionRes.records) {
-        items.value.push({
-          id: question.id,
-          title: question.title,
-          author: question.author,
-          createdTime: question.createdAt,
-          answerCount: question.answerCount,
-          content: question.content,
-        });
+    // 获取问题ID列表，临时变量res为id列表
+    items.value = [];
+    let questionRes = await request.get(`/api/auth/questions`, {
+      params: {
+        page_num: page,
+        page_size: 10,
+        sort: order
       }
-    } catch (error) {
-      console.error('Error fetching items:', error);
+    });
+
+
+    for(let question of questionRes.records) {
+      items.value.push({
+        id: question.id,
+        title: question.title,
+        author: question.author,
+        createdTime: question.createdAt,
+        answerCount: question.answerCount,
+        content: question.content,
+      });
     }
   };
 
   const deleteQuestion = async (id) => {
-    try {
-      await request.post(`/api/auth/question/delete`,{id});
-      ElMessage.success('删除成功');
-      fetchItems(currentPage.value, sortOrder.value);
-    } catch (error) {
-      console.error('Error deleting question:', error);
-    }
+    await request.post(`/api/auth/question/delete`,{id});
+    ElMessage.success('删除成功');
+    fetchItems(currentPage.value, sortOrder.value);
   };
 
   const handleSort = () => {

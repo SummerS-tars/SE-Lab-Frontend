@@ -14,48 +14,39 @@ export function usePagination() {
   const sortOrder = ref('time-');
 
   const fetchItems = async (page = currentPage.value, order = sortOrder.value, questionId = relatedQuestionId.value) => {
-    try {
-      fetchAnswerCount(questionId);
+    fetchAnswerCount(questionId);
 
-      let answerQueryApi = `/api/public/answers`;
-      if(questionId !== 0) {
-        answerQueryApi = `/api/auth/answers/byQuestionId/${questionId}`;
+    let answerQueryApi = `/api/public/answers`;
+    if(questionId !== 0) {
+      answerQueryApi = `/api/auth/answers/byQuestionId/${questionId}`;
+    }
+
+    items.value = [];
+    let res = await request.get(answerQueryApi, {
+      params: {
+        page_num: page,
+        page_size: 10,
+        sort: order
       }
-
-      items.value = [];
-      let res = await request.get(answerQueryApi, {
-        params: {
-          page_num: page,
-          page_size: 10,
-          sort: order
-        }
+    });
+    for(let answer of res.records) {
+      items.value.push({
+        id: answer.id,
+        questionId: answer.questionId,
+        author: answer.author,
+        createdTime: answer.createdAt,
+        content: answer.content,
       });
-      for(let answer of res.records) {
-        items.value.push({
-          id: answer.id,
-          questionId: answer.questionId,
-          author: answer.author,
-          createdTime: answer.createdAt,
-          content: answer.content,
-        });
-      }
-
-    } catch (error) {
-      console.error('Error fetching items:', error);
     }
   };
 
   const deleteAnswer = async (id) => {
-    try {
-      await request.post(`/api/auth/answer/delete`, {
-          params: { id }
-        }
-      );
-      ElMessage.success('删除成功');
-      fetchItems(currentPage.value, sortOrder.value);
-    } catch (error) {
-      console.error('Error deleting answer:', error);
-    }
+    await request.post(`/api/auth/answer/delete`, {
+        params: { id }
+      }
+    );
+    ElMessage.success('删除成功');
+    fetchItems(currentPage.value, sortOrder.value);
   };
 
   const handleSort = () => {

@@ -4,6 +4,7 @@ import { usePagination } from '@/hooks/useAnswerPagination';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
 const route = useRoute();
@@ -18,19 +19,19 @@ const showDetails = (id) => {
     dialogContent.value = `相关问题id：${answer.questionId}\n作者：${answer.author}\n创建时间：${answer.createdTime}\n${answer.content}`;
     dialogVisible.value = true;
   } else {
-    console.error('Answer not found');
+    ElMessage.error('回答未找到');
   }
 };
 
 onBeforeRouteUpdate((to, from, next)=>{
-  relatedQuestionId.value = to.query.questionId||0 ;
+  relatedQuestionId.value = to.query.questionId || 0;
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
   next();
-}) 
+});
 
 
 onMounted(() => {
-  relatedQuestionId.value = route.query.questionId||0 ;
+  relatedQuestionId.value = route.query.questionId || 0;
 
   // // test
 

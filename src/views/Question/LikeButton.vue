@@ -8,7 +8,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 
 const props=defineProps({
 	id:{default:''},
-})
+});
 
 const answerInfo=computed(()=>{
 	return useAnswerStore().getAnswer(props.id);

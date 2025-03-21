@@ -15,8 +15,8 @@ const userid =  route.params.id;
 const props=defineProps({
     questionid:{default:undefined},
     answerid:{default:undefined},
-	removethis:{default:()=>{}}
-})
+	removethis:{default:()=>{}},
+});
 
 const questionInfo=ref({});
 const answerInfo=ref({});

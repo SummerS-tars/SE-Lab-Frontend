@@ -1,11 +1,11 @@
 <script setup>
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
+import request from '@/request/http.js';
 import QuestionCard from './QuestionCard.vue';
 import { useRoute } from 'vue-router';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
-const tableData = ref([])
+const tableData = ref([]);
 
 const route = useRoute();
 const userid =  route.params.id;
@@ -21,7 +21,7 @@ const loadpage=async(page)=>{
 			id:item.id,
 		});
 	});
-}
+};
 
 onMounted(async()=>{
 	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
@@ -38,11 +38,11 @@ const infiniteScroll=ref();
 
 onBeforeUpdate(()=>{
 	infiniteScroll.value.onBeforeUpdate();
-})
+});
 
 onUpdated(()=>{
 	infiniteScroll.value.onUpdated();
-})
+});
 
 const itemDelete=(index)=>{
 	window.location.reload();

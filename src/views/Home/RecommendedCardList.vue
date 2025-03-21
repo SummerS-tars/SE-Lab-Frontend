@@ -1,12 +1,10 @@
 <script setup>
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
-import { ElMessage } from 'element-plus';
-import RecommendedCard from './RecommendedCard.vue';
+import request from '@/request/http.js';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 import QuestionCard from '../User/QuestionList/QuestionCard.vue';
 
-const tableData = ref([])
+const tableData = ref([]);
 
 const infiniteScroll=ref();
 const loadpage=async(page)=>{
@@ -37,7 +35,7 @@ onBeforeUpdate(()=>{
 
 onUpdated(()=>{
 	infiniteScroll.value.onUpdated();
-})
+});
 
 </script>
 

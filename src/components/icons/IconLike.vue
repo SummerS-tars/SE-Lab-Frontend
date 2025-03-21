@@ -1,7 +1,7 @@
 <script setup>
-	const props=defineProps({
-		like:{default: false}
-	})
+const props=defineProps({
+	like:{default: false},
+});
 </script>
 
 <template>

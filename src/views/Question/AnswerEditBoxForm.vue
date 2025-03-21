@@ -6,7 +6,7 @@ import { nextTick, ref, watch } from 'vue';
 
 const props=defineProps({
 	id:{default:''},
-})
+});
 
 const visible = ref(false);
 const resetForm = () => {}

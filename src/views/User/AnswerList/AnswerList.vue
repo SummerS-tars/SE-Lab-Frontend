@@ -1,11 +1,11 @@
 <script setup>
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
+import request from '@/request/http.js';
 import AnswerCard from './AnswerCard.vue';
 import { useRoute } from 'vue-router';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
-const tableData = ref([])
+const tableData = ref([]);
 
 const route = useRoute();
 const userid =  route.params.id;
@@ -22,7 +22,7 @@ const loadpage=async(page)=>{
 			answerid:item.id,
 		});
 	});
-}
+};
 
 
 
@@ -44,11 +44,11 @@ const infiniteScroll=ref();
 
 onBeforeUpdate(()=>{
 	infiniteScroll.value.onBeforeUpdate();
-})
+});
 
 onUpdated(()=>{
 	infiniteScroll.value.onUpdated();
-})
+});
 
 </script>
 

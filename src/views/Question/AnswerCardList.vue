@@ -1,14 +1,13 @@
 <script setup>
-import { nextTick, onBeforeMount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
-import { ElMessage } from 'element-plus';
+import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
+import request from '@/request/http.js';
 import AnswerCard from './AnswerCard.vue';
 import { useUserStore } from '@/stores/user';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
 const props=defineProps({
 	id:{default:''},
-})
+});
 
 const loadpage=async(page)=>{
 	let res=await request.get(`/api/auth/answers/byQuestionId/${props.id}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
@@ -21,11 +20,11 @@ const loadpage=async(page)=>{
 			id:item.id,
 		});
 	});
-}
+};
 
 const infiniteScroll=ref();
 
-const tableData = ref([])
+const tableData = ref([]);
 
 onMounted(async()=>{
 	let flag=false;
@@ -52,11 +51,11 @@ onMounted(async()=>{
 
 onBeforeUpdate(()=>{
 	infiniteScroll.value.onBeforeUpdate();
-})
+});
 
 onUpdated(()=>{
 	infiniteScroll.value.onUpdated();
-})
+});
 
 </script>
 

@@ -20,8 +20,6 @@ const showDetails = (id) => {
     dialogContent.value = `#${question.title}\n作者：${question.author}\n创建时间：${question.createdTime}\n${question.content}`;
     dialogVisible.value = true;
     selectedQuestionId.value = id; // 存储问题ID
-    
-    //test
   } else {
   }
 };
@@ -31,9 +29,9 @@ const goToAnswerManagement = () => {
     name: 'AnswerManagement',
     query:{
       questionId:selectedQuestionId.value
-    }
+    },
   });
-}
+};
 
 onMounted(() => {
   // 初始加载数据，默认按创建时间降序排列

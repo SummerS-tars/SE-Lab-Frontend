@@ -10,7 +10,7 @@ const userid =  route.params.id;
 const props=defineProps({
 	username:{default:''},
 	id:{default:''},
-})
+});
 
 </script>
 
