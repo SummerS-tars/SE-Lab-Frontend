@@ -29,9 +29,7 @@ const tableData = ref([]);
 onMounted(async() => {
   if(useUserStore().token()) {
 		infiniteScroll.value.setCallback(async() => {
-			await loadpage(infiniteScroll.value.getPage()).then(() => {
-				infiniteScroll.value.addPage();
-			});
+			await loadpage(infiniteScroll.value.getPage());
 		});
 		infiniteScroll.value.initLoad();
   }
