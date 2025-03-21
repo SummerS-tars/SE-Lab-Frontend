@@ -24,14 +24,14 @@ request.interceptors.request.use(
     error =>{
         return Promise.reject(error);
     }
-)
+);
 
 request.interceptors.response.use(
     response => {
         return response.data.data;
     },
     error => {
-        ElMessage.error(error.response.data.message)
+        ElMessage.error(error.response.data.message);
         return Promise.reject(error);
     },
 );

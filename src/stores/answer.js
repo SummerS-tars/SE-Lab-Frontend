@@ -14,4 +14,4 @@ export const useAnswerStore = defineStore('answer', () => {
 	}
 
   return { setAnswer,getAnswer };
-})
+});

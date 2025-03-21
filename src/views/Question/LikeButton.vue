@@ -26,9 +26,15 @@ const liked=computed(() => {
 	}
 });
 const likes=computed(() => {
-	if(answerInfo===undefined)return 0;
-	else if(answerInfo.value===undefined)return 0;
-	else return answerInfo.value.likes;
+	if(answerInfo===undefined) {
+		return 0;
+	}
+	else if(answerInfo.value===undefined) {
+		return 0;
+	}
+	else {
+		return answerInfo.value.likes;
+	}
 });
 
 const onClick=() => {
