@@ -45,7 +45,7 @@ const ruleForm = reactive({
 const rules = reactive({
 	title: [{
 		validator: (rule, value, callback) => {
-			if (value === "") {
+			if (value === '') {
 				callback(new Error('请输入标题'));
 			}
 			else if(value.length>50) {

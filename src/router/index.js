@@ -26,11 +26,11 @@ const router = createRouter({
       component: HomeView,
       beforeEnter: (to,from,next)=>{
         if(useUserStore().token()) {
-          next()
+          next();
         }else{
-          next({name:'Login'})
+          next({name:'Login'});
         }
-      }
+      },
     },
     {
       path: '/',
@@ -39,11 +39,11 @@ const router = createRouter({
         {path:'login',         name:'Login',  component:LoginForm,
           beforeEnter: (to,from,next)=>{
             if(useUserStore().token()) {
-              next(from)
+              next(from);
             }else{
-              next()
+              next();
             }
-          }
+          },
         },
         {path:'register',     name:'Register',component:RegisterForm},
       ],
@@ -58,12 +58,12 @@ const router = createRouter({
       ],
       beforeEnter: (to,from,next)=>{
         if(useUserStore().isadmin) {
-          next()
+          next();
         }else{
-          next(from)
-          ElMessage.error('没有管理员权限')
+          next(from);
+          ElMessage.error('没有管理员权限');
         }
-      }
+      },
     },
     {
       path: '/question/:id',
@@ -73,7 +73,7 @@ const router = createRouter({
         const questionId=to.params.id;
         try{
           let res=await request.get(`/api/public/question/byId/${questionId}`);
-          const questionInfo = ref({})
+          const questionInfo = ref({});
           questionInfo.value.id = questionId;
           questionInfo.value.title = res.title;
           questionInfo.value.createdAt = res.createdAt;
@@ -88,7 +88,7 @@ const router = createRouter({
         }catch(e) {
           next({path: '/notFound'});
         }
-      }
+      },
     },
     {
       path: '/user/profile/:id',
@@ -103,7 +103,7 @@ const router = createRouter({
         const userId=to.params.id;
         try{
           let res = await request.get(`/api/public/user/byId/${userId}`);
-          const userInfo=ref({})
+          const userInfo=ref({});
           userInfo.value.username=res.username;
           userInfo.value.email=res.email;
           userInfo.value.follower=res.numfollower;
@@ -121,7 +121,7 @@ const router = createRouter({
         }catch(e) {
           next({path: '/notFound'});
         }
-      }
+      },
     },
     {
       path: '/:pathMatch(.*)*', 
@@ -129,8 +129,7 @@ const router = createRouter({
       component: () => import('@/views/NotFoundView.vue'),
     },
   ],
-})
+});
 
 
-
-export default router
+export default router;

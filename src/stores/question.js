@@ -1,9 +1,9 @@
-import { ref, computed, reactive } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, computed, reactive } from 'vue';
+import { defineStore } from 'pinia';
 
 export const useQuestionStore = defineStore('question', () => {
 
-    const questionList = {}
+    const questionList = {};
 
     function setQuestion(question) {
         questionList[question.value.id]=question;
@@ -13,5 +13,5 @@ export const useQuestionStore = defineStore('question', () => {
         return questionList[id];
     }
 
-  return { setQuestion,getQuestion }
-})
+  return { setQuestion,getQuestion };
+});

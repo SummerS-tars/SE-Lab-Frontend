@@ -18,7 +18,9 @@ const resetForm = () => {};
 const open = () =>{
 	visible.value = true;resetForm();
 };
-const close = () =>{visible.value = false;};
+const close = () =>{
+	visible.value = false;
+};
 
 defineExpose({open, close});
 

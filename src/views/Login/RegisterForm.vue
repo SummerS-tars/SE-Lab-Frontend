@@ -11,16 +11,16 @@ let router = useRouter();
 const ruleFormRef = ref();
 
 const ruleForm = reactive({
-  username: "",
-	password: "",
-	email: "",
+  username: '',
+	password: '',
+	email: '',
 });
 
 const rules = reactive({
 	username: [{
 		validator: (rule, value, callback) => {
 			const regex = /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$/;
-			if (value === "") callback(new Error("请输入用户名"));
+			if (value === '') callback(new Error("请输入用户名"));
 			else if(value.length<2) callback(new Error("用户名过短"));
 			else if(value.length>20) callback(new Error("用户名过长"));
 			else if(!regex.test(value)) callback(new Error("存在非法字符"));
@@ -33,7 +33,7 @@ const rules = reactive({
 			const regex = /^[a-zA-Z0-9_]{8,}$/;
 			const hasLetter = /[a-zA-Z]/.test(value);
 			const hasNumber = /[0-9]/.test(value);
-			if (value === "") callback(new Error("请输入密码"));
+			if (value === '') callback(new Error("请输入密码"));
 			else if(value.length<8) callback(new Error("密码过短"));
 			else if(!regex.test(value)) callback(new Error("存在非法字符"));
 			else if(!hasLetter) callback(new Error("密码必须包含字母"));
@@ -56,11 +56,11 @@ const submitForm = (formEl) => {
 	formEl.validate(async (valid) =>{
 		if(valid) {
 			let res=await request.post("/api/public/register", ruleForm);
-			ElMessage.success('注册成功')
+			ElMessage.success('注册成功');
 			await router.push('/login');
 		}
 	});
-}
+};
 
 </script>
 

@@ -1,9 +1,9 @@
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive } from 'vue';
 import { defineStore } from 'pinia'
 
 export const useProfileStore = defineStore('profile', () => {
 
-    const profileList = {}
+    const profileList = {};
 
     function setProfile(profile) {
         profileList[profile.value.id]=profile;
@@ -13,5 +13,5 @@ export const useProfileStore = defineStore('profile', () => {
         return profileList[id];
     }
 
-  return { setProfile,getProfile }
-})
+  return { setProfile,getProfile };
+});

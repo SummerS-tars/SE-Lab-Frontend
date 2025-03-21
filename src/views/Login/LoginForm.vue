@@ -54,7 +54,7 @@ const submitForm = (formEl) => {
 			await router.push('/');
 		}
 	});
-}
+};
 
 </script>
 
