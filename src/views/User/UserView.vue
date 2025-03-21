@@ -22,7 +22,7 @@ const nameToIndexMap = {
   ['FollowingList']: '3',
 };
 
-const activeIndex = ref(computed(()=>{
+const activeIndex = ref(computed(() => {
 	return nameToIndexMap[route.name] || '0';
 }));
 

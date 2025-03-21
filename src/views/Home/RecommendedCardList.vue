@@ -7,7 +7,7 @@ import QuestionCard from '../User/QuestionList/QuestionCard.vue';
 const tableData = ref([]);
 
 const infiniteScroll=ref();
-const loadpage=async(page)=>{
+const loadpage=async(page) => {
 	let res=await request.get('/api/auth/questions',{params:{page_num:page,page_size:10,sort:'time-'}});
 	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
@@ -18,22 +18,22 @@ const loadpage=async(page)=>{
 	});
 };
 
-onMounted(async()=>{
-	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+onMounted(async() => {
+	loadpage(infiniteScroll.value.getPage()+1).then(() => {
 		infiniteScroll.value.setPage(1);
 	});
-	infiniteScroll.value.setCallback(async()=>{
-		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+	infiniteScroll.value.setCallback(async() => {
+		await loadpage(infiniteScroll.value.getPage()+1).then(() => {
 			infiniteScroll.value.addPage();
 		});
 	});
 });
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
 	infiniteScroll.value.onBeforeUpdate();
 });
 
-onUpdated(()=>{
+onUpdated(() => {
 	infiniteScroll.value.onUpdated();
 });
 

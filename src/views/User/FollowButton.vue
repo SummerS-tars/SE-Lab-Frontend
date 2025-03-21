@@ -12,7 +12,7 @@ const props=defineProps({
 
 const followed=ref(false);
 
-onMounted(()=>{
+onMounted(() => {
 	if(useUserStore().token()&&props.authorId) {
 		request.get('/api/auth/user/followed',{params:{ id:props.authorId}}).then(res=>{
 			followed.value=res.followed;
@@ -20,7 +20,7 @@ onMounted(()=>{
 	}
 });
 
-watch(()=>props.authorId,(newVal)=>{
+watch(()=>props.authorId,(newVal) => {
 	if(useUserStore().token()&&newVal) {
 		request.get('/api/auth/user/followed',{params:{ id:newVal}}).then(res=>{
 			followed.value=res.followed;
@@ -28,7 +28,7 @@ watch(()=>props.authorId,(newVal)=>{
 	}
 });
 
-const followUser=async(userid)=>{
+const followUser=async(userid) => {
 	if(!useUserStore().token()) {
 		ElMessage.error('请先登录后再进行操作');
 		return;
@@ -41,7 +41,7 @@ const followUser=async(userid)=>{
 	});
 };
 
-const unfollowUser=async(userid)=>{
+const unfollowUser=async(userid) => {
 	if(!useUserStore().token()) {
 		ElMessage.error('请先登录后再进行操作');
 		return;

@@ -11,7 +11,7 @@ const visible = ref(false);
 const resetForm = () => { ruleForm.title=''};
 const open = () => { 
 	visible.value = true; 
-	resetForm()
+	resetForm();
 };
 const close = () => { visible.value = false};
 
@@ -19,7 +19,7 @@ defineExpose({open, close});
 
 const EditBox = ref();
 
-watch(visible,async(newValue)=>{
+watch(visible,async(newValue) => {
 	if(newValue) {
 		await nextTick();
 		EditBox.value.init();

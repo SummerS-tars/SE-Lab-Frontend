@@ -23,7 +23,7 @@ const showDetails = (id) => {
   }
 };
 
-onBeforeRouteUpdate((to, from, next)=>{
+onBeforeRouteUpdate((to, from, next) => {
   relatedQuestionId.value = to.query.questionId || 0;
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
   next();

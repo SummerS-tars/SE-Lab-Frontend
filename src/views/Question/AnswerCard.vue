@@ -18,7 +18,7 @@ const answerInfo=ref({
 	author:{id:'',username:''},
 });
 
-onMounted(()=>{
+onMounted(() => {
 	answerInfo.value.id=props.id;
 	answerInfo.value.like=false;
 	request.get(`/api/public/answer/byId/${props.id}`).then(res=>{

@@ -9,7 +9,7 @@ const props=defineProps({
 	id:{default:''},
 });
 
-const loadpage=async(page)=>{
+const loadpage=async(page) => {
 	let res=await request.get(`/api/auth/answers/byQuestionId/${props.id}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
 	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
@@ -26,14 +26,14 @@ const infiniteScroll=ref();
 
 const tableData = ref([]);
 
-onMounted(async()=>{
+onMounted(async() => {
 	let flag=false;
   if(useUserStore().token()) {
-	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+	loadpage(infiniteScroll.value.getPage()+1).then(() => {
 		infiniteScroll.value.setPage(1);
 	});
-	infiniteScroll.value.setCallback(async()=>{
-		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+	infiniteScroll.value.setCallback(async() => {
+		await loadpage(infiniteScroll.value.getPage()+1).then(() => {
 			infiniteScroll.value.addPage();
 		});
 	});
@@ -49,11 +49,11 @@ onMounted(async()=>{
   }
 });
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
 	infiniteScroll.value.onBeforeUpdate();
 });
 
-onUpdated(()=>{
+onUpdated(() => {
 	infiniteScroll.value.onUpdated();
 });
 

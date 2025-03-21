@@ -43,12 +43,24 @@ const rules = reactive({
 			const regex = /^[a-zA-Z0-9_]{8,}$/;
 			const hasLetter = /[a-zA-Z]/.test(value);
 			const hasNumber = /[0-9]/.test(value);
-			if (value === '') callback(new Error("请输入密码"));
-			else if(value.length<8) callback(new Error("密码过短"));
-			else if(!regex.test(value)) callback(new Error("存在非法字符"));
-			else if(!hasLetter) callback(new Error("密码必须包含字母"));
-			else if(!hasNumber) callback(new Error("密码必须包含数字"));
-			else callback();
+			if (value === '') {
+				callback(new Error('请输入密码'));
+			}
+			else if(value.length<8) {
+				callback(new Error('密码过短'));
+			}
+			else if(!regex.test(value)) {
+				callback(new Error('存在非法字符'));
+			}
+			else if(!hasLetter) {
+				callback(new Error('密码必须包含字母'));
+			}
+			else if(!hasNumber) {
+				callback(new Error('密码必须包含数字'));
+			}
+			else {
+				callback();
+			}
 		},
 		trigger: 'blur'
 	}],

@@ -10,7 +10,7 @@ const tableData = ref([]);
 const route = useRoute();
 const userid =  route.params.id;
 
-const loadpage=async(page)=>{
+const loadpage=async(page) => {
 	let res= await request.get(`/api/public/questions/byUserId/${userid}`,{params:{page_num:page,page_size:10,sort:'time-'}});
 	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
@@ -23,12 +23,12 @@ const loadpage=async(page)=>{
 	});
 };
 
-onMounted(async()=>{
-	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+onMounted(async() => {
+	loadpage(infiniteScroll.value.getPage()+1).then(() => {
 		infiniteScroll.value.setPage(1);
 	});
-	infiniteScroll.value.setCallback(async()=>{
-		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
+	infiniteScroll.value.setCallback(async() => {
+		await loadpage(infiniteScroll.value.getPage()+1).then(() => {
 			infiniteScroll.value.addPage();
 		});
 	});
@@ -36,15 +36,15 @@ onMounted(async()=>{
 
 const infiniteScroll=ref();
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
 	infiniteScroll.value.onBeforeUpdate();
 });
 
-onUpdated(()=>{
+onUpdated(() => {
 	infiniteScroll.value.onUpdated();
 });
 
-const itemDelete=(index)=>{
+const itemDelete=(index) => {
 	window.location.reload();
 };
 
@@ -59,7 +59,7 @@ const itemDelete=(index)=>{
 	<template v-else>
 		<ul>
 			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
-				<QuestionCard :id="item.id" :removethis="()=>{itemDelete(index)}"/>
+				<QuestionCard :id="item.id" :removethis="() => {itemDelete(index)}"/>
 			</li>
 		</ul>
 	</template>

@@ -15,13 +15,13 @@ const userid =  route.params.id;
 const props=defineProps({
     questionid:{default:undefined},
     answerid:{default:undefined},
-	removethis:{default:()=>{}},
+	removethis:{default:() => {}},
 });
 
 const questionInfo=ref({});
 const answerInfo=ref({});
 
-const fetchData=async()=>{
+const fetchData=async() => {
 	if(!props.questionid||!props.answerid) {
 		return;
 	}
@@ -47,11 +47,11 @@ const fetchData=async()=>{
 	useAnswerStore().setAnswer(answerInfo);
 };
 
-onMounted(()=>{fetchData()});
-watch(()=>props,()=>{fetchData()});
+onMounted(() => {fetchData()});
+watch(()=>props,() => {fetchData()});
 
-const deleteAnswer=async()=>{
-	ElMessageBox.confirm('确认删除吗?').then(async()=>{
+const deleteAnswer=async() => {
+	ElMessageBox.confirm('确认删除吗?').then(async() => {
 		await request.post(`/api/auth/answer/delete`,{id:props.answerid});
 		props.removethis();
 		ElMessage.success('删除成功');

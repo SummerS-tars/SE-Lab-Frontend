@@ -10,22 +10,28 @@ const props=defineProps({
 	id:{default:''},
 });
 
-const answerInfo=computed(()=>{
+const answerInfo=computed(() => {
 	return useAnswerStore().getAnswer(props.id);
 });
 
-const liked=computed(()=>{
-	if(answerInfo===undefined)return false;
-	else if(answerInfo.value===undefined)return false;
-	else return answerInfo.value.liked;
+const liked=computed(() => {
+	if(answerInfo===undefined) {
+		return false;
+	}
+	else if(answerInfo.value===undefined) {
+		return false;
+	}
+	else {
+		return answerInfo.value.liked;
+	}
 });
-const likes=computed(()=>{
+const likes=computed(() => {
 	if(answerInfo===undefined)return 0;
 	else if(answerInfo.value===undefined)return 0;
 	else return answerInfo.value.likes;
 });
 
-const onClick=()=>{
+const onClick=() => {
 	if(!useUserStore().token()) {
 		return;
 	}

@@ -24,10 +24,10 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      beforeEnter: (to,from,next)=>{
-        if(useUserStore().token()) {
+      beforeEnter: (to,from,next) => {
+        if (useUserStore().token()) {
           next();
-        }else{
+        } else {
           next({name:'Login'});
         }
       },
@@ -37,7 +37,7 @@ const router = createRouter({
       component: () => import('@/views/Login/LoginView.vue'),
       children:[
         {path:'login',         name:'Login',  component:LoginForm,
-          beforeEnter: (to,from,next)=>{
+          beforeEnter: (to,from,next) => {
             if(useUserStore().token()) {
               next(from);
             }else{
@@ -56,7 +56,7 @@ const router = createRouter({
         {path:'question', name:'QuestionManagement', component:QuestionManagement}, 
         {path:'answer', name:'AnswerManagement', component:AnswerManagement}, 
       ],
-      beforeEnter: (to,from,next)=>{
+      beforeEnter: (to,from,next) => {
         if(useUserStore().isadmin) {
           next();
         }else{
@@ -69,7 +69,7 @@ const router = createRouter({
       path: '/question/:id',
       name: 'question',
       component: QuestionView,
-      beforeEnter: async(to,from,next)=>{
+      beforeEnter: async(to,from,next) => {
         const questionId=to.params.id;
         try{
           let res=await request.get(`/api/public/question/byId/${questionId}`);
@@ -99,7 +99,7 @@ const router = createRouter({
         {path:'follower', name:'FollowerList',  component:FollowerList},
         {path:'following',name:'FollowingList', component:FollowingList},
       ],
-      beforeEnter: async(to,from,next)=>{
+      beforeEnter: async(to,from,next) => {
         const userId=to.params.id;
         try{
           let res = await request.get(`/api/public/user/byId/${userId}`);
