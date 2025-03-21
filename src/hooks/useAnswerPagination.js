@@ -30,7 +30,7 @@ export function usePagination() {
           sort: order
         }
       });
-      for(let answer of res.records){
+      for(let answer of res.records) {
         items.value.push({
           id: answer.id,
           questionId: answer.questionId,

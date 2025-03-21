@@ -37,7 +37,7 @@ const fetchData=async()=>{
 		answerInfo.value.content=res.content;
 		answerInfo.value.likes=res.likes;
 	})
-	if(useUserStore().token()){
+	if(useUserStore().token()) {
 		request.get(`/api/auth/user/answer/like`,{params:{id:props.answerid}}).then(res=>{
 			answerInfo.value.liked=res.liked;
 		});

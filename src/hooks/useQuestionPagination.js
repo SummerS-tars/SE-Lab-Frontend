@@ -28,7 +28,7 @@ export function usePagination() {
       });
 
 
-      for(let question of questionRes.records){
+      for(let question of questionRes.records) {
         items.value.push({
           id: question.id,
           title: question.title,

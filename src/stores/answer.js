@@ -5,11 +5,11 @@ export const useAnswerStore = defineStore('answer', () => {
 
 	const answerList = ref({})
 
-	function setAnswer(answer){
+	function setAnswer(answer) {
 		answerList.value[answer.value.id]=answer;
 	}
 
-	function getAnswer(id){
+	function getAnswer(id) {
 		return answerList.value[id];
 	}
 

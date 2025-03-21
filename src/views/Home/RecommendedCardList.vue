@@ -11,7 +11,7 @@ const tableData = ref([])
 const infiniteScroll=ref();
 const loadpage=async(page)=>{
 	let res=await request.get("/api/auth/questions",{params:{page_num:page,page_size:10,sort:'time-'}});
-	if(res.records.length===0){
+	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
 	}

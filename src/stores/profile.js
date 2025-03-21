@@ -5,11 +5,11 @@ export const useProfileStore = defineStore('profile', () => {
 
     const profileList = {}
 
-    function setProfile(profile){
+    function setProfile(profile) {
         profileList[profile.value.id]=profile;
     }
 
-    function getProfile(id){
+    function getProfile(id) {
         return profileList[id];
     }
 

@@ -30,7 +30,7 @@ onMounted(async()=>{
 })
 
 const deleteQuestion=async()=>{
-	if(questionInfo.value.answerCount>0){
+	if(questionInfo.value.answerCount>0) {
 		ElMessage.error('问题已存在回答，不能删除');
 		return;
 	}

@@ -52,18 +52,20 @@ const rules = reactive({
 });
 
 const submitForm = (formEl) => {
-	if(!formEl) return false;
+	if(!formEl) {
+		return false;
+	}
 	formEl.validate(async (valid) =>{
-		if(valid){
-			let res=await request.post("/api/auth/question/modify", {id:props.id,title:ruleForm.title, content:EditBox.value.getContent()});
+		if(valid) {
+			let res=await request.post('/api/auth/question/modify', {id:props.id,title:ruleForm.title, content:EditBox.value.getContent()});
 			ElMessage.success('修改成功');
-			emit("update:title", ruleForm.title);
-			emit("update:content",EditBox.value.getContent());
+			emit('update:title', ruleForm.title);
+			emit('update:content',EditBox.value.getContent());
 			resetForm();
 			close();
 		}
 	});
-} ;
+};
 
 </script>
 

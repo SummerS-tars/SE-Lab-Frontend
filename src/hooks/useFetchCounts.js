@@ -16,7 +16,7 @@ export function useFetchCounts() {
 
   const fetchAnswerCount = async (id = 0) => {
     try {
-      if( id !== 0 ){
+      if( id !== 0 ) {
         let countRes = await request.get(`/api/auth/answers/byQuestionId/${id}`, {
           params: {
             page_num : 1,

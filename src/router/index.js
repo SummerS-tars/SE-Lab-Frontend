@@ -25,7 +25,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       beforeEnter: (to,from,next)=>{
-        if(useUserStore().token()){
+        if(useUserStore().token()) {
           next()
         }else{
           next({name:'Login'})
@@ -38,7 +38,7 @@ const router = createRouter({
       children:[
         {path:'login',         name:'Login',  component:LoginForm,
           beforeEnter: (to,from,next)=>{
-            if(useUserStore().token()){
+            if(useUserStore().token()) {
               next(from)
             }else{
               next()
@@ -57,7 +57,7 @@ const router = createRouter({
         {path:'answer', name:'AnswerManagement', component:AnswerManagement}, 
       ],
       beforeEnter: (to,from,next)=>{
-        if(useUserStore().isadmin){
+        if(useUserStore().isadmin) {
           next()
         }else{
           next(from)
@@ -85,7 +85,7 @@ const router = createRouter({
           questionInfo.value.answerCount = res.answerCount;
           useQuestionStore().setQuestion(questionInfo);
           next();
-        }catch(e){
+        }catch(e) {
           next({path: '/notFound'});
         }
       }
@@ -118,7 +118,7 @@ const router = createRouter({
 
           useProfileStore().setProfile(userInfo);
           next();
-        }catch(e){
+        }catch(e) {
           next({path: '/notFound'});
         }
       }

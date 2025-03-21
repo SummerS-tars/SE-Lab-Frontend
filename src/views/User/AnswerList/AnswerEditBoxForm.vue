@@ -39,7 +39,7 @@ const submitForm = async() => {
 	emit("update:content",EditBox.value.getContent());
 	resetForm();
 	close();
-} ;
+};
 
 </script>
 

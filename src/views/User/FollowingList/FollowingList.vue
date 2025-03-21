@@ -12,7 +12,7 @@ const userid =  route.params.id;
 
 const loadpage=async(page)=>{
 	let res=await request.get(`/api/public/user/byId/${userid}/following`,{params:{page_num:page,page_size:10}});
-	if(res.records.length===0){
+	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
 	}

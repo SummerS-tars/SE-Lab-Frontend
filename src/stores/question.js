@@ -5,11 +5,11 @@ export const useQuestionStore = defineStore('question', () => {
 
     const questionList = {}
 
-    function setQuestion(question){
+    function setQuestion(question) {
         questionList[question.value.id]=question;
     }
 
-    function getQuestion(id){
+    function getQuestion(id) {
         return questionList[id];
     }
 

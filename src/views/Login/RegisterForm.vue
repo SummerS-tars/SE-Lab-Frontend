@@ -50,9 +50,11 @@ const rules = reactive({
 });
 
 const submitForm = (formEl) => {
-	if(!formEl) return;
+	if(!formEl) {
+		return;
+	}
 	formEl.validate(async (valid) =>{
-		if(valid){
+		if(valid) {
 			let res=await request.post("/api/public/register", ruleForm);
 			ElMessage.success('注册成功')
 			await router.push('/login');
