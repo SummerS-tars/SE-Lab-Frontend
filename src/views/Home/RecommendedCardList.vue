@@ -19,14 +19,10 @@ const loadpage=async(page) => {
 };
 
 onMounted(async() => {
-	loadpage(infiniteScroll.value.getPage()+1).then(() => {
-		infiniteScroll.value.setPage(1);
-	});
 	infiniteScroll.value.setCallback(async() => {
-		await loadpage(infiniteScroll.value.getPage()+1).then(() => {
-			infiniteScroll.value.addPage();
-		});
+		await loadpage(infiniteScroll.value.getPage());
 	});
+	infiniteScroll.value.initLoad();
 });
 
 onBeforeUpdate(() => {
