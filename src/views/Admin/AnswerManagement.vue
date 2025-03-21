@@ -6,7 +6,7 @@ import request from '@/request/http';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
-const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
+const { currentPage, totalItems, items, sortOrder, fetchItems, handleSortChange, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
 const route = useRoute();
 const dialogVisible = ref(false);
 const dialogContent = ref('');
@@ -32,17 +32,6 @@ onMounted(() => {
   relatedQuestionId.value = route.query.questionId || 0;
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
 });
-
-const handleSortChange = ({ prop, order }) => {
-  if (prop === 'createdTime') {
-    if ((order === 'ascending')&& sortOrder.value==='time-') {
-      handleSort();
-    } else if ((order === 'descending' || order === null)&&sortOrder.value==='time+') {
-      handleSort();
-    }
-  }
-};
-
 </script>
 
 <template>

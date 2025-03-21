@@ -5,19 +5,18 @@ import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { useRouter } from 'vue-router';
 
-const { currentPage, totalItems, items, sortOrder, fetchItems, handleSort ,fetchPage, deleteQuestion } = usePagination();
+const { currentPage, totalItems, items, fetchItems, handleSortChange, fetchPage, deleteQuestion } = usePagination();
 const router = useRouter();
 const dialogVisible = ref(false);
 const dialogContent = ref('');
-const selectedQuestionId = ref(null); // 存储选中的问题ID
+const selectedQuestionId = ref(null);
 
-// 显示问题详情的浮窗
 const showDetails = (id) => {
   const question = items.value.find(q => q.id === id);
   if (question) {
     dialogContent.value = `#${question.title}\n作者：${question.author}\n创建时间：${question.createdTime}\n${question.content}`;
     dialogVisible.value = true;
-    selectedQuestionId.value = id; // 存储问题ID
+    selectedQuestionId.value = id;
   } else {
   }
 };
@@ -32,20 +31,8 @@ const goToAnswerManagement = () => {
 };
 
 onMounted(() => {
-  // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value);
 });
-
-const handleSortChange = ({ prop, order }) => {
-  if (prop === 'createdTime') {
-    if ((order === 'ascending')&& sortOrder.value==='time-') {
-      handleSort();
-    } else if ((order === 'descending' || order === null)&&sortOrder.value==='time+') {
-      handleSort();
-    }
-  }
-};
-
 </script>
 
 <template>
