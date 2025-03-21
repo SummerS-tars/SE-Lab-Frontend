@@ -18,7 +18,7 @@ const visible = ref(false);
 const resetForm = () => {ruleForm.title=props.title};
 const open = () => {
 	visible.value = true; 
-	resetForm()
+	resetForm();
 };
 const close = () => {visible.value = false};
 

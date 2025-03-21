@@ -11,7 +11,8 @@ const props=defineProps({
 const visible = ref(false);
 const resetForm = () => {};
 const open = () =>{
-	visible.value = true;resetForm();
+	visible.value = true;
+	resetForm();
 };
 const close = () =>{
 	visible.value = false;
@@ -32,7 +33,7 @@ watch(visible,async(newValue)=>{
 });
 
 const submitForm = async() => {
-	await request.post("/api/auth/answer/create", {questionId:props.id, content:EditBox.value.getContent()});
+	await request.post('/api/auth/answer/create', {questionId:props.id, content:EditBox.value.getContent()});
 	ElMessage.success('发布成功');
 	close();
 	window.location.reload();

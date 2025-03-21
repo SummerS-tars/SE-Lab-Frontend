@@ -22,10 +22,12 @@ const questionInfo=ref({});
 const answerInfo=ref({});
 
 const fetchData=async()=>{
-	if(!props.questionid||!props.answerid) return;
+	if(!props.questionid||!props.answerid) {
+		return;
+	}
 	request.get(`/api/public/question/byId/${props.questionid}`).then(res=>{
 		questionInfo.value.title=res.title;
-	})
+	});
 
 	answerInfo.value.id=props.answerid;
 	request.get(`/api/public/answer/byId/${props.answerid}`).then(res=>{
@@ -36,14 +38,14 @@ const fetchData=async()=>{
 		answerInfo.value.createdAt=res.createdAt;
 		answerInfo.value.content=res.content;
 		answerInfo.value.likes=res.likes;
-	})
+	});
 	if(useUserStore().token()) {
 		request.get(`/api/auth/user/answer/like`,{params:{id:props.answerid}}).then(res=>{
 			answerInfo.value.liked=res.liked;
 		});
 	}
 	useAnswerStore().setAnswer(answerInfo);
-}
+};
 
 onMounted(()=>{fetchData()});
 watch(()=>props,()=>{fetchData()});

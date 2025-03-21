@@ -20,11 +20,21 @@ const rules = reactive({
 	username: [{
 		validator: (rule, value, callback) => {
 			const regex = /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$/;
-			if (value === '') callback(new Error("请输入用户名"));
-			else if(value.length<2) callback(new Error("用户名过短"));
-			else if(value.length>20) callback(new Error("用户名过长"));
-			else if(!regex.test(value)) callback(new Error("存在非法字符"));
-			else callback();
+			if (value === '') {
+				callback(new Error('请输入用户名'));
+			}
+			else if(value.length<2) {
+				callback(new Error('用户名过短'));
+			}
+			else if(value.length>20) {
+				callback(new Error('用户名过长'));
+			}
+			else if(!regex.test(value)) {
+				callback(new Error('存在非法字符'));
+			}
+			else {
+				callback();
+			}
 		},
 		trigger: 'blur',
 	}],
@@ -55,7 +65,7 @@ const submitForm = (formEl) => {
 	}
 	formEl.validate(async (valid) =>{
 		if(valid) {
-			let res=await request.post("/api/public/register", ruleForm);
+			let res=await request.post('/api/public/register', ruleForm);
 			ElMessage.success('注册成功');
 			await router.push('/login');
 		}

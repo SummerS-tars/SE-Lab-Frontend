@@ -1,6 +1,6 @@
 <script setup >
 import Header from '@/components/Header/Header.vue';
-import request from '@/request/http'
+import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import { computed, ref } from 'vue';
@@ -24,12 +24,16 @@ const nameToIndexMap = {
 
 const activeIndex = ref(computed(()=>{
 	return nameToIndexMap[route.name] || '0';
-}))
+}));
 
 const handleSelect = (key, keyPath) => {
-	if(key=='0')router.push(`/user/profile/${userid}`);
-	else if(key=='1')router.push(`/user/profile/${userid}/answer`);
-}
+	if(key=='0') {
+		router.push(`/user/profile/${userid}`);
+	}
+	else if(key=='1') {
+		router.push(`/user/profile/${userid}/answer`);
+	}
+};
 
 </script>
 

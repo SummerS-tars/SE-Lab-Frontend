@@ -16,7 +16,8 @@ const visible = ref(false);
 
 const resetForm = () => {};
 const open = () =>{
-	visible.value = true;resetForm();
+	visible.value = true;
+	resetForm();
 };
 const close = () =>{
 	visible.value = false;
@@ -36,9 +37,9 @@ watch(visible,async(newValue)=>{
 	}
 });
 const submitForm = async() => {
-	await request.post("/api/auth/answer/modify", {id:props.id, content:EditBox.value.getContent()});
+	await request.post('/api/auth/answer/modify', {id:props.id, content:EditBox.value.getContent()});
 	ElMessage.success('修改成功');
-	emit("update:content",EditBox.value.getContent());
+	emit('update:content',EditBox.value.getContent());
 	resetForm();
 	close();
 };
