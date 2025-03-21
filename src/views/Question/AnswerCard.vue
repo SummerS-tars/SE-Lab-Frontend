@@ -35,7 +35,7 @@ onMounted(()=>{
 			answerInfo.value.liked=res.liked;
 		});
 	}
-	useAnswerStore().setAnswer(answerInfo)
+	useAnswerStore().setAnswer(answerInfo);
 });
 
 </script>

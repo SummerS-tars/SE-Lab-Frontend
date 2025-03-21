@@ -35,7 +35,7 @@ onMounted(async()=>{
 	infiniteScroll.value.setCallback(async()=>{
 		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
 			infiniteScroll.value.addPage();
-		})
+		});
 	});
 	flag=true;
   }

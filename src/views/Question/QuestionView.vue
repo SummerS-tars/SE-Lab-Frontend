@@ -23,8 +23,8 @@ const writeAnswer = () =>{
     ElMessage.error('请先登录后再进行操作');
     return;
   }
-  answerEditBox.value.open()
-}
+  answerEditBox.value.open();
+};
 
 </script>
 

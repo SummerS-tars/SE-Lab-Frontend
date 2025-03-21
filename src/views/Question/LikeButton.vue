@@ -18,20 +18,22 @@ const liked=computed(()=>{
 	if(answerInfo===undefined)return false;
 	else if(answerInfo.value===undefined)return false;
 	else return answerInfo.value.liked;
-})
+});
 const likes=computed(()=>{
 	if(answerInfo===undefined)return 0;
 	else if(answerInfo.value===undefined)return 0;
 	else return answerInfo.value.likes;
-})
+});
 
 const onClick=()=>{
-	if(!useUserStore().token()) {return;}
+	if(!useUserStore().token()) {
+		return;
+	}
 	if(liked.value) {
 		request.post('/api/auth/user/answer/unlike',{id:props.id}).then(res=>{
 			answerInfo.value.liked=false;
 			answerInfo.value.likes--;
-		})
+		});
 	}
 	else{
 		request.post('/api/auth/user/answer/like',{id:props.id}).then(res=>{
@@ -39,7 +41,7 @@ const onClick=()=>{
 			answerInfo.value.likes++;
 		});
 	}
-}
+};
 
 </script>
 

@@ -8,7 +8,7 @@ const tableData = ref([]);
 
 const infiniteScroll=ref();
 const loadpage=async(page)=>{
-	let res=await request.get("/api/auth/questions",{params:{page_num:page,page_size:10,sort:'time-'}});
+	let res=await request.get('/api/auth/questions',{params:{page_num:page,page_size:10,sort:'time-'}});
 	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
@@ -16,7 +16,7 @@ const loadpage=async(page)=>{
 	res.records.forEach(item=>{
 		tableData.value.push(item);
 	});
-}
+};
 
 onMounted(async()=>{
 	loadpage(infiniteScroll.value.getPage()+1).then(()=>{

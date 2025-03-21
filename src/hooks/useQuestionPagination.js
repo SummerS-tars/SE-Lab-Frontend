@@ -54,7 +54,7 @@ export function usePagination() {
   const fetchPage = (page) => {
     currentPage.value = page;
     fetchItems(currentPage.value, sortOrder.value);
-  }
+  };
 
   return {
     currentPage,
