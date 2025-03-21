@@ -16,7 +16,10 @@ const emit = defineEmits(['update:title','update:content']);
 const visible = ref(false);
 
 const resetForm = () => {ruleForm.title=props.title};
-const open = () => {visible.value = true;resetForm()};
+const open = () => {
+	visible.value = true; 
+	resetForm()
+};
 const close = () => {visible.value = false};
 
 defineExpose({open, close});
@@ -42,18 +45,26 @@ const ruleForm = reactive({
 const rules = reactive({
 	title: [{
 		validator: (rule, value, callback) => {
-			if (value === "") callback(new Error('请输入标题'));
-			else if(value.length>50) callback(new Error('标题长度不能超过50'));	
-			else if(value[value.length-1]!='?'&&value[value.length-1]!='？')callback(new Error('标题必须以问号结尾'));
-			else callback();
+			if (value === "") {
+				callback(new Error('请输入标题'));
+			}
+			else if(value.length>50) {
+				callback(new Error('标题长度不能超过50'));	
+			}
+			else if(value[value.length-1]!='?'&&value[value.length-1]!='？') {
+				callback(new Error('标题必须以问号结尾'));
+			}
+			else {
+				callback();
+			}
 		},
-		trigger: "blur",
+		trigger: 'blur',
 	}],
 });
 
 const submitForm = (formEl) => {
 	if(!formEl) {
-		return false;
+		return;
 	}
 	formEl.validate(async (valid) =>{
 		if(valid) {

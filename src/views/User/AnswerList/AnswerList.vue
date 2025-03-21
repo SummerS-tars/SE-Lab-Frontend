@@ -38,7 +38,7 @@ onMounted(async()=>{
 });
 const itemDelete=(index)=>{
 	window.location.reload();
-}
+};
 
 const infiniteScroll=ref();
 

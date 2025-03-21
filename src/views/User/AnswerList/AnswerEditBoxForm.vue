@@ -15,7 +15,9 @@ const emit = defineEmits(['update:content']);
 const visible = ref(false);
 
 const resetForm = () => {};
-const open = () =>{visible.value = true;resetForm();};
+const open = () =>{
+	visible.value = true;resetForm();
+};
 const close = () =>{visible.value = false;};
 
 defineExpose({open, close});

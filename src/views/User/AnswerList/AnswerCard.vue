@@ -54,7 +54,7 @@ const deleteAnswer=async()=>{
 		props.removethis();
 		ElMessage.success('删除成功');
 	});
-}
+};
 
 const EditBox = ref();
 

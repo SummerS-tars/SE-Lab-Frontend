@@ -26,7 +26,7 @@ const rules = reactive({
 			else if(!regex.test(value)) callback(new Error("存在非法字符"));
 			else callback();
 		},
-		trigger: "blur",
+		trigger: 'blur',
 	}],
 	password: [{
 		validator: (rule, value, callback) => {
@@ -40,12 +40,12 @@ const rules = reactive({
 			else if(!hasNumber) callback(new Error("密码必须包含数字"));
 			else callback();
 		},
-		trigger: "blur"
+		trigger: 'blur'
 	}],
 	email: [{
 		type: 'email',
 		message: '邮箱格式错误',
-		trigger: "blur"
+		trigger: 'blur'
 	}],
 });
 

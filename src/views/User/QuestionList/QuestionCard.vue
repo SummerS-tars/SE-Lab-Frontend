@@ -26,8 +26,8 @@ onMounted(async()=>{
 		content:res.content,
 		createdAt:res.createdAt,
 		answerCount:res.answerCount,
-	}
-})
+	};
+});
 
 const deleteQuestion=async()=>{
 	if(questionInfo.value.answerCount>0) {
@@ -39,7 +39,7 @@ const deleteQuestion=async()=>{
 		props.removethis();
 		ElMessage.success('删除成功');
 	});	
-}
+};
 
 const EditBox = ref();
 
