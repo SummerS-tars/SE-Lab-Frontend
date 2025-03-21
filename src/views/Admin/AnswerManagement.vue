@@ -8,11 +8,9 @@ import { ElMessage } from 'element-plus';
 
 const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
 const route = useRoute();
-
 const dialogVisible = ref(false);
 const dialogContent = ref('');
 
-// 显示回答详情的浮窗
 const showDetails = (id) => {
   const answer = items.value.find((item) => item.id === id);
   if (answer) {
@@ -32,10 +30,6 @@ onBeforeRouteUpdate((to, from, next) => {
 
 onMounted(() => {
   relatedQuestionId.value = route.query.questionId || 0;
-
-  // // test
-
-  // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
 });
 
