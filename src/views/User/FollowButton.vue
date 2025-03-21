@@ -38,6 +38,9 @@ const followUser=async(userid) => {
 		if(useProfileStore().getProfile(userid)) {
 			useProfileStore().getProfile(userid).value.follower+=1;
 		}
+		if(useProfileStore().getProfile(useUserStore().id)){
+			useProfileStore().getProfile(useUserStore().id).value.following+=1;
+		}
 	});
 };
 
@@ -50,6 +53,9 @@ const unfollowUser=async(userid) => {
 		followed.value=false;
 		if(useProfileStore().getProfile(userid)) {
 			useProfileStore().getProfile(userid).value.follower-=1;
+		}
+		if(useProfileStore().getProfile(useUserStore().id)){
+			useProfileStore().getProfile(useUserStore().id).value.following-=1;
 		}
 	});
 };

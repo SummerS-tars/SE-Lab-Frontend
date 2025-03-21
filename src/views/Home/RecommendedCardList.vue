@@ -4,7 +4,7 @@ import request from '@/request/http.js';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 import QuestionCard from '../User/QuestionList/QuestionCard.vue';
 
-const tableData = ref([]);
+const tableData = ref({});
 
 const infiniteScroll=ref();
 const loadpage=async(page) => {
@@ -14,7 +14,7 @@ const loadpage=async(page) => {
 		return;
 	}
 	res.records.forEach(item=>{
-		tableData.value.push(item);
+		tableData.value[item.id]={id:item.id};
 	});
 };
 
@@ -41,8 +41,8 @@ onUpdated(() => {
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
-		<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
-			<QuestionCard :id="item.id"></QuestionCard>
+		<li v-for="(value,key) in tableData" :key="key" style="list-style: none;" >
+			<QuestionCard :id="value.id"></QuestionCard>
 		</li>
 	</template>
 

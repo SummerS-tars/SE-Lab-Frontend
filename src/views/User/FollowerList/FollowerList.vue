@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import FollowerCard from './FollowerCard.vue';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
-const tableData = ref([]);
+const tableData = ref({});
 
 const route = useRoute();
 const userid =  route.params.id;
@@ -17,10 +17,10 @@ const loadpage=async(page) => {
 		return;
 	}
 	res.records.forEach(item=>{
-		tableData.value.push({
+		tableData.value[item.id]={
 			username:item.username,
 			id:item.id,
-		});
+		};
 	});
 };
 
@@ -49,8 +49,8 @@ onUpdated(() => {
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
-		<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
-			<FollowerCard :username="item.username" :id="item.id"/>
+		<li v-for="(value,key) in tableData" :key="key" style="list-style: none;" >
+			<FollowerCard :username="value.username" :id="value.id"/>
 		</li>
 	</template>
 </template>
