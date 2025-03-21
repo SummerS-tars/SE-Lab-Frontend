@@ -15,6 +15,14 @@ const addPage = () => {page++};
 
 const getNomore = () => {return nomore};
 
+const initLoad = async() => {
+    setPage(1);
+    loading = true;
+    await callback();
+    addPage();
+    loading = false;
+}
+
 const finishload = () => {
     nomore = true;
     window.removeEventListener('scroll',handleScroll);
@@ -30,7 +38,7 @@ const onUpdated = () => {
     });
 };
 
-defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated});
+defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated,initLoad});
 
 const handleScroll = async() => {
     if(loading) {
@@ -41,6 +49,7 @@ const handleScroll = async() => {
     if (scrollPosition >= pageHeight-1000) { 
         loading = true;
         await callback();
+        addPage();
         loading = false;
     }
 };

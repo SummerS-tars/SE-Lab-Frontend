@@ -27,26 +27,22 @@ const infiniteScroll=ref();
 const tableData = ref([]);
 
 onMounted(async() => {
-	let flag=false;
   if(useUserStore().token()) {
-	loadpage(infiniteScroll.value.getPage()+1).then(() => {
-		infiniteScroll.value.setPage(1);
-	});
-	infiniteScroll.value.setCallback(async() => {
-		await loadpage(infiniteScroll.value.getPage()+1).then(() => {
-			infiniteScroll.value.addPage();
+		infiniteScroll.value.setCallback(async() => {
+			await loadpage(infiniteScroll.value.getPage()).then(() => {
+				infiniteScroll.value.addPage();
+			});
 		});
-	});
-	flag=true;
+		infiniteScroll.value.initLoad();
   }
-  if(!flag) {
-    let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
+	else{
+		let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
 		res.forEach(item=>{
 			tableData.value.push({
 				id:item.id,
 			});
 		});
-  }
+	}
 });
 
 onBeforeUpdate(() => {
