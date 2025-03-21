@@ -21,7 +21,7 @@ const init = ()=> {
 };
 
 const destroy = () => {
-	if(cherryInstance.value){
+	if(cherryInstance.value) {
 		cherryInstance.value.destroy();
 		cherryInstance.value = null;
 	}
@@ -33,13 +33,13 @@ const getContent = () =>{
 
 defineExpose({init,destroy,setContent, getContent});
 const uploadImage = async(file,callback) => {
-	if(!/image/i.test(file.type))return;
+	if(!/image/i.test(file.type)){return;}
 	let res=await uploadFile('/api/auth/upload/image',file);
 	callback(res.url,{
 		width: '300px',
 		height: 'auto'
 	});
-}
+};
 
 </script>
 

@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import request from '@/request/http';
 import { useFetchCounts } from './useFetchCounts';
+import { ElMessage } from 'element-plus';
 
 const { answerCount, fetchAnswerCount } = useFetchCounts();
 
@@ -50,7 +51,7 @@ export function usePagination() {
           params: { id }
         }
       );
-      alert('删除成功');
+      ElMessage.success('删除成功');
       fetchItems(currentPage.value, sortOrder.value);
     } catch (error) {
       console.error('Error deleting answer:', error);

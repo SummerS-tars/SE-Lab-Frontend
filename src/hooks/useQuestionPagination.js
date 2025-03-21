@@ -1,6 +1,7 @@
 import { computed, ref } from 'vue';
 import request from '@/request/http';
 import { useFetchCounts } from './useFetchCounts';
+import { ElMessage } from 'element-plus';
 
 const { questionCount , fetchQuestionCount } = useFetchCounts();
 
@@ -45,7 +46,7 @@ export function usePagination() {
   const deleteQuestion = async (id) => {
     try {
       await request.post(`/api/auth/question/delete`,{id});
-      alert('删除成功');
+      ElMessage.success('删除成功');
       fetchItems(currentPage.value, sortOrder.value);
     } catch (error) {
       console.error('Error deleting question:', error);

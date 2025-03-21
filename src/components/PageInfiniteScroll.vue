@@ -33,7 +33,7 @@ const onUpdated = ()=>{
 defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated});
 
 const handleScroll = async()=>{
-    if(loading) return;
+    if(loading){return;}
     const scrollPosition = window.scrollY + window.innerHeight;
     const pageHeight = document.documentElement.scrollHeight;
     if (scrollPosition >= pageHeight-1000) { 

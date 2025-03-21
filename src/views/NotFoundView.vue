@@ -1,10 +1,7 @@
 <script setup>
 import Header from '@/components/Header/Header.vue';
 
-
-
 </script>
-
 
 <template>
 
@@ -12,8 +9,6 @@ import Header from '@/components/Header/Header.vue';
 <el-empty description="404 not found" />
 </template>
 
-
 <style scoped>
-
 
 </style>
