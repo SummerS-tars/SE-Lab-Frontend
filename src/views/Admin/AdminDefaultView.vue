@@ -15,12 +15,6 @@ onMounted(() => {
     currentTime.value = new Date().toLocaleString();
   }, 1000);
 });
-
-// 清理钩子
-onUnmounted(() => {
-  clearInterval(intervalId);
-});
-
 </script>
 
 <template>

@@ -50,6 +50,16 @@ export function usePagination() {
     fetchItems(currentPage.value, sortOrder.value);
   };
 
+  const handleSortChange = ({ prop, order }) => {
+    if (prop === 'createdTime') {
+      if ((order === 'ascending')&& sortOrder.value==='time-') {
+        handleSort();
+      } else if ((order === 'descending' || order === null)&&sortOrder.value==='time+') {
+        handleSort();
+      }
+    }
+  };
+
   const fetchPage = (page) => {
     currentPage.value = page;
     fetchItems(currentPage.value, sortOrder.value);
@@ -63,6 +73,7 @@ export function usePagination() {
     sortOrder,
     fetchItems,
     handleSort,
+    handleSortChange,
     fetchPage,
     deleteQuestion,
   };

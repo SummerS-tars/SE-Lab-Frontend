@@ -10,22 +10,18 @@ import AdminSideBar from '@/views/Admin/SideBar.vue';
       <el-header style="padding: 0;">
         <Header style="width:100%;height: 100%;"></Header>
       </el-header>
-
       <el-container>
         <el-aside width="200px" class="sidebar">
           <!-- 管理员侧边栏 -->
           <AdminSideBar></AdminSideBar>
         </el-aside>
-
         <el-main class="container">
           <!-- 挂载主要内容组件 -->
           <div class="content-box">
             <router-view></router-view>
           </div>
-          
         </el-main>
       </el-container>
-      
     </el-container>
   </div>
 </template>

@@ -5,9 +5,14 @@ export function useFetchCounts() {
   const questionCount = ref(0);
   const answerCount = ref(0);
 
+  //
   const fetchQuestionCount = async () => {
-    let countRes = await request.get(`/api/public/questionNum`);
-    questionCount.value = countRes.count;
+    try {
+      let countRes = await request.get(`/api/public/questionNum`);
+      questionCount.value = countRes.count;
+    } catch (error) {
+      console.error('Error fetching question count:', error);
+    }
   };
 
   const fetchAnswerCount = async (id = 0) => {

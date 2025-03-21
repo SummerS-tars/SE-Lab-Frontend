@@ -6,17 +6,15 @@ import request from '@/request/http';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
-const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
+const { currentPage, totalItems, items, sortOrder, fetchItems, handleSortChange, fetchPage , deleteAnswer , relatedQuestionId} = usePagination();
 const route = useRoute();
-
 const dialogVisible = ref(false);
 const dialogContent = ref('');
 
-// 显示回答详情的浮窗
 const showDetails = (id) => {
   const answer = items.value.find((item) => item.id === id);
   if (answer) {
-    dialogContent.value = `相关问题id：${answer.questionId}\n作者：${answer.author}\n创建时间：${answer.createdTime}\n${answer.content}`;
+    dialogContent.value = `相关问题id：${answer.questionId}\n作者：${answer.author}\n创建时间：${answer.createdTime}\n#回答内容\n${answer.content}`;
     dialogVisible.value = true;
   } else {
     ElMessage.error('回答未找到');
@@ -32,23 +30,8 @@ onBeforeRouteUpdate((to, from, next) => {
 
 onMounted(() => {
   relatedQuestionId.value = route.query.questionId || 0;
-
-  // // test
-
-  // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value , sortOrder.value, relatedQuestionId.value);
 });
-
-const handleSortChange = ({ prop, order }) => {
-  if (prop === 'createdTime') {
-    if ((order === 'ascending')&& sortOrder.value==='time-') {
-      handleSort();
-    } else if ((order === 'descending' || order === null)&&sortOrder.value==='time+') {
-      handleSort();
-    }
-  }
-};
-
 </script>
 
 <template>
