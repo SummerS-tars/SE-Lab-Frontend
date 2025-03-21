@@ -12,43 +12,43 @@ const props=defineProps({
 
 const followed=ref(false);
 
-onMounted(()=>{
-	if(useUserStore().token()&&props.authorId){
-		request.get("/api/auth/user/followed",{params:{ id:props.authorId}}).then(res=>{
-			followed.value=res.followed;
-		});
-	}
-})
-
-watch(()=>props.authorId,(newVal)=>{
-	if(useUserStore().token()&&newVal){
-		request.get("/api/auth/user/followed",{params:{ id:newVal}}).then(res=>{
+onMounted(() => {
+	if(useUserStore().token()&&props.authorId) {
+		request.get('/api/auth/user/followed',{params:{ id:props.authorId}}).then(res=>{
 			followed.value=res.followed;
 		});
 	}
 });
 
-const followUser=async(userid)=>{
-	if(!useUserStore().token()){
+watch(()=>props.authorId,(newVal) => {
+	if(useUserStore().token()&&newVal) {
+		request.get('/api/auth/user/followed',{params:{ id:newVal}}).then(res=>{
+			followed.value=res.followed;
+		});
+	}
+});
+
+const followUser=async(userid) => {
+	if(!useUserStore().token()) {
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}
 	request.post('/api/auth/user/follow',{id:userid}).then(res=>{
 		followed.value=true;
-		if(useProfileStore().getProfile(userid)){
+		if(useProfileStore().getProfile(userid)) {
 			useProfileStore().getProfile(userid).value.follower+=1;
 		}
 	});
 };
 
-const unfollowUser=async(userid)=>{
-	if(!useUserStore().token()){
+const unfollowUser=async(userid) => {
+	if(!useUserStore().token()) {
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}
 	request.post('/api/auth/user/unfollow',{id:userid}).then(res=>{
 		followed.value=false;
-		if(useProfileStore().getProfile(userid)){
+		if(useProfileStore().getProfile(userid)) {
 			useProfileStore().getProfile(userid).value.follower-=1;
 		}
 	});

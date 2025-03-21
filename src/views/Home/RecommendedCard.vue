@@ -7,7 +7,7 @@ const props=defineProps({
 	likes:{default:0},
 	like:{default:false},
 	id:{default:''},
-})
+});
 
 </script>
 

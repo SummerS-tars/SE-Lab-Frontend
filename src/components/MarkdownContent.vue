@@ -7,13 +7,13 @@ const props = defineProps({
 	content:{default:''},
 });
 
-watch(()=>props.content,()=>{
+watch(()=>props.content,() => {
   cherryInstance.value.setValue(props.content);
 });
 
 const cherryInstance=ref(null);
 
-onBeforeMount(async()=>{
+onBeforeMount(async() => {
   await nextTick();
   cherryInstance.value = new Cherry({
     id: props.id,

@@ -6,48 +6,59 @@ let nomore = false;
 let scrollPositionCurrent = 0;
 let page = 0;
 
-let callback=async()=>{};
+let callback=async() => {};
 
 const setCallback = (call) =>{callback = call};
-const setPage = (p)=>{page = p};
-const getPage = ()=>{return page};
-const addPage = ()=>{page++};
+const setPage = (p) => {page = p};
+const getPage = () => {return page};
+const addPage = () => {page++};
 
-const getNomore = ()=>{return nomore};
+const getNomore = () => {return nomore};
 
-const finishload = ()=>{
+const initLoad = async() => {
+    setPage(1);
+    loading = true;
+    await callback();
+    addPage();
+    loading = false;
+}
+
+const finishload = () => {
     nomore = true;
     window.removeEventListener('scroll',handleScroll);
 };
 
-const onBeforeUpdate = ()=>{
+const onBeforeUpdate = () => {
     scrollPositionCurrent = window.scrollY;
 };
 
-const onUpdated = ()=>{
-    nextTick(()=>{
+const onUpdated = () => {
+    nextTick(() => {
         window.scrollTo(0, scrollPositionCurrent);
     });
 };
 
-defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated});
+defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated,initLoad});
 
-const handleScroll = async()=>{
-    if(loading) return;
+const handleScroll = async() => {
+    if(loading) {
+        return;
+    }
     const scrollPosition = window.scrollY + window.innerHeight;
     const pageHeight = document.documentElement.scrollHeight;
     if (scrollPosition >= pageHeight-1000) { 
         loading = true;
         await callback();
+        addPage();
         loading = false;
     }
 };
 
-onMounted(()=>{
+onMounted(() => {
     window.addEventListener('scroll',handleScroll);
 });
 
-onUnmounted(()=>{
+onUnmounted(() => {
     window.removeEventListener('scroll',handleScroll);
 });
 

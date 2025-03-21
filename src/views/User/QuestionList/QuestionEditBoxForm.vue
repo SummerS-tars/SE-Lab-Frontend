@@ -16,15 +16,18 @@ const emit = defineEmits(['update:title','update:content']);
 const visible = ref(false);
 
 const resetForm = () => {ruleForm.title=props.title};
-const open = () =>{visible.value = true;resetForm()};
-const close = () =>{visible.value = false};
+const open = () => {
+	visible.value = true; 
+	resetForm();
+};
+const close = () => {visible.value = false};
 
 defineExpose({open, close});
 
 const EditBox = ref();
 
-watch(visible,async(newValue)=>{
-	if(newValue){
+watch(visible,async(newValue) => {
+	if(newValue) {
 		await nextTick();
 		EditBox.value.init();
 	}
@@ -42,28 +45,38 @@ const ruleForm = reactive({
 const rules = reactive({
 	title: [{
 		validator: (rule, value, callback) => {
-			if (value === "") callback(new Error("请输入标题"));
-			else if(value.length>50) callback(new Error("标题长度不能超过50"));	
-			else if(value[value.length-1]!='?'&&value[value.length-1]!='？')callback(new Error("标题必须以问号结尾"));
-			else callback();
+			if (value === '') {
+				callback(new Error('请输入标题'));
+			}
+			else if(value.length>50) {
+				callback(new Error('标题长度不能超过50'));	
+			}
+			else if(value[value.length-1]!='?'&&value[value.length-1]!='？') {
+				callback(new Error('标题必须以问号结尾'));
+			}
+			else {
+				callback();
+			}
 		},
-		trigger: "blur",
+		trigger: 'blur',
 	}],
 });
 
 const submitForm = (formEl) => {
-	if(!formEl) return false;
+	if(!formEl) {
+		return;
+	}
 	formEl.validate(async (valid) =>{
-		if(valid){
-			let res=await request.post("/api/auth/question/modify", {id:props.id,title:ruleForm.title, content:EditBox.value.getContent()});
+		if(valid) {
+			let res=await request.post('/api/auth/question/modify', {id:props.id,title:ruleForm.title, content:EditBox.value.getContent()});
 			ElMessage.success('修改成功');
-			emit("update:title", ruleForm.title);
-			emit("update:content",EditBox.value.getContent());
+			emit('update:title', ruleForm.title);
+			emit('update:content',EditBox.value.getContent());
 			resetForm();
 			close();
 		}
 	});
-} ;
+};
 
 </script>
 

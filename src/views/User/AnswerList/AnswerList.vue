@@ -1,18 +1,18 @@
 <script setup>
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
+import request from '@/request/http.js';
 import AnswerCard from './AnswerCard.vue';
 import { useRoute } from 'vue-router';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
-const tableData = ref([])
+const tableData = ref([]);
 
 const route = useRoute();
 const userid =  route.params.id;
 
-const loadpage=async(page)=>{
+const loadpage=async(page) => {
 	let res=await request.get(`/api/public/answers/byUserId/${userid}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
-	if(res.records.length===0){
+	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
 	}
@@ -22,33 +22,27 @@ const loadpage=async(page)=>{
 			answerid:item.id,
 		});
 	});
-}
+};
 
-
-
-onMounted(async()=>{
-	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
-		infiniteScroll.value.setPage(1);
+onMounted(async() => {
+	infiniteScroll.value.setCallback(async() => {
+		await loadpage(infiniteScroll.value.getPage());
 	});
-	infiniteScroll.value.setCallback(async()=>{
-		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
-			infiniteScroll.value.addPage();
-		});
-	});
+	infiniteScroll.value.initLoad();
 });
-const itemDelete=(index)=>{
+const itemDelete=(index) => {
 	window.location.reload();
-}
+};
 
 const infiniteScroll=ref();
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
 	infiniteScroll.value.onBeforeUpdate();
-})
+});
 
-onUpdated(()=>{
+onUpdated(() => {
 	infiniteScroll.value.onUpdated();
-})
+});
 
 </script>
 
@@ -60,7 +54,7 @@ onUpdated(()=>{
 	<template v-else>
 		<ul>
 			<li v-for="(item,index) in tableData" :key="item.answerid" style="list-style: none;" >
-				<AnswerCard :questionid="item.questionid" :answerid="item.answerid" :removethis="()=>{itemDelete(index)}"/>
+				<AnswerCard :questionid="item.questionid" :answerid="item.answerid" :removethis="() => {itemDelete(index)}"/>
 			</li>
 		</ul>
 	</template>

@@ -6,19 +6,24 @@ import { nextTick, ref, watch } from 'vue';
 
 const props=defineProps({
 	id:{default:''},
-})
+});
 
 const visible = ref(false);
-const resetForm = () => {}
-const open = () =>{visible.value = true;resetForm();};
-const close = () =>{visible.value = false;};
+const resetForm = () => {};
+const open = () =>{
+	visible.value = true;
+	resetForm();
+};
+const close = () =>{
+	visible.value = false;
+};
 
 defineExpose({open, close});
 
 const EditBox = ref();
 
-watch(visible,async(newValue)=>{
-	if(newValue){
+watch(visible,async(newValue) => {
+	if(newValue) {
 		await nextTick();
 		EditBox.value.init();
 	}
@@ -28,8 +33,7 @@ watch(visible,async(newValue)=>{
 });
 
 const submitForm = async() => {
-	console.log(props.id);
-	await request.post("/api/auth/answer/create", {questionId:props.id, content:EditBox.value.getContent()});
+	await request.post('/api/auth/answer/create', {questionId:props.id, content:EditBox.value.getContent()});
 	ElMessage.success('发布成功');
 	close();
 	window.location.reload();

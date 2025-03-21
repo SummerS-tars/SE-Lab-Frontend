@@ -15,17 +15,19 @@ const userid =  route.params.id;
 const props=defineProps({
     questionid:{default:undefined},
     answerid:{default:undefined},
-	removethis:{default:()=>{}}
-})
+	removethis:{default:() => {}},
+});
 
 const questionInfo=ref({});
 const answerInfo=ref({});
 
-const fetchData=async()=>{
-	if(!props.questionid||!props.answerid) return;
+const fetchData=async() => {
+	if(!props.questionid||!props.answerid) {
+		return;
+	}
 	request.get(`/api/public/question/byId/${props.questionid}`).then(res=>{
 		questionInfo.value.title=res.title;
-	})
+	});
 
 	answerInfo.value.id=props.answerid;
 	request.get(`/api/public/answer/byId/${props.answerid}`).then(res=>{
@@ -36,25 +38,25 @@ const fetchData=async()=>{
 		answerInfo.value.createdAt=res.createdAt;
 		answerInfo.value.content=res.content;
 		answerInfo.value.likes=res.likes;
-	})
-	if(useUserStore().token()){
+	});
+	if(useUserStore().token()) {
 		request.get(`/api/auth/user/answer/like`,{params:{id:props.answerid}}).then(res=>{
 			answerInfo.value.liked=res.liked;
 		});
 	}
 	useAnswerStore().setAnswer(answerInfo);
-}
+};
 
-onMounted(()=>{fetchData()});
-watch(()=>props,()=>{fetchData()});
+onMounted(() => {fetchData()});
+watch(()=>props,() => {fetchData()});
 
-const deleteAnswer=async()=>{
-	ElMessageBox.confirm('确认删除吗?').then(async()=>{
+const deleteAnswer=async() => {
+	ElMessageBox.confirm('确认删除吗?').then(async() => {
 		await request.post(`/api/auth/answer/delete`,{id:props.answerid});
 		props.removethis();
 		ElMessage.success('删除成功');
 	});
-}
+};
 
 const EditBox = ref();
 

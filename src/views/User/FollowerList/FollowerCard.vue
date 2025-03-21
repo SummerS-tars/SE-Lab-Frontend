@@ -5,7 +5,7 @@ import MarkdownContent from '@/components/MarkdownContent.vue';
 const props=defineProps({
     username:{default:''},
 	id:{default:''},
-})
+});
 
 </script>
 

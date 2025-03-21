@@ -5,7 +5,7 @@ import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { useRouter } from 'vue-router';
 
-const { currentPage, totalItems, totalPages, items, sortOrder, fetchItems, handleSort, nextPage, prevPage , deleteQuestion } = usePagination();
+const { currentPage, totalItems, items, sortOrder, fetchItems, handleSort ,fetchPage, deleteQuestion } = usePagination();
 const router = useRouter();
 const dialogVisible = ref(false);
 const dialogContent = ref('');
@@ -19,23 +19,33 @@ const showDetails = (id) => {
     dialogVisible.value = true;
     selectedQuestionId.value = id; // 存储问题ID
   } else {
-    console.error('Question not found');
   }
 };
 
 const goToAnswerManagement = () => {
   router.push({
     name: 'AnswerManagement',
-    params: {
-      questionId: selectedQuestionId.value
-    }
+    query:{
+      questionId:selectedQuestionId.value
+    },
   });
-}
+};
 
 onMounted(() => {
   // 初始加载数据，默认按创建时间降序排列
   fetchItems(currentPage.value);
 });
+
+const handleSortChange = ({ prop, order }) => {
+  if (prop === 'createdTime') {
+    if ((order === 'ascending')&& sortOrder.value==='time-') {
+      handleSort();
+    } else if ((order === 'descending' || order === null)&&sortOrder.value==='time+') {
+      handleSort();
+    }
+  }
+};
+
 </script>
 
 <template>
@@ -45,42 +55,27 @@ onMounted(() => {
     </div>
     <br>
     <div class="info-box">
-      <table>
-        <thead>
-          <tr>
-            <th>问题ID</th>
-            <th>问题标题</th>
-            <th>问题作者</th>
-            <th @click="handleSort">
-              创建时间
-              <span v-if="sortOrder === 'time-'">↓</span>
-              <span v-else-if="sortOrder === 'time+'">↑</span>
-            </th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="question in items" :key="question.id">
-            <td>{{ question.id }}</td>
-            <td>{{ question.title }}</td>
-            <td>{{ question.author }}</td>
-            <td>{{ question.createdTime }}</td>
-            <td>
-              <el-button type="primary" plain @click="showDetails(question.id)">详情</el-button>
-              <el-button type="danger" plain @click="deleteQuestion(question.id)">删除</el-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="pagination">
-        <span>总问题数: {{ totalItems }}</span>
-        <span>总页数: {{ totalPages }}</span>
-        <div class="page-controls">
-          <el-button @click="prevPage" :disabled="currentPage === 1"><</el-button>
-          <span>{{ currentPage }}</span>
-          <el-button @click="nextPage" :disabled="currentPage >= totalPages">></el-button>
-        </div>
-      </div>
+      <el-table :data="items" border @sort-change="handleSortChange">
+        <el-table-column prop="id" label="问题ID" min-width="80"/>
+        <el-table-column prop="title" label="问题标题" min-width="400"/>
+        <el-table-column prop="author" label="问题作者" min-width="100"/>
+        <el-table-column prop="createdTime" label="创建时间" sortable="custom" min-width="200"/>
+        <el-table-column prop="answerCount" label="回答数" min-width="80"/>
+        <el-table-column label="操作" min-width="200">
+          <template #default="{ row }">
+            <el-button type="primary" plain @click="showDetails(row.id)">详情</el-button>
+            <el-button type="danger" plain @click="deleteQuestion(row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination
+        layout="jumper, prev, pager, next, total"
+        :total="totalItems"
+        :current-page="currentPage"
+        :page-size="10"
+        @current-change="fetchPage"
+      />
     </div>
 
     <!-- 使用MarkdownContent组件显示问题详情 -->
@@ -95,4 +90,12 @@ onMounted(() => {
 
 <style scoped>
 @import '../../assets/styles/adminMainView.css';
+
+.el-table :deep(.el-table__header-wrapper th) {
+  background-color: #f5f7fa; 
+  color: #303133; 
+  font-size: 14px; 
+  font-weight: bold; 
+}
+
 </style>

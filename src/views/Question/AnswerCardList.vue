@@ -1,18 +1,17 @@
 <script setup>
-import { nextTick, onBeforeMount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
-import { ElMessage } from 'element-plus';
+import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
+import request from '@/request/http.js';
 import AnswerCard from './AnswerCard.vue';
 import { useUserStore } from '@/stores/user';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
 const props=defineProps({
 	id:{default:''},
-})
+});
 
-const loadpage=async(page)=>{
+const loadpage=async(page) => {
 	let res=await request.get(`/api/auth/answers/byQuestionId/${props.id}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
-	if(res.records.length===0){
+	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
 	}
@@ -21,42 +20,36 @@ const loadpage=async(page)=>{
 			id:item.id,
 		});
 	});
-}
+};
 
 const infiniteScroll=ref();
 
-const tableData = ref([])
+const tableData = ref([]);
 
-onMounted(async()=>{
-	let flag=false;
-  if(useUserStore().token()){
-	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
-		infiniteScroll.value.setPage(1);
-	});
-	infiniteScroll.value.setCallback(async()=>{
-		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
-			infiniteScroll.value.addPage();
-		})
-	});
-	flag=true;
+onMounted(async() => {
+  if(useUserStore().token()) {
+		infiniteScroll.value.setCallback(async() => {
+			await loadpage(infiniteScroll.value.getPage());
+		});
+		infiniteScroll.value.initLoad();
   }
-  if(!flag){
-    let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
+	else{
+		let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
 		res.forEach(item=>{
 			tableData.value.push({
 				id:item.id,
 			});
 		});
-  }
+	}
 });
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
 	infiniteScroll.value.onBeforeUpdate();
-})
+});
 
-onUpdated(()=>{
+onUpdated(() => {
 	infiniteScroll.value.onUpdated();
-})
+});
 
 </script>
 

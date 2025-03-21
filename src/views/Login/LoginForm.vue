@@ -16,27 +16,33 @@ const ruleForm = reactive({
 const rules = reactive({
 	username: [{
 		validator: (rule, value, callback) => {
-			if (value === "") callback(new Error("请输入用户名"));
-			else callback();
+			if (value === '') {
+				callback(new Error('请输入用户名'));
+			}
+			else {
+				callback();
+			}
 		},
-		trigger: "blur",
+		trigger: 'blur',
 	}],
 	password: [{
 		validator: (rule, value, callback) => {
-			if (value === "") {
-				callback(new Error("请输入密码"));
+			if (value === '') {
+				callback(new Error('请输入密码'));
 			} else {
 				callback();
 			}
 		},
-		trigger: "blur"
+		trigger: 'blur',
 	}],
 });
 
 const submitForm = (formEl) => {
-	if(!formEl) return;
+	if(!formEl) {
+		return;
+	}
 	formEl.validate(async (valid) =>{
-		if(valid){
+		if(valid) {
 			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
 			ElMessage.success('登录成功');
 			useUserStore().setToken(res);
@@ -48,7 +54,7 @@ const submitForm = (formEl) => {
 			await router.push('/');
 		}
 	});
-}
+};
 
 </script>
 

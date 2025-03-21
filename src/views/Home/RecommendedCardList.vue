@@ -1,43 +1,37 @@
 <script setup>
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
-import request from '@/request/http.js'
-import { ElMessage } from 'element-plus';
-import RecommendedCard from './RecommendedCard.vue';
+import request from '@/request/http.js';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 import QuestionCard from '../User/QuestionList/QuestionCard.vue';
 
-const tableData = ref([])
+const tableData = ref([]);
 
 const infiniteScroll=ref();
-const loadpage=async(page)=>{
-	let res=await request.get("/api/auth/questions",{params:{page_num:page,page_size:10,sort:'time-'}});
-	if(res.records.length===0){
+const loadpage=async(page) => {
+	let res=await request.get('/api/auth/questions',{params:{page_num:page,page_size:10,sort:'time-'}});
+	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
 	}
 	res.records.forEach(item=>{
 		tableData.value.push(item);
 	});
-}
+};
 
-onMounted(async()=>{
-	loadpage(infiniteScroll.value.getPage()+1).then(()=>{
-		infiniteScroll.value.setPage(1);
+onMounted(async() => {
+	infiniteScroll.value.setCallback(async() => {
+		await loadpage(infiniteScroll.value.getPage());
 	});
-	infiniteScroll.value.setCallback(async()=>{
-		await loadpage(infiniteScroll.value.getPage()+1).then(()=>{
-			infiniteScroll.value.addPage();
-		});
-	});
+	infiniteScroll.value.initLoad();
 });
 
-onBeforeUpdate(()=>{
+onBeforeUpdate(() => {
 	infiniteScroll.value.onBeforeUpdate();
 });
 
-onUpdated(()=>{
+onUpdated(() => {
 	infiniteScroll.value.onUpdated();
-})
+});
 
 </script>
 

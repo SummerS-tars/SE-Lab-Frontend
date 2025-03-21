@@ -1,12 +1,12 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, computed } from 'vue';
+import { defineStore } from 'pinia';
 
-const jwtparse = (token)=>{
+const jwtparse = (token) => {
     const parts =token.split('.');
 
     const payloadBase64Url = parts[1];
     const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map((c)=>{
+    const payloadJson = decodeURIComponent(atob(payloadBase64).split('').map((c) => {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 
@@ -14,15 +14,15 @@ const jwtparse = (token)=>{
     return payload;
 }
 
-export const useUserStore = defineStore('user',()=>{
+export const useUserStore = defineStore('user',() => {
     const token = () => localStorage.getItem('user-tn');
     const username = computed(() => {
         return jwtparse(token()).sub;
     });
-    const id = computed(()=>{
+    const id = computed(() => {
         return jwtparse(token()).id;
     });
-    const isadmin = computed(()=>{
+    const isadmin = computed(() => {
         return jwtparse(token()).roles[0].authority==='ROLE_ADMIN';
     });
     const setToken = (user_tn) => {

@@ -12,34 +12,34 @@ const userid =  route.params.id;
 
 const props=defineProps({
 	id:{default:''},
-	removethis:{default:()=>{}}
-})
+	removethis:{default:() => {}},
+});
 
 let questionInfo=ref({
 	answerCount:0,
 });
 
-onMounted(async()=>{
+onMounted(async() => {
 	let res= await request.get(`/api/public/question/byId/${props.id}`);
 	questionInfo.value={
 		title:res.title,
 		content:res.content,
 		createdAt:res.createdAt,
 		answerCount:res.answerCount,
-	}
-})
+	};
+});
 
-const deleteQuestion=async()=>{
-	if(questionInfo.value.answerCount>0){
+const deleteQuestion=async() => {
+	if(questionInfo.value.answerCount>0) {
 		ElMessage.error('问题已存在回答，不能删除');
 		return;
 	}
-	ElMessageBox.confirm('确认删除吗?').then(async()=>{
+	ElMessageBox.confirm('确认删除吗?').then(async() => {
 		await request.post(`/api/auth/question/delete`,{id:props.id});
 		props.removethis();
 		ElMessage.success('删除成功');
 	});	
-}
+};
 
 const EditBox = ref();
 

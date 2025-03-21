@@ -24,26 +24,26 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      beforeEnter: (to,from,next)=>{
-        if(useUserStore().token()){
-          next()
-        }else{
-          next({name:'Login'})
+      beforeEnter: (to,from,next) => {
+        if (useUserStore().token()) {
+          next();
+        } else {
+          next({name:'Login'});
         }
-      }
+      },
     },
     {
       path: '/',
       component: () => import('@/views/Login/LoginView.vue'),
       children:[
         {path:'login',         name:'Login',  component:LoginForm,
-          beforeEnter: (to,from,next)=>{
-            if(useUserStore().token()){
-              next(from)
+          beforeEnter: (to,from,next) => {
+            if(useUserStore().token()) {
+              next(from);
             }else{
-              next()
+              next();
             }
-          }
+          },
         },
         {path:'register',     name:'Register',component:RegisterForm},
       ],
@@ -53,27 +53,27 @@ const router = createRouter({
       component: () => import('@/views/Admin/AdminView.vue'),
       children:[
         {path:'', name:'AdminHome' , component:AdminDefaultView},
-        {path:'question', name:'QuestionManagement', component:QuestionManagement},
-        {path:'answer/:questionId', name:'AnswerManagement', component:AnswerManagement},
+        {path:'question', name:'QuestionManagement', component:QuestionManagement}, 
+        {path:'answer', name:'AnswerManagement', component:AnswerManagement}, 
       ],
-      beforeEnter: (to,from,next)=>{
-        if(useUserStore().isadmin){
-          next()
+      beforeEnter: (to,from,next) => {
+        if(useUserStore().isadmin) {
+          next();
         }else{
-          next(from)
-          ElMessage.error('没有管理员权限')
+          next(from);
+          ElMessage.error('没有管理员权限');
         }
-      }
+      },
     },
     {
       path: '/question/:id',
       name: 'question',
       component: QuestionView,
-      beforeEnter: async(to,from,next)=>{
+      beforeEnter: async(to,from,next) => {
         const questionId=to.params.id;
         try{
           let res=await request.get(`/api/public/question/byId/${questionId}`);
-          const questionInfo = ref({})
+          const questionInfo = ref({});
           questionInfo.value.id = questionId;
           questionInfo.value.title = res.title;
           questionInfo.value.createdAt = res.createdAt;
@@ -85,11 +85,10 @@ const router = createRouter({
           questionInfo.value.answerCount = res.answerCount;
           useQuestionStore().setQuestion(questionInfo);
           next();
-        }catch(e){
-          console.log(e);
+        }catch(e) {
           next({path: '/notFound'});
         }
-      }
+      },
     },
     {
       path: '/user/profile/:id',
@@ -100,11 +99,11 @@ const router = createRouter({
         {path:'follower', name:'FollowerList',  component:FollowerList},
         {path:'following',name:'FollowingList', component:FollowingList},
       ],
-      beforeEnter: async(to,from,next)=>{
+      beforeEnter: async(to,from,next) => {
         const userId=to.params.id;
         try{
           let res = await request.get(`/api/public/user/byId/${userId}`);
-          const userInfo=ref({})
+          const userInfo=ref({});
           userInfo.value.username=res.username;
           userInfo.value.email=res.email;
           userInfo.value.follower=res.numfollower;
@@ -119,11 +118,10 @@ const router = createRouter({
 
           useProfileStore().setProfile(userInfo);
           next();
-        }catch(e){
-          console.log(e);
+        }catch(e) {
           next({path: '/notFound'});
         }
-      }
+      },
     },
     {
       path: '/:pathMatch(.*)*', 
@@ -131,8 +129,7 @@ const router = createRouter({
       component: () => import('@/views/NotFoundView.vue'),
     },
   ],
-})
+});
 
 
-
-export default router
+export default router;

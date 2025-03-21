@@ -4,10 +4,9 @@ import { useRouter, useRoute } from 'vue-router';
 const router = useRouter();
 const route = useRoute();
 
-const navigateTo = (routeName, params = {}) => {
+const navigateTo = (routeName) => {
   router.push({ 
     name: routeName,
-    params: params,
   });
 };
 </script>
@@ -25,7 +24,7 @@ const navigateTo = (routeName, params = {}) => {
     <el-menu-item index="QuestionManagement" @click="navigateTo('QuestionManagement')">
       <span class="content">问题管理</span>
     </el-menu-item>
-    <el-menu-item index="AnswerManagement" @click="navigateTo('AnswerManagement', { questionId: 0 })">
+    <el-menu-item index="AnswerManagement" @click="navigateTo('AnswerManagement')">
       <span class="content">回答管理</span>
     </el-menu-item>
   </el-menu>

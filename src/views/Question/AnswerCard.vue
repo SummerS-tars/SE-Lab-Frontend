@@ -18,7 +18,7 @@ const answerInfo=ref({
 	author:{id:'',username:''},
 });
 
-onMounted(()=>{
+onMounted(() => {
 	answerInfo.value.id=props.id;
 	answerInfo.value.like=false;
 	request.get(`/api/public/answer/byId/${props.id}`).then(res=>{
@@ -30,12 +30,12 @@ onMounted(()=>{
 		answerInfo.value.content=res.content;
 		answerInfo.value.likes=res.likes;
 	});
-	if(useUserStore().token()){
+	if(useUserStore().token()) {
 		request.get(`/api/auth/user/answer/like`,{params:{id:props.id}}).then(res=>{
 			answerInfo.value.liked=res.liked;
 		});
 	}
-	useAnswerStore().setAnswer(answerInfo)
+	useAnswerStore().setAnswer(answerInfo);
 });
 
 </script>

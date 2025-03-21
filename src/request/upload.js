@@ -1,15 +1,15 @@
-import { useUserStore } from "@/stores/user";
-import axios from "axios";
+import { useUserStore } from '@/stores/user';
+import axios from 'axios';
 
 
 const upload = axios.create({
     baseURL: '',
-})
+});
 
 upload.interceptors.request.use(
     config =>{
         const token= useUserStore().token();
-        if(token){
+        if(token) {
             config.headers.Authorization=`Bearer ${token}`;
         }
         return config;
@@ -17,11 +17,10 @@ upload.interceptors.request.use(
     error =>{
         return Promise.reject(error);
     }
-)
+);
 
 upload.interceptors.response.use(
     response => {
-        console.log(response.data);
         return response.data.data;
     },
     error => {
@@ -37,6 +36,6 @@ const uploadFile = (url,file) =>{
         method: 'post',
         data: formData
     });
-}
+};
 
 export {uploadFile};
