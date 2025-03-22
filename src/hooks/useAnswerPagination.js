@@ -41,10 +41,7 @@ export function usePagination() {
   };
 
   const deleteAnswer = async (id) => {
-    await request.post(`/api/auth/answer/delete`, {
-        params: { id }
-      }
-    );
+    await request.post(`/api/auth/answer/delete`, { id } );
     ElMessage.success('删除成功');
     fetchItems(currentPage.value, sortOrder.value);
   };
