@@ -33,7 +33,7 @@ export default defineConfig({
     proxy: {
         '/api/': {
             // target: 'http://127.0.0.1:4523/m1/5923172-5610251-default',
-            // target: "http://thesumst.top:7009/",
+            // target: "frp.thesumst.top:7009",
             target: "http://localhost:8080/",
             ws: true,
             /** 是否允许跨域 */

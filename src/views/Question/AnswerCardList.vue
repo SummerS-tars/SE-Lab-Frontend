@@ -16,13 +16,19 @@ const loadpage=async(page) => {
 		return;
 	}
 	res.records.forEach(item=>{
-		tableData.value[item.id]={id:item.id};
+		if(!FetchSet.has(item.id)){
+			FetchSet.add(item.id);
+			tableData.value.push({
+				id:item.id,
+			});
+		}
 	});
 };
 
 const infiniteScroll=ref();
 
-const tableData = ref({});
+const tableData = ref([]);
+let FetchSet = new Set();
 
 onMounted(async() => {
   if(useUserStore().token()) {
@@ -34,9 +40,14 @@ onMounted(async() => {
 	else{
 		let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
 		res.forEach(item=>{
-			tableData.value[item.id]={id:item.id};
+			if(!FetchSet.has(item.id)){
+				FetchSet.add(item.id);
+				tableData.value.push({
+					id:item.id,
+				});
+			}
 		});
-	}
+	}	
 });
 
 onBeforeUpdate(() => {
@@ -56,8 +67,8 @@ onUpdated(() => {
 	</template>
 	<template v-else>
 		<ul>
-			<li v-for="(value,key) in tableData" :key="key" style="list-style: none;" >
-				<AnswerCard :id="value.id"></AnswerCard>
+			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
+				<AnswerCard :id="item.id"></AnswerCard>
 			</li>
 		</ul>
 	</template>

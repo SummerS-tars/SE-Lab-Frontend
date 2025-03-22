@@ -5,7 +5,8 @@ import AnswerCard from './AnswerCard.vue';
 import { useRoute } from 'vue-router';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
-const tableData = ref({});
+let FetchSet = new Set();
+const tableData = ref([]);
 
 const route = useRoute();
 const userid =  route.params.id;
@@ -17,10 +18,13 @@ const loadpage=async(page) => {
 		return;
 	}
 	res.records.forEach(item=>{
-		tableData.value[item.id]={
-			questionid:item.questionId,
-			answerid:item.id,
-		};
+		if(!FetchSet.has(item.id)){
+			FetchSet.add(item.id);
+			tableData.value.push({
+				questionid:item.questionId,
+				answerid:item.id,
+			});
+		}
 	});
 };
 
@@ -53,8 +57,8 @@ onUpdated(() => {
 	</template>
 	<template v-else>
 		<ul>
-			<li v-for="(value,key) in tableData" :key="key" style="list-style: none;" >
-				<AnswerCard :questionid="value.questionid" :answerid="value.answerid" :removethis="() => {itemDelete(key)}"/>
+			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
+				<AnswerCard :questionid="item.questionid" :answerid="item.answerid" :removethis="() => {itemDelete(item.answerid)}"/>
 			</li>
 		</ul>
 	</template>
