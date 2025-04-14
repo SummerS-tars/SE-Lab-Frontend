@@ -13,5 +13,9 @@ export const useCommentStore = defineStore('comment', () => {
         return commentList.value[id];
     }
 
-  return { set,get };
+    const getCommentAnswerId = (id)=>{
+        return commentList.value[id].answerId;
+    }
+
+  return { set,get, getCommentAnswerId };
 });

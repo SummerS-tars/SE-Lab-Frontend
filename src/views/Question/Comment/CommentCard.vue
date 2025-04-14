@@ -9,12 +9,12 @@ import { useCommentStore } from '@/stores/comment';
 
 
 const props=defineProps({
-  id:{default:''},
+	commentId:{default:''},
 });
 
 const showCommentForm=ref(false);
 
-const commentRef=computed(()=>useCommentStore().get(props.id));
+const commentRef=computed(()=>useCommentStore().get(props.commentId));
 
 </script>
 
@@ -38,7 +38,7 @@ const commentRef=computed(()=>useCommentStore().get(props.id));
 		</div>
 		<template #footer style="padding: 0px;">
 			<template v-if="showCommentForm"><CommentForm/></template>
-			<SubCommentList :commentId="commentRef.id" :style="{ padding: '0' }"></SubCommentList>
+			<SubCommentList :commentId="props.commentId" :style="{ padding: '0' }"></SubCommentList>
 		</template>
 	</el-card>
 </template>

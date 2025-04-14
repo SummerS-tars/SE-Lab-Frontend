@@ -1,6 +1,6 @@
 <script setup>
 import request from '@/request/http';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import SubCommentCard from './SubCommentCard.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
@@ -14,15 +14,21 @@ const problemId=useRoute().params.id;
 
 const props=defineProps({
 	commentId:{default:''},
-})
+});
+
+const answerId=computed(()=>{
+	return useCommentStore().getCommentAnswerId(props.commentId);
+});
 const loadpage=async(page) => {
-	let res=await request.get(`/api/auth/reply/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	let res=await request.get(`/api/public/reply/byAnswerId/${answerId.value}/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
 			tableData.value.push(item.id);
 
 			const commmentRef=ref(item);
+			commmentRef.value.answerId=answerId.value;
+			commmentRef.value.fatherCommentId=props.commentId;
 			if(useUserStore().token()) {
 				request.get(`/api/auth/user/comment/like`,{params:{id:props.id}}).then(res=>{
 					commmentRef.value.liked=res.liked;

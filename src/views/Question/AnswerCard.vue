@@ -46,7 +46,7 @@ const showComments=ref(false);
 		
 		<template #footer>
 			<div class="card-footer" style="display: flex; ">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/answer" v-model:info="answerInfo"></LikeButton></span>
+				<span style="width: 60px;"><LikeButton api="/api/auth/user/answer" :params="{id:props.id}" v-model:info="answerInfo"></LikeButton></span>
 				<span @click="showComments=!showComments" style="width: 60px;"><CommentButton :id="props.id"></CommentButton></span>
 			</div>
 			<template v-if="showComments" >

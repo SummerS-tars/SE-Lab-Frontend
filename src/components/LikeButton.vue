@@ -8,6 +8,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 
 const props=defineProps({
 	api:{default:'/api/auth/user/answer'},
+	params:{default:{}},
 	info:{},
 });
 
@@ -21,14 +22,14 @@ const onClick=() => {
 		return;
 	}
 	if(liked.value) {
-		request.post(`${props.api}/unlike`,{id:props.id}).then(res=>{
+		request.post(`${props.api}/unlike`,props.params).then(res=>{
 			props.info.liked=false;
 			props.info.likes--;
 			emit('update:info',props.info);
 		});
 	}
 	else{
-		request.post(`${props.api}/like`,{id:props.id}).then(res=>{
+		request.post(`${props.api}/like`,props.params).then(res=>{
 			props.info.liked=true;
 			props.info.likes++;
 			emit('update:info',props.info);

@@ -10,12 +10,12 @@ import { useCommentStore } from '@/stores/comment';
 
 
 const props=defineProps({
-  id:{default:''},
+  commentId:{default:''},
 });
 
 const showCommentForm=ref(false);
 
-const commentRef=computed(()=>useCommentStore().get(props.id));
+const commentRef=computed(()=>useCommentStore().get(props.commentId));
 
 </script>
 

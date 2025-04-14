@@ -23,8 +23,9 @@ const loadpage=async(page) => {
 			tableData.value.push(item.id);
 
 			const commmentRef=ref(item);
+			commmentRef.value.answerId=props.answerId;
 			if(useUserStore().token()) {
-				request.get(`/api/auth/user/comment/like`,{params:{id:props.id}}).then(res=>{
+				request.get(`/api/auth/user/comment/like`,{params:{answerId:props.answerId, commentId:item.id}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
 			}
@@ -48,7 +49,7 @@ const showComments=()=>{
 	<div style="display: flex; flex-direction: column;">
 		<ul>
 			<li v-for="(item,index) in tableData" :key="item" style="list-style: none;" >
-				<CommentCard :id="item"></CommentCard>
+				<CommentCard :commentId="item"></CommentCard>
 			</li>
 		</ul>
 		<el-button @click="showComments" type="primary" style="width: 50%;margin: 0 auto;">查看全部评论</el-button>
