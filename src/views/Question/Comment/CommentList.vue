@@ -16,7 +16,7 @@ const props=defineProps({
 	answerId:{default:''},
 })
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
@@ -52,7 +52,10 @@ const showComments=()=>{
 				<CommentCard :commentId="item"></CommentCard>
 			</li>
 		</ul>
-		<el-button @click="showComments" type="primary" style="width: 50%;margin: 0 auto;">查看全部评论</el-button>
+		<template v-if="true">
+			
+		</template>
+		<el-button @click="showComments" type="primary" style="width: 50%;margin: 10px auto;">查看全部评论</el-button>
 	</div>
 </template>
 

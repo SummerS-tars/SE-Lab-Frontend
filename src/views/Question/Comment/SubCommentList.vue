@@ -20,7 +20,7 @@ const answerId=computed(()=>{
 	return useCommentStore().getCommentAnswerId(props.commentId);
 });
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/reply/byAnswerId/${answerId.value}/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	let res=await request.get(`/api/public/reply/byAnswerId/${answerId.value}/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);

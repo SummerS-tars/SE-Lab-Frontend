@@ -15,6 +15,17 @@ const props=defineProps({
 const showCommentForm=ref(false);
 
 const commentRef=computed(()=>useCommentStore().get(props.commentId));
+const answerId=computed(()=>commentRef.value.answerId);
+
+const createReplyParams=computed(()=>{
+	let params={
+		answerId:answerId.value,
+		commentId:props.commentId,
+		replyType:"DIRECT",
+		replyTo:0,
+	};
+	return params;
+});
 
 </script>
 
@@ -23,8 +34,8 @@ const commentRef=computed(()=>useCommentStore().get(props.commentId));
   <el-card style="border:0px;" class="no-border">
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
-				<a class="comment-link" :href="`/user/profile/${commentRef.authorId}`">
-					<span style=""> {{ commentRef.author }}</span>
+				<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
+					<span style=""> {{ commentRef.username }}</span>
 				</a>
 				<br/>
 				{{ commentRef.content }}
@@ -32,12 +43,14 @@ const commentRef=computed(()=>useCommentStore().get(props.commentId));
 				<span style="font-size: 12px;color: #999;"> {{ commentRef.createdAt }}</span>
 			</div>
 			<div style="display: flex;align-items: center;">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" v-model:info="commentRef"></LikeButton></span>
-				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id"></CommentButton></span>
+				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" :params="{answerId:answerId,commentId:commentRef.id}" v-model:info="commentRef"></LikeButton></span>
+				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id" :comments="commentRef.commentCount"></CommentButton></span>
 			</div>
 		</div>
 		<template #footer style="padding: 0px;">
-			<template v-if="showCommentForm"><CommentForm/></template>
+			<template v-if="showCommentForm">
+				<CommentForm api="/api/auth/reply/create" :params="createReplyParams" style="margin-bottom: 20px;"></CommentForm>
+			</template>
 			<SubCommentList :commentId="props.commentId" :style="{ padding: '0' }"></SubCommentList>
 		</template>
 	</el-card>

@@ -9,9 +9,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 
 const props=defineProps({
 	id:{default:''},
+	comments:{default:0}
 });
-
-const comments=ref(0);
 
 </script>
 
@@ -20,7 +19,7 @@ const comments=ref(0);
 	<div style="cursor: pointer;">
 		<span style="display: flex; align-items: center;">
             <el-icon size="20px" style="margin-right: 4px;"><ChatLineRound /></el-icon>
-            {{comments}}
+            {{props.comments}}
         </span>
 	</div>
 </template>
