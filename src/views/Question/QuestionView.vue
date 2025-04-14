@@ -29,25 +29,6 @@ const writeAnswer = () =>{
   answerEditBox.value.open();
 };
 
-onBeforeRouteUpdate((to, from, next) => {
-  if(to.query.answerId){
-    setDetail(detailAnswer,to.query.answerId);
-    setDetail(detailComment,null);
-    next();
-    return;
-  }
-  if(to.query.commentId){
-    setDetail(detailAnswer,null);
-    setDetail(detailComment,to.query.commentId);
-    next();
-    return;
-  }
-  setDetail(detailAnswer,null);
-  setDetail(detailComment,null);
-  next();
-  return;
-});
-
 const detailAnswer = ref({visible:false,id:null});
 const detailComment = ref({visible:false,id:null}); 
 const setDetail=(detail,newId)=>{
@@ -55,6 +36,30 @@ const setDetail=(detail,newId)=>{
   else detail.value.visible=false;
   detail.value.id=newId;
 }
+
+const setDetailfromRoute=(route)=>{
+  if(route.query.answerId){
+    setDetail(detailAnswer,route.query.answerId);
+    setDetail(detailComment,null);
+  }
+  else if(route.query.commentId){
+    setDetail(detailAnswer,null);
+    setDetail(detailComment,route.query.commentId);
+  }
+  else{
+    setDetail(detailAnswer,null);
+    setDetail(detailComment,null);
+  }
+};
+
+onMounted(()=>{
+  setDetailfromRoute(useRoute());
+});
+
+onBeforeRouteUpdate((to, from, next) => {
+  setDetailfromRoute(to);
+  next();
+});
 const clearRouteQuery = () => {
   router.push(`/question/${questionid}`);
 }
@@ -102,7 +107,6 @@ const clearRouteQuery = () => {
           title="回答评论"
           :before-close="clearRouteQuery"
           align-center
-          style="max-height: 80vh;"
         >
           <CommentDetailList :answerId="detailAnswer.id"/>
         </el-dialog>
@@ -110,7 +114,6 @@ const clearRouteQuery = () => {
           title="评论回复"
           :before-close="clearRouteQuery"
           align-center
-          style="max-height: 80vh;"
         >
           <ReplyDetailList :commentId="useRoute().query?.commentId"></ReplyDetailList>
         </el-dialog>

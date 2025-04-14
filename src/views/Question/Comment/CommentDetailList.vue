@@ -78,7 +78,6 @@ const load = async() => {
 
 <template>
 	<el-card>
-
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
 				answer by
