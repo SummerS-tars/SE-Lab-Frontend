@@ -31,25 +31,30 @@ const writeAnswer = () =>{
 
 onBeforeRouteUpdate((to, from, next) => {
   if(to.query.answerId){
-    answerCommentVisible.value = true;
-    commentReplyVisible.value = false;
+    setDetail(detailAnswer,to.query.answerId);
+    setDetail(detailComment,null);
     next();
     return;
   }
   if(to.query.commentId){
-    answerCommentVisible.value = false;
-    commentReplyVisible.value = true;
+    setDetail(detailAnswer,null);
+    setDetail(detailComment,to.query.commentId);
     next();
     return;
   }
-  answerCommentVisible.value = false;
-  commentReplyVisible.value = false;
+  setDetail(detailAnswer,null);
+  setDetail(detailComment,null);
   next();
   return;
 });
 
-const answerCommentVisible = ref(false);
-const commentReplyVisible = ref(false); 
+const detailAnswer = ref({visible:false,id:null});
+const detailComment = ref({visible:false,id:null}); 
+const setDetail=(detail,newId)=>{
+  if(newId)detail.value.visible=true;
+  else detail.value.visible=false;
+  detail.value.id=newId;
+}
 const clearRouteQuery = () => {
   router.push(`/question/${questionid}`);
 }
@@ -93,15 +98,15 @@ const clearRouteQuery = () => {
           </template>
           <AnswerCardList :id="questionid"></AnswerCardList>
         </el-card>
-        <el-dialog v-model="answerCommentVisible"
+        <el-dialog v-model="detailAnswer.visible"
           title="回答评论"
           :before-close="clearRouteQuery"
           align-center
           style="max-height: 80vh;"
         >
-          <CommentDetailList :answerId="useRoute().query?.answerId"></CommentDetailList>
+          <CommentDetailList :answerId="detailAnswer.id"/>
         </el-dialog>
-        <el-dialog v-model="commentReplyVisible" 
+        <el-dialog v-model="detailComment.visible" 
           title="评论回复"
           :before-close="clearRouteQuery"
           align-center

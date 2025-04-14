@@ -20,7 +20,7 @@ const loadpage=async(page) => {
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
-			tableData.value.push(item.id);
+			tableData.value.push({id:item.id});
 
 			const commmentRef=ref(item);
 			commmentRef.value.answerId=props.answerId;
@@ -48,12 +48,12 @@ const showComments=()=>{
 <template>
 	<div style="display: flex; flex-direction: column;">
 		<ul>
-			<li v-for="(item,index) in tableData" :key="item" style="list-style: none;" >
-				<CommentCard :commentId="item"></CommentCard>
+			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
+				<CommentCard :commentId="item.id"></CommentCard>
 			</li>
 		</ul>
 		<template v-if="true">
-			
+
 		</template>
 		<el-button @click="showComments" type="primary" style="width: 50%;margin: 10px auto;">查看全部评论</el-button>
 	</div>

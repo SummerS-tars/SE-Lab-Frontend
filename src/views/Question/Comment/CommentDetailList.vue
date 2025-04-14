@@ -22,30 +22,35 @@ const answerInfo=computed(()=>useAnswerStore().getAnswer(props.answerId));
 
 let page=1;
 const loadpage=async(page) => {
-	let res=await request.get(`/api/auth/comment/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
 			tableData.value.push({id:item.id});
 
 			const commmentRef=ref(item);
+			commmentRef.value.answerId=props.answerId;
 			if(useUserStore().token()) {
-				request.get(`/api/auth/user/comment/like`,{params:{id:item.id}}).then(res=>{
+				request.get(`/api/auth/user/comment/like`,{params:{answerId:props.answerId, commentId:item.id}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
 			}
-			if(!useCommentStore().get(item.id)){
-				useCommentStore().set(commmentRef);
-			}
+			useCommentStore().set(commmentRef);
 		}
 	});
 };
 
-onMounted(()=>{
+const initData=()=>{
 	onloading.value=true;
+	tableData.value=[];
+	FetchSet.clear();
 	page=1;
 	loadpage(page);
 	onloading.value=false;
+}
+
+onMounted(()=>{
+	initData();
 });
 
 onBeforeRouteUpdate((to, from, next) => {
@@ -53,12 +58,7 @@ onBeforeRouteUpdate((to, from, next) => {
 		next();
 		return;
 	}
-	onloading.value=true;
-	tableData.value=[];
-	FetchSet.clear();
-	page=1;
-	loadpage(page);
-	onloading.value=false;
+	initData();
 	next();
 	return;
 });
@@ -96,8 +96,8 @@ const load = async() => {
 
 		<template #footer>
 			 <ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
-				<li v-for="(item,index) in tableData" :key="index" style="list-style: none;overflow: auto;">
-					<CommentCard :id="item.id"></CommentCard>
+				<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
+					<CommentCard :commentId="item.id"></CommentCard>
 				</li>
 			</ul>
 		</template>
