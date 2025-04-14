@@ -4,6 +4,7 @@ import request from '@/request/http.js';
 import AnswerCard from './AnswerCard.vue';
 import { useUserStore } from '@/stores/user';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
+import { useAnswerStore } from '@/stores/answer';
 
 const props=defineProps({
 	id:{default:''},
@@ -16,6 +17,15 @@ const loadpage=async(page) => {
 		return;
 	}
 	res.records.forEach(item=>{
+		const answerRef=ref(item);
+		answerRef.value.liked=false;
+		if(useUserStore().token()) {
+			request.get(`/api/auth/user/answer/like`,{params:{id:item.id}}).then(res=>{
+				answerRef.value.liked=res.liked;
+			});
+		}
+		useAnswerStore().setAnswer(answerRef);
+
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
 			tableData.value.push({
@@ -45,6 +55,10 @@ onMounted(async() => {
 				tableData.value.push({
 					id:item.id,
 				});
+
+				const answerRef=ref(item);
+				answerRef.value.liked=false;
+				useAnswerStore().setAnswer(answerRef);
 			}
 		});
 	}	

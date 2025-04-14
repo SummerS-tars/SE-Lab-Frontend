@@ -1,7 +1,7 @@
 <script setup>
 import request from '@/request/http';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import Header from '@/components/Header/Header.vue';
 import AnswerCardList from './AnswerCardList.vue';
 import FollowButton from '../User/FollowButton.vue';
@@ -11,6 +11,9 @@ import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import { useQuestionStore } from '@/stores/question';
 import Copyright from '@/components/Copyright.vue';
+import router from '@/router';
+import CommentDetailList from './Comment/CommentDetailList.vue';
+import ReplyDetailList from './Comment/ReplyDetailList.vue';
 
 const questionid =  useRoute().params.id;
 
@@ -26,6 +29,31 @@ const writeAnswer = () =>{
   answerEditBox.value.open();
 };
 
+onBeforeRouteUpdate((to, from, next) => {
+  if(to.query.answerId){
+    answerCommentVisible.value = true;
+    commentReplyVisible.value = false;
+    next();
+    return;
+  }
+  if(to.query.commentId){
+    answerCommentVisible.value = false;
+    commentReplyVisible.value = true;
+    next();
+    return;
+  }
+  answerCommentVisible.value = false;
+  commentReplyVisible.value = false;
+  next();
+  return;
+});
+
+const answerCommentVisible = ref(false);
+const commentReplyVisible = ref(false); 
+const clearRouteQuery = () => {
+  router.push(`/question/${questionid}`);
+}
+
 </script>
 
 
@@ -35,7 +63,6 @@ const writeAnswer = () =>{
       <el-header style="padding: 0;">
         <Header style="width:100%"></Header>
       </el-header>
-
       <el-main>
         <el-card style="max-width: 800px;margin: 0 auto;">
           <template #header>
@@ -64,10 +91,24 @@ const writeAnswer = () =>{
               </div>
             </div>
           </template>
-          
           <AnswerCardList :id="questionid"></AnswerCardList>
-
         </el-card>
+        <el-dialog v-model="answerCommentVisible"
+          title="回答评论"
+          :before-close="clearRouteQuery"
+          align-center
+          style="max-height: 80vh;"
+        >
+          <CommentDetailList :answerId="useRoute().query?.answerId"></CommentDetailList>
+        </el-dialog>
+        <el-dialog v-model="commentReplyVisible" 
+          title="评论回复"
+          :before-close="clearRouteQuery"
+          align-center
+          style="max-height: 80vh;"
+        >
+          <ReplyDetailList :commentId="useRoute().query?.commentId"></ReplyDetailList>
+        </el-dialog>
       </el-main>
       <Copyright></Copyright>
     </el-container>

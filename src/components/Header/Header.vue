@@ -1,6 +1,6 @@
 <script setup>
 import { ElMessage,ElNotification as notify} from 'element-plus';
-import { User, Setting} from '@element-plus/icons-vue';
+import { User, Setting ,Bell, Message} from '@element-plus/icons-vue';
 import { useUserStore } from '@/stores/user';
 import request from '@/request/http';
 import router from '@/router';
@@ -40,10 +40,18 @@ const EditBox = ref();
 		</template>
 		<template v-else>
 			<div style="align-items:center; display: flex;">
-				<span style="margin-right: 30px;">
+				<span style="margin-right: 48px;">
 					<el-button type="primary" round @click="EditBox.open()">提问</el-button>
 					<QuestionEditBoxForm ref="EditBox"></QuestionEditBoxForm>
 				</span>
+				<el-badge :value="12" style="margin-right: 32px;">
+					<router-link :to="`/notifications`" style="text-decoration: none; color: black;">
+						<div style="display: flex; align-items:center; flex-direction: column;">
+							<el-icon size="20px"><Bell/></el-icon>
+							<el-text style="font-size: smaller;">消息</el-text>
+						</div>
+					</router-link>
+				</el-badge>
 				<span>
 					<el-popover :width="80"
 					popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"

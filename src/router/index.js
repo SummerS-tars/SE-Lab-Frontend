@@ -16,6 +16,8 @@ import { useQuestionStore } from '@/stores/question';
 import { useProfileStore } from '@/stores/profile';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
+import LikeMessageList from '@/views/Notifications/LikeMessageList.vue';
+import CommentMessageList from '@/views/Notifications/CommentMessageList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,13 +26,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      beforeEnter: (to,from,next) => {
-        if (useUserStore().token()) {
-          next();
-        } else {
-          next({name:'Login'});
-        }
-      },
+      meta: {requiresAuth: true}
     },
     {
       path: '/',
@@ -124,11 +120,30 @@ const router = createRouter({
       },
     },
     {
+      path: '/notifications',
+      name: 'Notifications',
+      component: () => import('@/views/Notifications/NotificationsView.vue'),
+      meta: {requiresAuth: true},
+      children:[
+        {path:'',         name:'LikeMessageList',  component:LikeMessageList},
+        {path:'comment',   name:'CommentMessageList',    component:CommentMessageList},
+      ],
+    },
+    {
       path: '/:pathMatch(.*)*', 
       name: 'NotFound',
       component: () => import('@/views/NotFoundView.vue'),
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = useUserStore().token();
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
 });
 
 

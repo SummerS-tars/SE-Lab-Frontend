@@ -3,40 +3,23 @@ import IconLike from '@/components/icons/IconLike.vue';
 import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import FollowButton from '../User/FollowButton.vue';
-import LikeButton from './LikeButton.vue';
+import LikeButton from '../../components/LikeButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import { useAnswerStore } from '@/stores/answer';
+import CommentForm from './Comment/CommentForm.vue';
+import CommentList from './Comment/CommentList.vue';
+import CommentButton from '@/views/Question/Comment/CommentButton.vue';
 
 const props=defineProps({
 	id:{default:''},
 });
 
-const answerInfo=ref({
-	author:{id:'',username:''},
-});
+const answerInfo=computed(()=>useAnswerStore().getAnswer(props.id));
 
-onMounted(() => {
-	answerInfo.value.id=props.id;
-	answerInfo.value.like=false;
-	request.get(`/api/public/answer/byId/${props.id}`).then(res=>{
-		answerInfo.value.author={
-			id:res.authorId,
-			username:res.author,
-		};
-		answerInfo.value.createdAt=res.createdAt;
-		answerInfo.value.content=res.content;
-		answerInfo.value.likes=res.likes;
-	});
-	if(useUserStore().token()) {
-		request.get(`/api/auth/user/answer/like`,{params:{id:props.id}}).then(res=>{
-			answerInfo.value.liked=res.liked;
-		});
-	}
-	useAnswerStore().setAnswer(answerInfo);
-});
+const showComments=ref(false);
 
 </script>
 
@@ -46,14 +29,14 @@ onMounted(() => {
 			<div style="justify-content: space-between;display: flex;align-items: center;">
 				<div>
 					answer by
-					<a class="link" :href="`/user/profile/${answerInfo.author.id}`">
-						<span style="font-weight: bold;"> {{ answerInfo.author.username }}</span>
+					<a class="link" :href="`/user/profile/${answerInfo.authorId}`">
+						<span style="font-weight: bold;"> {{ answerInfo.author }}</span>
 					</a>
 					<br/>
 					<span style="font-size: 14px;color: #999;">回答时间: {{ answerInfo.createdAt }}</span>
 				</div>
 				<div>
-					<FollowButton :authorId="answerInfo.author.id"></FollowButton>
+					<FollowButton :authorId="answerInfo.authorId"></FollowButton>
 				</div>
 			</div>
 			
@@ -62,11 +45,14 @@ onMounted(() => {
 		<MarkdownContent :id="`answer-content${props.id}`" :content="answerInfo.content"></MarkdownContent>
 		
 		<template #footer>
-			<div class="card-footer">
-				<span>
-					<LikeButton :id="props.id"></LikeButton>
-				</span>
+			<div class="card-footer" style="display: flex; ">
+				<span style="width: 60px;"><LikeButton api="/api/auth/user/answer" v-model:info="answerInfo"></LikeButton></span>
+				<span @click="showComments=!showComments" style="width: 60px;"><CommentButton :id="props.id"></CommentButton></span>
 			</div>
+			<template v-if="showComments" >
+				<CommentForm></CommentForm>
+				<CommentList :answerId="props.id"></CommentList>
+			</template>
 		</template>
 	</el-card>
 </template>

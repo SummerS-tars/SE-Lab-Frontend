@@ -6,7 +6,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 import { useUserStore } from '@/stores/user';
-import LikeButton from '@/views/Question/LikeButton.vue';
+import LikeButton from '@/components/LikeButton.vue';
 import { useAnswerStore } from '@/stores/answer';
 
 const route = useRoute();
@@ -75,7 +75,7 @@ const EditBox = ref();
 		<template #footer>
 			<div class="card-footer" style="display: flex;justify-content: space-between;">
 				<div>
-					<LikeButton :id="props.answerid"></LikeButton>
+					<LikeButton api="/api/auth/user/answer" v-model:info="answerInfo"></LikeButton>
 				</div>
 				<div style="display: flex;justify-content: flex-end">
 					<template v-if="useUserStore().token()&&userid==useUserStore().id">
