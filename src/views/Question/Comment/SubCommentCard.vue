@@ -16,6 +16,17 @@ const props=defineProps({
 const showCommentForm=ref(false);
 
 const commentRef=computed(()=>useCommentStore().get(props.commentId));
+const answerId=computed(()=>commentRef.value.answerId);
+
+const createReplyParams=computed(()=>{
+	let params={
+		answerId:answerId.value,
+		commentId:commentRef.value.fatherCommentId,
+		replyType:"CITE",
+		replyTo:props.commentId,
+	};
+	return params;
+});
 
 </script>
 
@@ -24,8 +35,8 @@ const commentRef=computed(()=>useCommentStore().get(props.commentId));
   <el-card style="border:0px" class="no-border">
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
-				<a class="comment-link" :href="`/user/profile/${commentRef.authorId}`">
-					<span style=""> {{ commentRef.author }}</span>
+				<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
+					<span style=""> {{ commentRef.username }}</span>
 				</a>
 				<br/>
 				{{ commentRef.content }}
@@ -33,7 +44,7 @@ const commentRef=computed(()=>useCommentStore().get(props.commentId));
 				<span style="font-size: 12px;color: #999;"> {{ commentRef.createdAt }}</span>
 			</div>
 			<div style="display: flex;align-items: center;">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" v-model:info="commentRef"></LikeButton></span>
+				<span style="width: 60px;"><LikeButton api="/api/auth/user/reply" :params="{answerId:answerId,commentId:commentRef.fatherCommentId,replyId:props.commentId}" v-model:info="commentRef"></LikeButton></span>
 				<span style="width: 60px;" @click="showCommentForm=!showCommentForm">
 					<div style="cursor: pointer;">
 						<span style="display: flex; align-items: center;">
@@ -44,7 +55,9 @@ const commentRef=computed(()=>useCommentStore().get(props.commentId));
 				</span>
 			</div>
 		</div>
-		<template v-if="showCommentForm"><CommentForm/></template>
+		<template v-if="showCommentForm">
+			<CommentForm api="/api/auth/reply/create" :params="createReplyParams"/>
+		</template>
 	</el-card>
 </template>
 

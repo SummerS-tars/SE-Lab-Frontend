@@ -22,6 +22,9 @@ const createComment=async() =>{
 
 	let params=props.params;
 	params.content=commentContent.value;
+	
+	console.log(props.api,params);
+
 	request.post(props.api,params).then(res=>{
 		commentContent.value='';
 		window.location.reload();

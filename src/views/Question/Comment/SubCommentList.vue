@@ -24,16 +24,17 @@ const loadpage=async(page) => {
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
-			tableData.value.push(item.id);
+			tableData.value.push({id:item.id});
 
 			const commmentRef=ref(item);
 			commmentRef.value.answerId=answerId.value;
 			commmentRef.value.fatherCommentId=props.commentId;
 			if(useUserStore().token()) {
-				request.get(`/api/auth/user/comment/like`,{params:{id:props.id}}).then(res=>{
+				request.get(`/api/auth/user/reply/like`,{params:{answerId:answerId.value,commentId:props.commentId, replyId:item.id}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
 			}
+			console.log(commmentRef.value);
 			useCommentStore().set(commmentRef);
 		}
 	});
@@ -53,8 +54,8 @@ const showReplys=()=>{
 <template>
 	<div>
 		<ul>
-			<li v-for="(item,index) in tableData" :key="item" style="list-style: none;" >
-				<SubCommentCard :id="item"></SubCommentCard>
+			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
+				<SubCommentCard :commentId="item.id"></SubCommentCard>
 			</li>
 		</ul>
 		<el-button @click="showReplys" style="margin: 0 auto;">查看全部回复</el-button>
