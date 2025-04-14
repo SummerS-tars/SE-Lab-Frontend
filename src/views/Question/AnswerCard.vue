@@ -50,7 +50,7 @@ const showComments=ref(false);
 				<span @click="showComments=!showComments" style="width: 60px;"><CommentButton :id="props.id"></CommentButton></span>
 			</div>
 			<template v-if="showComments" >
-				<CommentForm></CommentForm>
+				<CommentForm api="/api/auth/comment/create" :params="{answerId:props.id}"></CommentForm>
 				<CommentList :answerId="props.id"></CommentList>
 			</template>
 		</template>

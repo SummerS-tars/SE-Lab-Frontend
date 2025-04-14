@@ -1,6 +1,13 @@
 <script setup>
+import request from '@/request/http';
+import { useUserStore } from '@/stores/user';
+import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
+const props = defineProps({
+	api : {default: '',required:true},
+	params : {default: {},required:true},
+})
 
 const commentContent=ref('');
 const createComment=async() =>{
@@ -12,8 +19,11 @@ const createComment=async() =>{
 		ElMessage.error('评论内容不能为空');
 		return;
 	}
-    //todo
-	request.post('/api/auth/answer/comment',{id:props.id,content:commentContent.value}).then(res=>{
+
+	let params=props.params;
+	params.content=commentContent.value;
+	console.log(props.api,params);
+	request.post(props.api,params).then(res=>{
 		commentContent.value='';
 		ElMessage.success('评论成功');
 	});
