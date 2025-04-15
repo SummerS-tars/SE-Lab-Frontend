@@ -28,6 +28,10 @@ const createReplyParams=computed(()=>{
 	return params;
 });
 
+const isDirectReply=()=>{
+	return commentRef.value.replyType=='DIRECT';
+};
+
 </script>
 
 
@@ -35,9 +39,21 @@ const createReplyParams=computed(()=>{
   <el-card style="border:0px" class="no-border">
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
-				<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
-					<span style=""> {{ commentRef.username }}</span>
-				</a>
+				<template v-if="isDirectReply()">
+					<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
+						<span style=""> {{ commentRef.username }}</span>
+					</a>
+				</template>
+				<template v-else>
+					<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
+						<span style=""> {{ commentRef.username }}</span>
+					</a>
+					<span>></span>
+					<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
+						<span style=""> {{ commentRef.replyToUser }}</span>
+					</a>
+				</template>
+				
 				<br/>
 				{{ commentRef.content }}
 				<br/>

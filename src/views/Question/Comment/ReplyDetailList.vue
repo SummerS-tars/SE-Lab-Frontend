@@ -6,6 +6,7 @@ import { computed, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import CommentCard from './CommentCard.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
+import SubCommentCard from './SubCommentCard.vue';
 
 const tableData = ref([]);
 let FetchSet = new Set();
@@ -18,33 +19,43 @@ const props=defineProps({
 
 const commentInfo=computed(()=>useCommentStore().get(props.commentId));
 
+const answerId=computed(()=>{
+	return useCommentStore().getCommentAnswerId(props.commentId);
+});
 
 let page=1;
 const loadpage=async(page) => {
-	let res=await request.get(`/api/auth/reply/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
+	let res=await request.get(`/api/public/reply/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:5,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
-			FetchSet.add(item.id);
-			tableData.value.push({id:item.id});
-
 			const commmentRef=ref(item);
+			commmentRef.value.answerId=answerId.value;
+			commmentRef.value.fatherCommentId=props.commentId;
+			commmentRef.value.id=item.commentId;
 			if(useUserStore().token()) {
-				request.get(`/api/auth/user/comment/like`,{params:{id:item.id}}).then(res=>{
+				request.get(`/api/auth/user/reply/like`,{params:{replyId:item.id}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
 			}
-			if(!useCommentStore().get(item.id)){
-				useCommentStore().set(commmentRef);
-			}
+			useCommentStore().set(commmentRef);
+
+			FetchSet.add(item.commentId);
+			tableData.value.push({id:item.commentId});
 		}
 	});
 };
 
-onMounted(()=>{
+const initData=()=>{
 	onloading.value=true;
+	tableData.value=[];
+	FetchSet.clear();
 	page=1;
 	loadpage(page);
 	onloading.value=false;
+}
+
+onMounted(()=>{
+	initData();
 });
 
 onBeforeRouteUpdate((to, from, next) => {
@@ -52,12 +63,7 @@ onBeforeRouteUpdate((to, from, next) => {
 		next();
 		return;
 	}
-	onloading.value=true;
-	tableData.value=[];
-	FetchSet.clear();
-	page=1;
-	loadpage(page);
-	onloading.value=false;
+	initData();
 	next();
 	return;
 });
@@ -80,8 +86,8 @@ const load = async() => {
 
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
-				<a class="comment-link" :href="`/user/profile/${commentInfo?.authorId}`">
-					<span style=""> {{ commentInfo?.author }}</span>
+				<a class="comment-link" :href="`/user/profile/${commentInfo?.userId}`">
+					<span style=""> {{ commentInfo?.username }}</span>
 				</a>
 				<br/>
 				{{ commentInfo?.content }}
@@ -96,8 +102,8 @@ const load = async() => {
 
 		<template #footer>
 			 <ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
-				<li v-for="(item,index) in tableData" :key="index" style="list-style: none;overflow: auto;">
-					<CommentCard :id="item.id"></CommentCard>
+				<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
+					<SubCommentCard :commentId="item.id"/>
 				</li>
 			</ul>
 		</template>

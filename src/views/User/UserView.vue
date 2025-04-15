@@ -18,8 +18,9 @@ const user=useProfileStore().getProfile(userid);
 const nameToIndexMap = {
   ['QuestionList']: '0',
   ['AnswerList']: '1',
-  ['FollowerList']: '2',
-  ['FollowingList']: '3',
+  ['CommentList']:'2',
+  ['FollowerList']: '3',
+  ['FollowingList']: '4',
 };
 
 const activeIndex = ref(computed(() => {
@@ -32,6 +33,9 @@ const handleSelect = (key, keyPath) => {
 	}
 	else if(key=='1') {
 		router.push(`/user/profile/${userid}/answer`);
+	}
+	else if(key=='2'){
+		router.push(`/user/profile/${userid}/commment`);
 	}
 };
 
@@ -79,6 +83,7 @@ const handleSelect = (key, keyPath) => {
 					>
 						<el-menu-item index="0">问题 {{ user.questionCount}}</el-menu-item>
 						<el-menu-item index="1">回答 {{ user.answerCount}}</el-menu-item>
+						<el-menu-item index="2">评论 {{ user.commentCount}}</el-menu-item>
 					</el-menu>
 
 					<RouterView></RouterView>

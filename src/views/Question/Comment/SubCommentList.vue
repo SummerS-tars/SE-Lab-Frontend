@@ -34,7 +34,6 @@ const loadpage=async(page) => {
 					commmentRef.value.liked=res.liked;
 				});
 			}
-			console.log(commmentRef.value);
 			useCommentStore().set(commmentRef);
 		}
 	});

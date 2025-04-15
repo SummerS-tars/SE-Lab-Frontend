@@ -115,7 +115,7 @@ const clearRouteQuery = () => {
           :before-close="clearRouteQuery"
           align-center
         >
-          <ReplyDetailList :commentId="useRoute().query?.commentId"></ReplyDetailList>
+          <ReplyDetailList :commentId="detailComment.id"></ReplyDetailList>
         </el-dialog>
       </el-main>
       <Copyright></Copyright>

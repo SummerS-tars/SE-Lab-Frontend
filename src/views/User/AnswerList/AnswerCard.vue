@@ -75,7 +75,7 @@ const EditBox = ref();
 		<template #footer>
 			<div class="card-footer" style="display: flex;justify-content: space-between;">
 				<div>
-					<LikeButton api="/api/auth/user/answer" v-model:info="answerInfo"></LikeButton>
+					<span style="width: 60px;"><LikeButton api="/api/auth/user/answer" :params="{id:props.answerid}" v-model:info="answerInfo"></LikeButton></span>
 				</div>
 				<div style="display: flex;justify-content: flex-end">
 					<template v-if="useUserStore().token()&&userid==useUserStore().id">
