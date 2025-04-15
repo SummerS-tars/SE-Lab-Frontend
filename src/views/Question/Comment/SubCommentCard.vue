@@ -49,8 +49,8 @@ const isDirectReply=()=>{
 						<span style=""> {{ commentRef.username }}</span>
 					</a>
 					<span>></span>
-					<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
-						<span style=""> {{ commentRef.replyToUser }}</span>
+					<a class="comment-link" :href="`/user/profile/${commentRef.replyToUserId}`">
+						<span style=""> {{ commentRef.replyToUsername }}</span>
 					</a>
 				</template>
 				
@@ -60,7 +60,7 @@ const isDirectReply=()=>{
 				<span style="font-size: 12px;color: #999;"> {{ commentRef.createdAt }}</span>
 			</div>
 			<div style="display: flex;align-items: center;">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/reply" :params="{answerId:answerId,commentId:commentRef.fatherCommentId,replyId:props.commentId}" v-model:info="commentRef"></LikeButton></span>
+				<span style="width: 60px;"><LikeButton api="/api/auth/user/reply" :params="{id:props.commentId}" v-model:info="commentRef"></LikeButton></span>
 				<span style="width: 60px;" @click="showCommentForm=!showCommentForm">
 					<div style="cursor: pointer;">
 						<span style="display: flex; align-items: center;">

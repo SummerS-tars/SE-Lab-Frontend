@@ -18,7 +18,7 @@ const props=defineProps({
 const loadpage=async(page) => {
 	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
 	res.records.forEach(item=>{
-		if(!FetchSet.has(item.id)){
+		if(!FetchSet.has(item.commentId)){
 			const commmentRef=ref(item);
 			commmentRef.value.id=item.commentId;
 			commmentRef.value.answerId=props.answerId;

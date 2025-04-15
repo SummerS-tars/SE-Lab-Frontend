@@ -22,20 +22,21 @@ const answerInfo=computed(()=>useAnswerStore().getAnswer(props.answerId));
 
 let page=1;
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:5,sort:'likes-'}});
+	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
-			FetchSet.add(item.id);
-			tableData.value.push({id:item.id});
-
 			const commmentRef=ref(item);
+			commmentRef.value.id=item.commentId;
 			commmentRef.value.answerId=props.answerId;
 			if(useUserStore().token()) {
-				request.get(`/api/auth/user/comment/like`,{params:{answerId:props.answerId, commentId:item.id}}).then(res=>{
+				request.get(`/api/auth/user/comment/like`,{params:{commentId:item.commentId}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
 			}
 			useCommentStore().set(commmentRef);
+
+			FetchSet.add(item.id);
+			tableData.value.push({id:item.id});
 		}
 	});
 };

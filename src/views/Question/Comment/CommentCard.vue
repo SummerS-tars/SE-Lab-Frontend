@@ -43,8 +43,9 @@ const createReplyParams=computed(()=>{
 				<span style="font-size: 12px;color: #999;"> {{ commentRef.createdAt }}</span>
 			</div>
 			<div style="display: flex;align-items: center;">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" :params="{answerId:answerId,commentId:commentRef.id}" v-model:info="commentRef"></LikeButton></span>
-				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id" :comments="commentRef.commentCount"></CommentButton></span>
+				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" :params="{id:commentRef.id}" v-model:info="commentRef"></LikeButton></span>
+				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id" :comments="commentRef.replyCount"></CommentButton></span>
+				<span><el-icon><MoreFilled /></el-icon></span>
 			</div>
 		</div>
 		<template #footer style="padding: 0px;">

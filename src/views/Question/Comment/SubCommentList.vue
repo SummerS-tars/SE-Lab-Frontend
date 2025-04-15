@@ -20,21 +20,22 @@ const answerId=computed(()=>{
 	return useCommentStore().getCommentAnswerId(props.commentId);
 });
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/reply/byAnswerId/${answerId.value}/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
+	let res=await request.get(`/api/public/reply/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:5,sort:'likes-'}});
 	res.records.forEach(item=>{
-		if(!FetchSet.has(item.id)){
-			FetchSet.add(item.id);
-			tableData.value.push({id:item.id});
-
+		if(!FetchSet.has(item.replyId)){
 			const commmentRef=ref(item);
 			commmentRef.value.answerId=answerId.value;
 			commmentRef.value.fatherCommentId=props.commentId;
+			commmentRef.value.id=item.replyId;
 			if(useUserStore().token()) {
-				request.get(`/api/auth/user/reply/like`,{params:{answerId:answerId.value,commentId:props.commentId, replyId:item.id}}).then(res=>{
+				request.get(`/api/auth/user/reply/like`,{params:{replyId:item.replyId}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
 			}
 			useCommentStore().set(commmentRef);
+
+			FetchSet.add(item.replyId);
+			tableData.value.push({id:item.id});
 		}
 	});
 };
