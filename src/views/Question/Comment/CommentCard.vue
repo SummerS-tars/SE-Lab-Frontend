@@ -6,6 +6,8 @@ import LikeButton from '@/components/LikeButton.vue';
 import CommentButton from '@/views/Question/Comment/CommentButton.vue';
 import SubCommentList from './SubCommentList.vue';
 import { useCommentStore } from '@/stores/comment';
+import MoreOperatorButton from './MoreOperatorButton.vue';
+import { useUserStore } from '@/stores/user';
 
 
 const props=defineProps({
@@ -27,6 +29,11 @@ const createReplyParams=computed(()=>{
 	return params;
 });
 
+const showDelete=computed(()=>{
+	if(!useUserStore().token())return false;
+	return commentRef.value.userId==useUserStore().id;
+});
+
 </script>
 
 
@@ -45,7 +52,7 @@ const createReplyParams=computed(()=>{
 			<div style="display: flex;align-items: center;">
 				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" :params="{id:commentRef.id}" v-model:info="commentRef"></LikeButton></span>
 				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id" :comments="commentRef.replyCount"></CommentButton></span>
-				<span><el-icon><MoreFilled /></el-icon></span>
+				<span><MoreOperatorButton deteteApi="/api/auth/comment/delete" :params="{id:props.commentId}" :showDelete="showDelete" :copyContent="commentRef.content"/></span>
 			</div>
 		</div>
 		<template #footer style="padding: 0px;">

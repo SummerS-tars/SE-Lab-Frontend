@@ -17,7 +17,7 @@ const props=defineProps({
 	commentId:{default:''},
 });
 
-const commentInfo=computed(()=>useCommentStore().get(props.commentId));
+const commentInfo=ref({});
 
 const answerId=computed(()=>{
 	return useCommentStore().getCommentAnswerId(props.commentId);
@@ -47,6 +47,17 @@ const loadpage=async(page) => {
 };
 
 const initData=()=>{
+	if(useCommentStore().get(props.answerId)){
+		commentInfo.value=useCommentStore().get(props.answerId);
+	}
+	else{
+		request.get(`/api/public/answer/byId/${props.answerId}`).then(res=>{
+			commentInfo.value.id=res.id;
+			commentInfo.value=res;
+			useCommentStore().set(commentInfo);
+		});
+	}
+
 	onloading.value=true;
 	tableData.value=[];
 	FetchSet.clear();

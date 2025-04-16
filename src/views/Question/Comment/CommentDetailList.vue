@@ -17,7 +17,7 @@ const props=defineProps({
 	answerId:{default:''},
 });
 
-const answerInfo=computed(()=>useAnswerStore().getAnswer(props.answerId));
+const answerInfo=ref({});
 
 
 let page=1;
@@ -42,6 +42,18 @@ const loadpage=async(page) => {
 };
 
 const initData=()=>{
+	if(useAnswerStore().getAnswer(props.answerId)){
+		answerInfo.value=useAnswerStore().getAnswer(props.answerId);
+	}
+	else{
+		request.get(`/api/public/answers/byId/${props.answerId}`).then(res=>{
+			answerInfo.value.id=res.id;
+			answerInfo.value=res;
+			useAnswerStore().setAnswer(answerInfo);
+		});
+	}
+	console.log(answerInfo.value);
+	
 	onloading.value=true;
 	tableData.value=[];
 	FetchSet.clear();

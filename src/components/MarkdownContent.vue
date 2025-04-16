@@ -8,6 +8,7 @@ const props = defineProps({
 });
 
 watch(()=>props.content,() => {
+  if(!cherryInstance.value)return;
   cherryInstance.value.setValue(props.content);
 });
 

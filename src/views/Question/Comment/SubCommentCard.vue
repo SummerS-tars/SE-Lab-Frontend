@@ -7,6 +7,8 @@ import { computed, ref } from 'vue';
 import LikeButton from '@/components/LikeButton.vue';
 import CommentButton from '@/views/Question/Comment/CommentButton.vue';
 import { useCommentStore } from '@/stores/comment';
+import MoreOperatorButton from './MoreOperatorButton.vue';
+import { useUserStore } from '@/stores/user';
 
 
 const props=defineProps({
@@ -31,6 +33,11 @@ const createReplyParams=computed(()=>{
 const isDirectReply=()=>{
 	return commentRef.value.replyType=='DIRECT';
 };
+
+const showDelete=computed(()=>{
+	if(!useUserStore().token())return false;
+	return commentRef.value.userId==useUserStore().id;
+});
 
 </script>
 
@@ -69,6 +76,7 @@ const isDirectReply=()=>{
 						</span>
 					</div>
 				</span>
+				<span><MoreOperatorButton deteteApi="/api/auth/reply/delete" :params="{id:props.commentId}" :showDelete="showDelete" :copyContent="commentRef.content"/></span>
 			</div>
 		</div>
 		<template v-if="showCommentForm">
