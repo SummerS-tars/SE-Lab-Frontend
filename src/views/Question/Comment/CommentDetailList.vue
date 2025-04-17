@@ -42,19 +42,18 @@ const loadpage=async(page) => {
 	});
 };
 
-const initData=()=>{
+const initData=async()=>{
 	answerIdValid.value=false;
 	if(useAnswerStore().getAnswer(props.answerId)){
 		answerInfo.value=useAnswerStore().getAnswer(props.answerId);
 		answerIdValid.value=true;
 	}
 	else{
-		request.get(`/api/public/answer/byId/${props.answerId}`).then(res=>{
-			answerInfo.value.id=res.id;
-			answerInfo.value=res;
-			useAnswerStore().setAnswer(answerInfo);
-			answerIdValid.value=true;
-		});
+		let res=await request.get(`/api/public/answer/byId/${props.answerId}`);
+		answerInfo.value.id=res.id;
+		answerInfo.value=res;
+		useAnswerStore().setAnswer(answerInfo);
+		answerIdValid.value=true;
 	}
 	if(!answerIdValid.value)return;
 	

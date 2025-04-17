@@ -44,7 +44,7 @@ const loadpage=async(page) => {
 	});
 };
 
-const initData=()=>{
+const initData=async()=>{
 	commentIdValid.value=false;
 	if(useCommentStore().get(props.commentId)){
 		commentInfo.value=useCommentStore().get(props.commentId);
@@ -52,13 +52,12 @@ const initData=()=>{
 		commentIdValid.value=true;
 	}
 	else{
-		request.get(`/api/public/comment/byId/${props.commentId}`).then(res=>{
-			commentInfo.value.id=res.id;
-			commentInfo.value=res;
-			answerId.value=commentInfo.value.answerId;
-			useCommentStore().set(commentInfo);
-			commentIdValid.value=true;
-		});
+		let res=await request.get(`/api/public/comment/byId/${props.commentId}`);
+		commentInfo.value.id=res.id;
+		commentInfo.value=res;
+		answerId.value=commentInfo.value.answerId;
+		useCommentStore().set(commentInfo);
+		commentIdValid.value=true;
 	}
 	if(!commentIdValid.value)return;
 
