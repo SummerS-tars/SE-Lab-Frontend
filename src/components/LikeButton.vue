@@ -5,6 +5,7 @@ import { useAnswerStore } from '@/stores/answer';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import { computed, onMounted, ref, watch } from 'vue';
+import { throttle } from '@/utils/debounce.js';
 
 const props=defineProps({
 	api:{default:'/api/auth/user/answer'},
@@ -17,7 +18,7 @@ const emit = defineEmits(['update:info']);
 const liked=computed(() => props.info?.liked ?? false);
 const likes=computed(() => props.info?.likes ?? 0);
 
-const onClick=() => {
+const onClick=throttle(() => {
 	if(!useUserStore().token()) {
 		return;
 	}
@@ -35,13 +36,13 @@ const onClick=() => {
 			emit('update:info',props.info);
 		});
 	}
-};
+},500);
 
 </script>
 
 
 <template>
-	<div @click="onClick"  class="like-button" style="cursor: pointer;">
+	<div @click="onClick"  class="like-button" style="cursor: pointer; user-select: none;">
 		<span><IconLike :like='liked' style="margin-right: 4px;"/>{{likes}}</span>
 	</div>
 </template>

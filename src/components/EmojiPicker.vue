@@ -69,7 +69,7 @@ const selectEmoji = (emoji) => {
 					:name="category"
 				>
 					<!-- 表情列表 -->
-					<el-scrollbar max-height="200px" class="emoji-list">
+					<el-scrollbar height="200px" class="emoji-list">
 						<div class="emoji-grid">
 							<div
 								v-for="(emoji, index) in emojiCategories[category]"
