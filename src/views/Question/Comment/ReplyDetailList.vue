@@ -17,11 +17,9 @@ const props=defineProps({
 	commentId:{default:''},
 });
 
+const commentIdValid=ref(false);
 const commentInfo=ref({});
-
-const answerId=computed(()=>{
-	return useCommentStore().getCommentAnswerId(props.commentId);
-});
+const answerId=ref("");
 
 let page=1;
 const loadpage=async(page) => {
@@ -47,16 +45,22 @@ const loadpage=async(page) => {
 };
 
 const initData=()=>{
-	if(useCommentStore().get(props.answerId)){
-		commentInfo.value=useCommentStore().get(props.answerId);
+	commentIdValid.value=false;
+	if(useCommentStore().get(props.commentId)){
+		commentInfo.value=useCommentStore().get(props.commentId);
+		answerId.value=commentInfo.value.answerId;
+		commentIdValid.value=true;
 	}
 	else{
-		request.get(`/api/public/answer/byId/${props.answerId}`).then(res=>{
+		request.get(`/api/public/comment/byId/${props.commentId}`).then(res=>{
 			commentInfo.value.id=res.id;
 			commentInfo.value=res;
+			answerId.value=commentInfo.value.answerId;
 			useCommentStore().set(commentInfo);
+			commentIdValid.value=true;
 		});
 	}
+	if(!commentIdValid.value)return;
 
 	onloading.value=true;
 	tableData.value=[];
@@ -94,32 +98,34 @@ const load = async() => {
 </script>
 
 <template>
-	<el-card>
-
-		<div style="justify-content: space-between;display: flex;align-items: center;">
-			<div>
-				<a class="comment-link" :href="`/user/profile/${commentInfo?.userId}`">
-					<span style=""> {{ commentInfo?.username }}</span>
-				</a>
-				<br/>
-				{{ commentInfo?.content }}
-				<br/>
-				<span style="font-size: 12px;color: #999;"> {{ commentInfo?.createdAt }}</span>
+	<template v-if="commentIdValid">
+		<el-card>
+			<div style="justify-content: space-between;display: flex;align-items: center;">
+				<div>
+					<a class="comment-link" :href="`/user/profile/${commentInfo?.userId}`">
+						<span style=""> {{ commentInfo?.username }}</span>
+					</a>
+					<br/>
+					{{ commentInfo?.content }}
+					<br/>
+					<span style="font-size: 12px;color: #999;"> {{ commentInfo?.createdAt }}</span>
+				</div>
+				<div style="display: flex;align-items: center;">
+					<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" v-model:info="commentInfo"></LikeButton></span>
+					<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id"></CommentButton></span>
+				</div>
 			</div>
-			<div style="display: flex;align-items: center;">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" v-model:info="commentInfo"></LikeButton></span>
-				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id"></CommentButton></span>
-			</div>
-		</div>
 
-		<template #footer>
-			 <ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
-				<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
-					<SubCommentCard :commentId="item.id"/>
-				</li>
-			</ul>
-		</template>
-	</el-card>
+			<template #footer>
+				<ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
+					<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
+						<SubCommentCard :commentId="item.id"/>
+					</li>
+				</ul>
+			</template>
+		</el-card>
+	</template>
+	<el-empty v-else/>
 </template>
 
 <style>

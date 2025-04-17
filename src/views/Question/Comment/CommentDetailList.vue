@@ -17,6 +17,7 @@ const props=defineProps({
 	answerId:{default:''},
 });
 
+const answerIdValid=ref(false);
 const answerInfo=ref({});
 
 
@@ -42,17 +43,20 @@ const loadpage=async(page) => {
 };
 
 const initData=()=>{
+	answerIdValid.value=false;
 	if(useAnswerStore().getAnswer(props.answerId)){
 		answerInfo.value=useAnswerStore().getAnswer(props.answerId);
+		answerIdValid.value=true;
 	}
 	else{
-		request.get(`/api/public/answers/byId/${props.answerId}`).then(res=>{
+		request.get(`/api/public/answer/byId/${props.answerId}`).then(res=>{
 			answerInfo.value.id=res.id;
 			answerInfo.value=res;
 			useAnswerStore().setAnswer(answerInfo);
+			answerIdValid.value=true;
 		});
 	}
-	console.log(answerInfo.value);
+	if(!answerIdValid.value)return;
 	
 	onloading.value=true;
 	tableData.value=[];
@@ -90,30 +94,34 @@ const load = async() => {
 </script>
 
 <template>
-	<el-card>
-		<div style="justify-content: space-between;display: flex;align-items: center;">
-			<div>
-				answer by
-				<a class="link" :href="`/user/profile/${answerInfo?.authorId}`">
-					<span style="font-weight: bold;"> {{ answerInfo?.author }}</span>
-				</a>
-				<br/>
-				<span style="font-size: 14px;color: #999;">回答时间: {{ answerInfo?.createdAt}}</span>
+	<template v-if="answerIdValid">
+		<el-card>
+			<div style="justify-content: space-between;display: flex;align-items: center;">
+				<div>
+					answer by
+					<a class="link" :href="`/user/profile/${answerInfo?.authorId}`">
+						<span style="font-weight: bold;"> {{ answerInfo?.author }}</span>
+					</a>
+					<br/>
+					<span style="font-size: 14px;color: #999;">回答时间: {{ answerInfo?.createdAt}}</span>
+				</div>
+				<div>
+					<FollowButton :authorId="answerInfo"></FollowButton>
+				</div>
 			</div>
-			<div>
-				<FollowButton :authorId="answerInfo"></FollowButton>
-			</div>
-		</div>
-		<MarkdownContent :id="`CommentDetail-answer-content${props.answerId}`" :content="answerInfo?.content"></MarkdownContent>
+			<MarkdownContent :id="`CommentDetail-answer-content${props.answerId}`" :content="answerInfo?.content"></MarkdownContent>
 
-		<template #footer>
-			 <ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
-				<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
-					<CommentCard :commentId="item.id"></CommentCard>
-				</li>
-			</ul>
-		</template>
-	</el-card>
+			<template #footer>
+				<ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
+					<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
+						<CommentCard :commentId="item.id"></CommentCard>
+					</li>
+				</ul>
+			</template>
+		</el-card>
+	</template>
+	<el-empty v-else/>
+
 </template>
 
 <style>
