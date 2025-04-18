@@ -23,7 +23,7 @@ const answerInfo=ref({});
 
 let page=1;
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
+	let res=await request.get(`/api/public/comments/byAnswerId/${props.answerId}`,{params:{page_num:page,page_size:5,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			const commmentRef=ref(item);

@@ -20,7 +20,7 @@ const answerId=computed(()=>{
 	return useCommentStore().getCommentAnswerId(props.commentId);
 });
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/reply/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:5,sort:'likes-'}});
+	let res=await request.get(`/api/public/reply/byCommentId/${props.commentId}`,{params:{page_num:page,page_size:3,sort:'likes-'}});
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.replyId)){
 			const commmentRef=ref(item);
