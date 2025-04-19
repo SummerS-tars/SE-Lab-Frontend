@@ -4,7 +4,7 @@ import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import FollowButton from './FollowButton.vue';
 import { useProfileStore } from '@/stores/profile';
 import Copyright from '@/components/Copyright.vue';

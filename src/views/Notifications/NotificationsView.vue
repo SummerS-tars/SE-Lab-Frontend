@@ -3,7 +3,7 @@ import Copyright from '@/components/Copyright.vue';
 import Header from '@/components/Header/Header.vue';
 import request from '@/request/http';
 import { computed, onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
@@ -38,6 +38,20 @@ onMounted(()=>{
 		commentMessageCount.value=res.count;
 	});
 });
+
+onBeforeRouteUpdate(async(to,from,next) => {
+	if(to.name=='LikeMessageList'){
+		await request.post(`/api/auth/notify/likes/check`);
+		next();
+	}
+	else if(to.name=='CommentMessageList'){
+		await request.post(`/api/auth/notify/comments/check`);
+		next();
+	}
+	else{
+		next();
+	}
+})
 
 </script>
 
