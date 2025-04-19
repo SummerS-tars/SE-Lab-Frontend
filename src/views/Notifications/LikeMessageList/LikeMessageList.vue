@@ -1,5 +1,6 @@
 <script setup>
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
+import LikeMessageCard from './LikeMessageCard.vue';
 import request from '@/request/http.js';
 import { useRoute } from 'vue-router';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
@@ -11,7 +12,7 @@ const route = useRoute();
 const userid =  route.params.id;
 
 const loadpage=async(page) => {
-	let res=await request.get(`/api/public/user/byId/${userid}/follower`,{params:{page_num:page,page_size:10,sort:'time-'}});
+	let res=await request.get(`/api/auth/notify/likes/page`,{params:{page_num:page,page_size:5,sort:'time-'}});
 	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
@@ -20,8 +21,7 @@ const loadpage=async(page) => {
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
 			tableData.value.push({
-				username:item.username,
-				id:item.id,
+				item
 			});
 		}
 	});
@@ -52,8 +52,8 @@ onUpdated(() => {
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
-		<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
-            {{item}}
+		<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
+			<LikeMessageCard :messageInfo="item"/>
 		</li>
 	</template>
 </template>
