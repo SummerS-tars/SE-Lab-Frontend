@@ -32,8 +32,6 @@ export const useNotifyStore = defineStore('Notify',()=>{
             isConnected = false;
             socket = null;
         };
-
-        socket.send("hello");
     }
 
     const send=(message)=> {
