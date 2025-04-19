@@ -19,7 +19,7 @@ export const useNotifyStore = defineStore('Notify',()=>{
 
         socket.onmessage = (event) => {
             console.log('Message received:', event.data);
-            messageCount=event.data;
+            messageCount=event.data.count;
         };
 
         socket.onerror = (msg) => {
