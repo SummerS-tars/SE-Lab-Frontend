@@ -19,6 +19,12 @@ const content=computed(()=>{
 	if(props.messageInfo.reply)return props.messageInfo.reply.content;
 })
 
+const hrefQuery=computed(()=>{
+	if(props.messageInfo.answer)return {answerId:props.messageInfo.answer.answerId};
+	if(props.messageInfo.comment)return {answerId:props.messageInfo.comment.answerId};
+	if(props.messageInfo.reply)return {commentId:props.messageInfo.reply.commentId};
+})
+
 </script>
 
 
@@ -33,9 +39,11 @@ const content=computed(()=>{
 					<span>点赞了你的{{messageType}}</span>
 				</div>
 				<span style="font-size: 12px;color: #999;"> {{ props.messageInfo.createdAt }}</span>
+				<router-link :to="{path:`/question/${props.messageInfo.questionId}`,query:hrefQuery}"  class="comment-link">
+					<div>{{props.messageInfo.questionTitle}}</div>
+				</router-link>
 				<MarkdownContent v-if="messageType==`回答`" :id="`message-answer-content-${index}`" :content="content"></MarkdownContent>
 				<div v-else>{{content}}</div>
-				<el-button>临时跳转按钮</el-button>
 			</div>
 		</div>
 	</el-card>

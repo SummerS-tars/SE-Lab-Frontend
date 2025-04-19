@@ -1,7 +1,7 @@
 <script setup>
 import Copyright from '@/components/Copyright.vue';
 import Header from '@/components/Header/Header.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -25,6 +25,13 @@ const handleSelect = (key, keyPath) => {
 	}
 };
 
+const likeMessageCount=ref(0);
+const commentMessageCount=ref(0);
+
+onMounted(()=>{
+	
+})
+
 </script>
 
 
@@ -45,8 +52,8 @@ const handleSelect = (key, keyPath) => {
 						mode="horizontal"
 						@select="handleSelect"
 					>
-						<el-menu-item index="0">点赞 {{ 1 }}</el-menu-item>
-						<el-menu-item index="1">评论 {{ 2 }}</el-menu-item>
+						<el-menu-item index="0">点赞 {{ likeMessageCount }}</el-menu-item>
+						<el-menu-item index="1">评论 {{ commentMessageCount }}</el-menu-item>
 					</el-menu>
 
 					<RouterView></RouterView>

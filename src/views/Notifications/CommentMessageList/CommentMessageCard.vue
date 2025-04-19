@@ -43,8 +43,10 @@ const username=computed(()=>{
 					<span>回复了你的{{messageType}}</span>
 				</div>
 				<span style="font-size: 12px;color: #999;"> {{ props.messageInfo.createdAt }}</span>
+				<router-link :to="{path:`/question/${props.messageInfo.questionId}`,query:hrefQuery}"  class="comment-link">
+					<div>{{props.messageInfo.questionTitle}}</div>
+				</router-link>
 				<div>{{content}}</div>
-				<el-button>临时跳转按钮</el-button>
 			</div>
 		</div>
 	</el-card>

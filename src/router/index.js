@@ -129,15 +129,14 @@ const router = createRouter({
         {path:'comment',   name:'CommentMessageList',    component:CommentMessageList},
       ],
       beforeEnter: async(to,from,next) => {
+        console.log("???");
         if(to.name=='LikeMessageList'){
-          // request.post(`/api/auth/notify/likes/check`).then(res=>{
-             next();
-          // });
+          // await request.post(`/api/auth/notify/likes/check`);
+          next();
         }
         else if(to.name=='CommentMessageList'){
-          // request.post(`/api/auth/notify/comments/check`).then(res=>{
-            next();
-        //  });
+          // await request.post(`/api/auth/notify/comments/check`);
+          next();
         }
         else{
           next();
