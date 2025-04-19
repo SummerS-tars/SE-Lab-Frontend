@@ -19,6 +19,16 @@ const content=computed(()=>{
 	if(props.messageInfo.reply)return props.messageInfo.reply.content;
 })
 
+const userId=computed(()=>{
+	if(props.messageInfo.comment)return props.messageInfo.comment.userId;
+	if(props.messageInfo.reply)return props.messageInfo.reply.userId;
+})
+
+const username=computed(()=>{
+	if(props.messageInfo.comment)return props.messageInfo.comment.username;
+	if(props.messageInfo.reply)return props.messageInfo.reply.username;
+})
+
 </script>
 
 
@@ -27,14 +37,13 @@ const content=computed(()=>{
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
 				<div style="font-size: 16px;color: #999;">
-					<a class="message-user-link" :href="`/user/profile/${props.messageInfo.userId}`">
-						<span style=""> {{ props.messageInfo.username }}</span>
+					<a class="message-user-link" :href="`/user/profile/${userId}`">
+						<span style=""> {{ username }}</span>
 					</a>
-					<span>点赞了你的{{messageType}}</span>
+					<span>回复了你的{{messageType}}</span>
 				</div>
 				<span style="font-size: 12px;color: #999;"> {{ props.messageInfo.createdAt }}</span>
-				<MarkdownContent v-if="messageType==`回答`" :id="`message-answer-content-${index}`" :content="content"></MarkdownContent>
-				<div v-else>{{content}}</div>
+				<div>{{content}}</div>
 				<el-button>临时跳转按钮</el-button>
 			</div>
 		</div>
