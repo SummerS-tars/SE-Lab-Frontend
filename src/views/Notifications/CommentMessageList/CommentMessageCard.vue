@@ -11,23 +11,28 @@ const props=defineProps({
 const messageType=computed(()=>{
 	if(props.messageInfo.answer)return "回答";
 	else return "评论";
-})
+});
 
 const content=computed(()=>{
 	if(props.messageInfo.answer)return props.messageInfo.answer.content;
 	if(props.messageInfo.comment)return props.messageInfo.comment.content;
 	if(props.messageInfo.reply)return props.messageInfo.reply.content;
-})
+});
 
 const userId=computed(()=>{
 	if(props.messageInfo.comment)return props.messageInfo.comment.userId;
 	if(props.messageInfo.reply)return props.messageInfo.reply.userId;
-})
+});
 
 const username=computed(()=>{
 	if(props.messageInfo.comment)return props.messageInfo.comment.username;
 	if(props.messageInfo.reply)return props.messageInfo.reply.username;
-})
+});
+
+const hrefQuery=computed(()=>{
+	if(props.messageInfo.comment)return {answerId:props.messageInfo.comment.answerId};
+	if(props.messageInfo.reply)return {commentId:props.messageInfo.reply.commentId};
+});
 
 </script>
 

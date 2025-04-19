@@ -1,6 +1,7 @@
 <script setup>
 import Copyright from '@/components/Copyright.vue';
 import Header from '@/components/Header/Header.vue';
+import request from '@/request/http';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -29,8 +30,14 @@ const likeMessageCount=ref(0);
 const commentMessageCount=ref(0);
 
 onMounted(()=>{
-	
-})
+	request.get(`/api/auth/notify/likes/count`).then(res=>{
+		likeMessageCount.value=res.count;
+		console.log(res);
+	});
+	request.get(`/api/auth/notify/comments/count`).then(res=>{
+		commentMessageCount.value=res.count;
+	});
+});
 
 </script>
 
