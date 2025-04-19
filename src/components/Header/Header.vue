@@ -6,6 +6,7 @@ import request from '@/request/http';
 import router from '@/router';
 import { nextTick, ref, watch } from 'vue';
 import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
+import { useNotifyStore } from '@/stores/notify';
 
 const logout = async() =>{
 	try{
@@ -44,7 +45,7 @@ const EditBox = ref();
 					<el-button type="primary" round @click="EditBox.open()">提问</el-button>
 					<QuestionEditBoxForm ref="EditBox"></QuestionEditBoxForm>
 				</span>
-				<el-badge :value="12" style="margin-right: 32px;">
+				<el-badge :value="useNotifyStore().messageCount" :max="99" style="margin-right: 32px;">
 					<router-link :to="`/notifications`" style="text-decoration: none; color: black;">
 						<div style="display: flex; align-items:center; flex-direction: column;">
 							<el-icon size="20px"><Bell/></el-icon>

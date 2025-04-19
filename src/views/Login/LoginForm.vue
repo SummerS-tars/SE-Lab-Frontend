@@ -45,7 +45,7 @@ const submitForm = (formEl) => {
 		if(valid) {
 			let res=await request.post(`/api/public/login?password=${ruleForm.password}&username=${ruleForm.username}`);
 			ElMessage.success('登录成功');
-			useUserStore().setToken(res);
+			useUserStore().login(res);
 		}
 
 		if(useUserStore().isadmin) {

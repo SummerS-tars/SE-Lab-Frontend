@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import { useNotifyStore } from './notify';
 
 const jwtparse = (token) => {
     const parts =token.split('.');
@@ -16,6 +17,7 @@ const jwtparse = (token) => {
 
 export const useUserStore = defineStore('user',() => {
     const token = () => localStorage.getItem('user-tn');
+    const isLogin = () => {return !!token();}
     const username = computed(() => {
         return jwtparse(token()).sub;
     });
@@ -25,8 +27,9 @@ export const useUserStore = defineStore('user',() => {
     const isadmin = computed(() => {
         return jwtparse(token()).roles[0].authority==='ROLE_ADMIN';
     });
-    const setToken = (user_tn) => {
+    const login = (user_tn) => {
         localStorage.setItem('user-tn',user_tn);
+        useNotifyStore().connect(id.value);
     };
     const delToken = () => {
         localStorage.removeItem('user-tn');
@@ -36,5 +39,9 @@ export const useUserStore = defineStore('user',() => {
         delToken();
     };
 
-    return {token,username,id,isadmin,setToken,delToken,logout};
+    if(isLogin()){
+        useNotifyStore().connect(id.value);
+    }
+
+    return {token,isLogin,username,id,isadmin,login,logout};
 });

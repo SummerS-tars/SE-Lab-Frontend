@@ -1,15 +1,14 @@
 import { defineStore } from "pinia";
-import { useUserStore } from "./user";
 
-export const useNotifyStore = defineStore('Notify',()=>{
+export const useWebSocketStore = defineStore('websocket',()=>{
     let socket=null;
     let isConnected=false;
-    let messageCount=0;
+    let messages=[];
     let error=null;
 
-    const connect=(id)=>{
+    const connect=(url)=>{
         if(isConnected)return;
-        socket=new WebSocket(`/api/notify/count/${id}`);
+        socket=new WebSocket(url);
 
         socket.onopen = () => {
             console.log('websocket connected');
@@ -19,7 +18,7 @@ export const useNotifyStore = defineStore('Notify',()=>{
 
         socket.onmessage = (event) => {
             console.log('Message received:', event.data);
-            messageCount=event.data;
+            messages.push(event.data); // 将消息添加到消息列表
         };
 
         socket.onerror = (msg) => {
@@ -32,8 +31,6 @@ export const useNotifyStore = defineStore('Notify',()=>{
             isConnected = false;
             socket = null;
         };
-
-        socket.send("hello");
     }
 
     const send=(message)=> {
@@ -47,13 +44,12 @@ export const useNotifyStore = defineStore('Notify',()=>{
     const disconnect=()=> {
         if (socket) {
             socket.close();
-            isConnected=false;
         }
     }
 
     const clear=()=>{
-        messageCount=0;
+        messages.clear()
     }
 
-    return { connect,send, messageCount ,disconnect, clear };
+    return { connect,send, disconnect, clear };
 })
