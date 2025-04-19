@@ -9,7 +9,7 @@ export const useNotifyStore = defineStore('Notify',()=>{
 
     const connect=(id)=>{
         if(isConnected)return;
-        socket=new WebSocket(`api/notify/count/${id}`);
+        socket=new WebSocket(`ws://localhost:8080/notify/count/${id}`);
 
         socket.onopen = () => {
             console.log('websocket connected');
