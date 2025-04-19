@@ -45,7 +45,7 @@ const EditBox = ref();
 					<el-button type="primary" round @click="EditBox.open()">提问</el-button>
 					<QuestionEditBoxForm ref="EditBox"></QuestionEditBoxForm>
 				</span>
-				<el-badge :value="useNotifyStore().messageCount" :max="99" style="margin-right: 32px;">
+				<el-badge :value="useNotifyStore().getCount()" :max="99" style="margin-right: 32px;">
 					<router-link :to="`/notifications`" style="text-decoration: none; color: black;">
 						<div style="display: flex; align-items:center; flex-direction: column;">
 							<el-icon size="20px"><Bell/></el-icon>

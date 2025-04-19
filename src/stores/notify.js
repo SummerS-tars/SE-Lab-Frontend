@@ -7,6 +7,8 @@ export const useNotifyStore = defineStore('Notify',()=>{
     let messageCount=0;
     let error=null;
 
+    const getCount=()=>{return messageCount;}
+
     const connect=(id)=>{
         if(isConnected)return;
         socket=new WebSocket(`ws://localhost:8080/notify/count/${id}`);
@@ -53,5 +55,5 @@ export const useNotifyStore = defineStore('Notify',()=>{
         messageCount=0;
     }
 
-    return { connect,send, messageCount ,disconnect, clear };
+    return { connect,send, getCount ,disconnect, clear };
 })
