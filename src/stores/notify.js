@@ -1,13 +1,12 @@
 import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 import { useUserStore } from "./user";
 
 export const useNotifyStore = defineStore('Notify',()=>{
     let socket=null;
     let isConnected=false;
-    let messageCount=0;
+    let messageCount=ref(0);
     let error=null;
-
-    const getCount=()=>{return messageCount;}
 
     const connect=(id)=>{
         if(isConnected)return;
@@ -21,7 +20,7 @@ export const useNotifyStore = defineStore('Notify',()=>{
 
         socket.onmessage = (event) => {
             console.log('Message received:', event.data);
-            messageCount=event.data.count;
+            messageCount.value=JSON.parse(event.data).count;
         };
 
         socket.onerror = (msg) => {
@@ -52,8 +51,8 @@ export const useNotifyStore = defineStore('Notify',()=>{
     }
 
     const clear=()=>{
-        messageCount=0;
+        messageCount.value=0;
     }
 
-    return { connect,send, getCount ,disconnect, clear };
+    return { connect,send, messageCount ,disconnect, clear };
 })

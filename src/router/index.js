@@ -16,8 +16,8 @@ import { useQuestionStore } from '@/stores/question';
 import { useProfileStore } from '@/stores/profile';
 import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
-import LikeMessageList from '@/views/Notifications/LikeMessageList.vue';
-import CommentMessageList from '@/views/Notifications/CommentMessageList.vue';
+import LikeMessageList from '@/views/Notifications/LikeMessageList/LikeMessageList.vue';
+import CommentMessageList from '@/views/Notifications/CommentMessageList/CommentMessageList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -128,6 +128,21 @@ const router = createRouter({
         {path:'',         name:'LikeMessageList',  component:LikeMessageList},
         {path:'comment',   name:'CommentMessageList',    component:CommentMessageList},
       ],
+      beforeEnter: async(to,from,next) => {
+        if(to.name=='LikeMessageList'){
+          // request.post(`/api/auth/notify/likes/check`).then(res=>{
+             next();
+          // });
+        }
+        else if(to.name=='CommentMessageList'){
+          // request.post(`/api/auth/notify/comments/check`).then(res=>{
+            next();
+        //  });
+        }
+        else{
+          next();
+        }
+      },
     },
     {
       path: '/:pathMatch(.*)*', 
@@ -138,7 +153,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = useUserStore().token();
+  const isAuthenticated = useUserStore().isLogin();
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'Login' });
   } else {
