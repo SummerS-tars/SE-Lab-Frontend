@@ -1,28 +1,39 @@
 <script setup>
+import { computed } from "vue"
+import MarkdownContent from '@/components/MarkdownContent.vue';
+
 
 const props=defineProps({
-    messageInfo:{default:{}}
+  messageInfo:{default:{}},
+	index:{default:0},
+});
+
+const messageType=computed(()=>{
+	if(props.messageInfo.answer)return "回答";
+	else return "评论";
+})
+
+const content=computed(()=>{
+	if(props.messageInfo.answer)return props.messageInfo.answer.content;
 })
 
 </script>
 
 
 <template>
-  <el-card style="border:0px;" class="no-border">
+  <el-card style="margin-top:5px">
 		<div style="justify-content: space-between;display: flex;align-items: center;">
 			<div>
-				<a class="comment-link" :href="`/user/profile/${commentRef.userId}`">
-					<span style=""> {{ commentRef.username }}</span>
-				</a>
+				<div style="font-size: 16px;color: #999;">
+					<a class="message-user-link" :href="`/user/profile/${props.messageInfo.userId}`">
+						<span style=""> {{ props.messageInfo.username }}</span>
+					</a>
+					<span>点赞了你的{{messageType}}</span>
+				</div>
+				<span style="font-size: 12px;color: #999;"> {{ "00::00" }}</span>
+				<MarkdownContent :id="`message-answer-content-${index}`" :content="content"></MarkdownContent>
+				<!-- {{ content }} -->
 				<br/>
-				{{ commentRef.content }}
-				<br/>
-				<span style="font-size: 12px;color: #999;"> {{ commentRef.createdAt }}</span>
-			</div>
-			<div style="display: flex;align-items: center;">
-				<span style="width: 60px;"><LikeButton api="/api/auth/user/comment" :params="{id:commentRef.id}" v-model:info="commentRef"></LikeButton></span>
-				<span @click="showCommentForm=!showCommentForm" style="width: 60px;"><CommentButton :id="props.id" :comments="commentRef.replyCount"></CommentButton></span>
-				<span><MoreOperatorButton deteteApi="/api/auth/comment/delete" :params="{id:props.commentId}" :showDelete="showDelete" :copyContent="commentRef.content"/></span>
 			</div>
 		</div>
 	</el-card>
@@ -30,6 +41,15 @@ const props=defineProps({
 
 
 <style scoped>
+
+.message-user-link{
+	color: #999;
+	text-decoration: none;
+}
+
+.message-user-link:hover{
+	color: #007BFF;
+}
 
 
 </style>

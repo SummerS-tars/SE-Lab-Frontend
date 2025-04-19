@@ -5,7 +5,6 @@ import request from '@/request/http.js';
 import { useRoute } from 'vue-router';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
-let FetchSet = new Set();
 const tableData = ref([]);
 
 const route = useRoute();
@@ -13,17 +12,13 @@ const userid =  route.params.id;
 
 const loadpage=async(page) => {
 	let res=await request.get(`/api/auth/notify/likes/page`,{params:{page_num:page,page_size:5,sort:'time-'}});
+	console.log(res);
 	if(res.records.length===0) {
 		infiniteScroll.value.finishload();
 		return;
 	}
 	res.records.forEach(item=>{
-		if(!FetchSet.has(item.id)){
-			FetchSet.add(item.id);
-			tableData.value.push({
-				item
-			});
-		}
+		tableData.value.push(item);
 	});
 };
 
@@ -53,7 +48,7 @@ onUpdated(() => {
 	</template>
 	<template v-else>
 		<li v-for="(item,index) in tableData" :key="index" style="list-style: none;" >
-			<LikeMessageCard :messageInfo="item"/>
+			<LikeMessageCard :messageInfo="item" :index="index"/>
 		</li>
 	</template>
 </template>
