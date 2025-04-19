@@ -15,6 +15,8 @@ const messageType=computed(()=>{
 
 const content=computed(()=>{
 	if(props.messageInfo.answer)return props.messageInfo.answer.content;
+	if(props.messageInfo.comment)return props.messageInfo.comment.content;
+	if(props.messageInfo.reply)return props.messageInfo.reply.content;
 })
 
 </script>
@@ -31,8 +33,8 @@ const content=computed(()=>{
 					<span>点赞了你的{{messageType}}</span>
 				</div>
 				<span style="font-size: 12px;color: #999;"> {{ "00::00" }}</span>
-				<MarkdownContent :id="`message-answer-content-${index}`" :content="content"></MarkdownContent>
-				<!-- {{ content }} -->
+				<MarkdownContent v-if="messageType==`回答`" :id="`message-answer-content-${index}`" :content="content"></MarkdownContent>
+				<div v-else>{{content}}</div>
 				<br/>
 			</div>
 		</div>
