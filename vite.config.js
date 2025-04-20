@@ -31,14 +31,19 @@ export default defineConfig({
     strictPort: false,
     /** 接口代理 */
     proxy: {
-        '/api/': {
-            // target: 'http://127.0.0.1:4523/m1/5923172-5610251-default',
-            // target: "frp.thesumst.top:7009",
-            target: "http://localhost:8080/",
-            ws: true,
-            /** 是否允许跨域 */
-            changeOrigin: true,  // 是否改变域
+        '/api': {
+            target: 'http://localhost:8080',
+            changeOrigin: true
+        },
+        '/notify': {
+            target: 'ws://localhost:8080',
+            changeOrigin: true,
+            ws: true
         }
     },
+  },
+  // 开发环境变量配置
+  define: {
+    'import.meta.env.VITE_WEBSOCKET_URL': JSON.stringify(process.env.VITE_WEBSOCKET_URL || 'ws://localhost:8080')
   }
 });

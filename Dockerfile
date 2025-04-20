@@ -2,6 +2,10 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 
+# 设置构建参数 - 移除VITE前缀
+ARG WS_URL=ws://backend:8080
+ENV VITE_WEBSOCKET_URL=${WS_URL}
+
 # 优先复制依赖文件以利用缓存
 COPY package*.json ./
 

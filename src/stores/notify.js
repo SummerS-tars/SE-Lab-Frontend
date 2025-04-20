@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
-import { useUserStore } from "./user";
+import { ref } from "vue";
+import webSocketConfig from '@/config/websocket';
 
 export const useNotifyStore = defineStore('Notify',()=>{
     let socket=null;
@@ -10,7 +10,8 @@ export const useNotifyStore = defineStore('Notify',()=>{
 
     const connect=(id)=>{
         if(isConnected)return;
-        socket=new WebSocket(`ws://localhost:8080/notify/count/${id}`);
+        // 使用统一配置的WebSocket URL
+        socket=new WebSocket(`${webSocketConfig.baseUrl}${webSocketConfig.notifyPath}/${id}`);
 
         socket.onopen = () => {
             console.log('websocket connected');
@@ -54,5 +55,5 @@ export const useNotifyStore = defineStore('Notify',()=>{
         messageCount.value=0;
     }
 
-    return { connect,send, messageCount ,disconnect, clear };
+    return { connect, send, messageCount, disconnect, clear };
 })
