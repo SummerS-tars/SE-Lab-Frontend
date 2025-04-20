@@ -5,7 +5,7 @@
 import { config } from '../config/websocket';
 
 /**
- * WebSocket 连接调试工具
+ * WebSocket 连接调试工具 - 仅用于开发环境
  * @param {Object} options 连接选项
  * @param {boolean} options.autoReconnect 是否自动重连
  * @param {number} options.reconnectInterval 重连间隔(毫秒)
@@ -69,7 +69,7 @@ export function debugWebSocketConnection(options = {}) {
   return enhancedWs;
 }
 
-// 在浏览器控制台中公开调试函数
-if (typeof window !== 'undefined') {
+// 仅在开发环境中公开调试函数
+if (typeof window !== 'undefined' && import.meta.env.DEV) {
   window.debugWebSocket = debugWebSocketConnection;
 }
