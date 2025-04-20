@@ -40,7 +40,7 @@ const hrefQuery=computed(()=>{
 <template>
   <el-card style="margin-top:5px">
 		<div style="justify-content: space-between;display: flex;align-items: center;">
-			<div>
+			<div v-if="props.messageInfo">
 				<div style="font-size: 16px;color: #999;">
 					<a class="message-user-link" :href="`/user/profile/${userId}`">
 						<span style=""> {{ username }}</span>
@@ -52,6 +52,9 @@ const hrefQuery=computed(()=>{
 					<div>{{props.messageInfo.questionTitle}}</div>
 				</router-link>
 				<div>{{content}}</div>
+			</div>
+			<div v-else>
+				<span>通知已失效</span>
 			</div>
 		</div>
 	</el-card>
