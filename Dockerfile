@@ -1,20 +1,34 @@
 # 构建阶段
-FROM node:18 AS build
+FROM node:18-alpine AS build
 WORKDIR /app
 
-# 复制依赖文件并安装
+# 复制包管理文件
 COPY package*.json ./
 RUN npm install
 
-# 复制所有源代码并构建
+# 复制源代码
 COPY . .
+
+# 明确设置生产环境标志
+ENV NODE_ENV=production
+ENV VITE_WEBSOCKET_URL=
+
+# 构建应用
 RUN npm run build
 
-# 运行阶段
+# 生产阶段
 FROM nginx:alpine
-# 复制构建产物到 Nginx 目录
-COPY --from=build /app/dist /usr/share/nginx/html
-# 复制 Nginx 配置
+WORKDIR /usr/share/nginx/html
+
+# 复制构建文件
+COPY --from=build /app/dist .
+# 复制自定义nginx配置
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget -q -O /dev/null http://localhost/health || exit 1
+
+# 启动nginx
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
