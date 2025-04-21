@@ -31,7 +31,6 @@ request.interceptors.response.use(
         return response.data.data;
     },
     error => {
-        if(error.response.data.code==="501")useUserStore().logout();
         ElMessage.error(error.response.data.message);
         return Promise.reject(error);
     },
