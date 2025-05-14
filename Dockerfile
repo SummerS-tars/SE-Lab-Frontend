@@ -1,5 +1,5 @@
 # 构建阶段
-FROM node:18-alpine AS build
+FROM 257b67e62b5944fc8bacf101088ebaee.mirror.swr.myhuaweicloud.com/library/node:18-alpine AS build
 WORKDIR /app
 
 # 复制包管理文件
@@ -17,7 +17,7 @@ ENV VITE_WEBSOCKET_URL=
 RUN npm run build
 
 # 生产阶段
-FROM nginx:alpine
+FROM 257b67e62b5944fc8bacf101088ebaee.mirror.swr.myhuaweicloud.com/library/nginx:alpine
 WORKDIR /usr/share/nginx/html
 
 # 复制构建文件
