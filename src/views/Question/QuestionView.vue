@@ -8,7 +8,7 @@ import FollowButton from '../User/FollowButton.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import AnswerEditBoxForm from './AnswerEditBoxForm.vue';
 import { useUserStore } from '@/stores/user';
-import { ElMessage } from 'element-plus';
+import { ElMessage,ElMessageBox } from 'element-plus';
 import { useQuestionStore } from '@/stores/question';
 import Copyright from '@/components/Copyright.vue';
 import router from '@/router';
@@ -64,6 +64,63 @@ const clearRouteQuery = () => {
   router.push(`/question/${questionid}`);
 }
 
+const inviteAnswer = async () => {
+  if (!useUserStore().token()) {
+    ElMessage.error('请先登录后再进行操作');
+    return;
+  }
+  try{
+    const inviteType = await ElMessageBox.confirm(
+      '请选择邀请方式',
+      '邀请回答',
+      {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '按用户名',
+        cancelButtonText: '按用户ID',
+      }
+    );
+    try{
+      const username = await ElMessageBox.prompt(
+        '请输入要邀请的用户名',
+        '邀请回答',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S+/,
+          inputErrorMessage: '用户名不能为空'
+        }
+      );
+      const response = await request.post(
+        '/api/auth/invite/byUsername', 
+        {
+          username: username,
+          questionId: questionid
+        }
+      );
+      ElMessage.success('邀请成功');
+    }
+    catch (usernameError) {}
+  }
+  catch(inviteTypeError){
+    const userId = await ElMessageBox.prompt(
+      '请输入要邀请的用户ID',
+      '邀请回答',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /\S+/,
+        inputErrorMessage: '用户ID不能为空'
+      }
+    );
+    const response = await request.post('/api/auth/invite/byId', { id: userId, questionId: questionid });
+    ElMessage.success('邀请成功');
+  } 
+
+  
+};
+
+
+
 </script>
 
 
@@ -96,6 +153,7 @@ const clearRouteQuery = () => {
               <MarkdownContent :id="`question-content`" :content="questionInfo.content"></MarkdownContent>
               <div style="margin: 20px 0px 0px 20px">
                 <el-button type="primary" plain @click="writeAnswer">写回答</el-button>
+                <el-button type="success" plain @click="inviteAnswer">邀请回答</el-button>
 					      <AnswerEditBoxForm ref="answerEditBox" :id="questionid"></AnswerEditBoxForm>
                 <span style="font-size: 14px;color: #999;margin-left: 8%;"> 回答数 {{ questionInfo.answerCount }}</span>
               </div>

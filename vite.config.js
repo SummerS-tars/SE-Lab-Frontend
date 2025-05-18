@@ -27,7 +27,8 @@ export default defineConfig(({ mode }) => {
       strictPort: false,
       proxy: {
           '/api': {
-              target: 'http://localhost:8080',
+              // target: 'http://localhost:8080',
+              target: 'http://127.0.0.1:4523/m1/5923172-5610251-default',
               changeOrigin: true
           },
           '/notify': {
