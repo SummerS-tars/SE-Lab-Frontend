@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
+import { computed, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import request from '@/request/http.js';
 import AnswerCard from './AnswerCard.vue';
 import { useUserStore } from '@/stores/user';
@@ -10,10 +10,11 @@ const props=defineProps({
 	id:{default:''},
 });
 
+const nomore=ref(false);
 const loadpage=async(page) => {
 	let res=await request.get(`/api/auth/answers/byQuestionId/${props.id}`,{params:{page_num:page,page_size:10,sort:'likes-'}});
 	if(res.records.length===0) {
-		infiniteScroll.value.finishload();
+		nomore.value=true;
 		return;
 	}
 	res.records.forEach(item=>{
@@ -41,12 +42,12 @@ const tableData = ref([]);
 let FetchSet = new Set();
 
 onMounted(async() => {
-  if(useUserStore().token()) {
+  	if(useUserStore().token()) {
 		infiniteScroll.value.setCallback(async() => {
 			await loadpage(infiniteScroll.value.getPage());
 		});
 		infiniteScroll.value.initLoad();
-  }
+  	}
 	else{
 		let res=await request.get(`/api/public/answers/byQuestionId/${props.id}`);
 		res.forEach(item=>{
@@ -86,15 +87,10 @@ onUpdated(() => {
 			</li>
 		</ul>
 	</template>
-	<template v-if="useUserStore().token()">
-		<template v-if="onloading">
-			<el-card style="margin:10px;border:0px">
-				<el-skeleton :rows="5"/>
-			</el-card>
-		</template>
-		<template v-else>
+	<template v-if="useUserStore().isLogin()">
+		<el-card v-if="!nomore" style="margin:10px;border:0px">
 			<el-skeleton :rows="5"/>
-		</template>
+		</el-card>
 	</template>
 	<template v-else>
 		<div style="text-align: center;">

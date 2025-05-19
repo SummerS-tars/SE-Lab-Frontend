@@ -27,11 +27,13 @@ export default defineConfig(({ mode }) => {
       strictPort: false,
       proxy: {
           '/api': {
-              target: 'http://localhost:8080',
+              target: 'http://120.46.150.163:18080',
+              // target: 'http://localhost:8080',
               changeOrigin: true
           },
           '/notify': {
-              target: 'ws://localhost:8080',
+              target: 'ws://120.46.150.163:18080',
+              // target: 'ws://localhost:8080',
               changeOrigin: true,
               ws: true
           }
@@ -39,7 +41,7 @@ export default defineConfig(({ mode }) => {
     },
     // 环境变量配置 - 只在开发模式下设置WebSocket URL
     define: isDev 
-      ? {'import.meta.env.VITE_WEBSOCKET_URL': JSON.stringify('ws://localhost:8080')}
+      ? {'import.meta.env.VITE_WEBSOCKET_URL': JSON.stringify('ws://120.46.150.163:18080')}
       : {'import.meta.env.VITE_WEBSOCKET_URL': JSON.stringify('')}
   };
 });

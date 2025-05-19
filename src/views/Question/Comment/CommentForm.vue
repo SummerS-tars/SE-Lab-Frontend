@@ -44,20 +44,57 @@ const emoji = ref(null);
 
 
 <template>
-    <div style="display: flex; align-items: center;margin-top: 10px;">
-		<div style="display: flex; flex-direction: column;width: 100%;margin-right: 20px;">
-			<el-input v-model="commentContent" placeholder="理性发言，友善互动" type="textarea" autosize></el-input>
-			<EmojiPicker @select="appendText"></EmojiPicker>
-		</div>
-		<el-button type="primary" @click="createComment">发布评论</el-button>
+  <div class="comment-box">
+    <el-input
+      v-model="commentContent"
+      type="textarea"
+      :autosize="{ minRows: 2, maxRows: 4 }"
+      placeholder="理性发言，友善互动..."
+      class="comment-textarea"
+    />
+    <div class="comment-footer">
+      <EmojiPicker @select="appendText" class="emoji-picker-trigger" />
+      <el-button type="primary" @click="createComment" class="submit-button">发布评论</el-button>
     </div>
+  </div>
 </template>
 
 
 <style scoped>
-
-::v-deep(.emoji-picker) {
-  z-index: 9999 !important;
+.comment-box {
+  padding: 16px;
 }
 
+.comment-textarea ::v-deep(.el-textarea__inner) {
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  font-size: 14px;
+  padding: 12px 16px;
+  resize: none;
+}
+
+.comment-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.emoji-picker-trigger {
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.emoji-picker-trigger:hover {
+  color: #333;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
 </style>

@@ -2,7 +2,6 @@
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import request from '@/request/http.js';
 import { useRoute } from 'vue-router';
-import FollowerCard from './FollowerCard.vue';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
 
 let FetchSet = new Set();
@@ -20,10 +19,7 @@ const loadpage=async(page) => {
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
-			tableData.value.push({
-				username:item.username,
-				id:item.id,
-			});
+			tableData.value.push(item);
 		}
 	});
 };
@@ -54,7 +50,11 @@ onUpdated(() => {
 	</template>
 	<template v-else>
 		<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
-			<FollowerCard :username="item.username" :id="item.id"/>
+			<el-card style="margin:10px;border:0px">
+				<a class="link" :href="`/user/profile/${item.id}`">
+					<span style="font-weight: bold;">{{ item.username }}</span>
+				</a>
+			</el-card>
 		</li>
 	</template>
 </template>
@@ -62,5 +62,15 @@ onUpdated(() => {
 
 <style scoped>
 
+.link{
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+	font-size: large;
+}
+
+.link:hover{
+	color: #007BFF;
+}
 
 </style>

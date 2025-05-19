@@ -6,7 +6,7 @@ import { computed, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import CommentCard from './CommentCard.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
-import SubCommentCard from './SubCommentCard.vue';
+import ReplyCard from './ReplyCard.vue';
 
 const tableData = ref([]);
 let FetchSet = new Set();
@@ -118,7 +118,7 @@ const load = async() => {
 			<template #footer>
 				<ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
 					<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
-						<SubCommentCard :commentId="item.id"/>
+						<ReplyCard :commentId="item.id"/>
 					</li>
 				</ul>
 			</template>

@@ -50,8 +50,7 @@ const showComments=()=>{
 	<div style="display: flex; flex-direction: column;">
 		<ul>
 			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
-				<CommentCard :commentId="item.id"></CommentCard>
-				<el-divider v-if="index<tableData.length-1"></el-divider>
+				<CommentCard :commentId="item.id"/>
 			</li>
 		</ul>
 		<el-button @click="showComments" type="primary" style="width: 50%;margin: 10px auto;">查看全部评论</el-button>

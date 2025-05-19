@@ -1,11 +1,11 @@
 <script setup>
 import request from '@/request/http';
 import { computed, onMounted, ref } from 'vue';
-import SubCommentCard from './SubCommentCard.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useCommentStore } from '@/stores/comment';
+import ReplyCard from './ReplyCard.vue';
 
 const tableData = ref([]);
 let FetchSet = new Set();
@@ -55,7 +55,7 @@ const showReplys=()=>{
 	<div>
 		<ul>
 			<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
-				<SubCommentCard :commentId="item.id"></SubCommentCard>
+				<ReplyCard :commentId="item.id"/>
 			</li>
 		</ul>
 		<el-button @click="showReplys" style="margin: 0 auto;">查看全部回复</el-button>

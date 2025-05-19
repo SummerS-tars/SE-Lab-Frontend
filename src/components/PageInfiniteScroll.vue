@@ -13,7 +13,7 @@ const setPage = (p) => {page = p};
 const getPage = () => {return page};
 const addPage = () => {page++};
 
-const getNomore = () => {return nomore};
+const isNomore = () => {return nomore};
 
 const initLoad = async() => {
     setPage(1);
@@ -38,7 +38,7 @@ const onUpdated = () => {
     });
 };
 
-defineExpose({setCallback, setPage, getPage, addPage,finishload,getNomore,onBeforeUpdate,onUpdated,initLoad});
+defineExpose({setCallback, setPage, getPage, addPage,finishload,isNomore,onBeforeUpdate,onUpdated,initLoad});
 
 const handleScroll = async() => {
     if(loading) {

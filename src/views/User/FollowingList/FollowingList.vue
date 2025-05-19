@@ -2,8 +2,9 @@
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import request from '@/request/http.js';
 import { useRoute } from 'vue-router';
-import FollowingCard from './FollowingCard.vue';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
+import FollowButton from '../FollowButton.vue';
+import { useUserStore } from '@/stores/user';
 
 let FetchSet = new Set();
 const tableData = ref([]);
@@ -20,10 +21,7 @@ const loadpage=async(page) => {
 	res.records.forEach(item=>{
 		if(!FetchSet.has(item.id)){
 			FetchSet.add(item.id);
-			tableData.value.push({
-				username:item.username,
-				id:item.id,
-			});
+			tableData.value.push(item);
 		}
 	});
 };
@@ -49,12 +47,25 @@ onUpdated(() => {
 
 <template>
 	<PageInfiniteScroll ref="infiniteScroll"/>
-  <template v-if="tableData.length==0">
+  	<template v-if="tableData.length==0">
 		<el-empty></el-empty>
 	</template>
 	<template v-else>
 		<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;" >
-			<FollowingCard :username="item.username" :id="item.id"/>
+			<el-card style="margin:10px;border:0px;">
+				<div class="FollowingCard">
+					<div>
+						<a class="link" :href="`/user/profile/${item.id}`">
+							<span style="font-weight: bold;">{{ item.username }}</span>
+						</a>
+					</div>
+					<div>
+						<template v-if="useUserStore().isLogin()&&useUserStore().id==userid">
+							<FollowButton :authorId="item.id"/>
+						</template>
+					</div>
+				</div>
+			</el-card>
 		</li>
 	</template>
 
@@ -63,5 +74,22 @@ onUpdated(() => {
 
 <style scoped>
 
+.FollowingCard{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.link{
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+	font-size: large;
+}
+
+.link:hover{
+	color: #007BFF;
+}
 
 </style>
