@@ -8,11 +8,10 @@ import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 const router = useRouter();
 const route = useRoute();
 
-// 路由名称到 tab index 映射
 const nameToIndexMap = {
   LikeMessageList: '0',
   CommentMessageList: '1',
-  InviteMessageList: '2', // 新增
+  InviteMessageList: '2',
 };
 
 const activeIndex = ref(computed(() => {
@@ -29,16 +28,15 @@ const handleSelect = (key) => {
   }
 };
 
-// 消息数量
 const likeMessageCount = ref(0);
 const commentMessageCount = ref(0);
-const inviteMessageCount = ref(0); // 新增邀请消息数量
+const inviteMessageCount = ref(0); 
 
 onMounted(async () => {
   const [likeRes, commentRes, inviteRes] = await Promise.all([
     request.get(`/api/auth/notify/likes/count`),
     request.get(`/api/auth/notify/comments/count`),
-    request.get(`/api/auth/notify/invitations/count`) // 新增接口
+    request.get(`/api/auth/notify/invitations/count`) 
   ]);
 
   likeMessageCount.value = likeRes.count;
@@ -52,7 +50,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
   } else if (to.name === 'CommentMessageList') {
     await request.post(`/api/auth/notify/comments/check`);
   } else if (to.name === 'InviteMessageList') {
-    await request.post(`/api/auth/notify/invitations/check`); // 新增已读标记
+    await request.post(`/api/auth/notify/invitations/check`);
   }
 
   next();
