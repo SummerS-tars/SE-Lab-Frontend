@@ -84,6 +84,7 @@ const inviteAnswer = async () => {
         '请输入要邀请的用户名',
         '邀请回答',
         {
+          distinguishCancelAndClose: true,
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /\S+/,
@@ -102,19 +103,21 @@ const inviteAnswer = async () => {
     catch (usernameError) {}
   }
   catch(inviteTypeError){
-    const userId = await ElMessageBox.prompt(
-      '请输入要邀请的用户ID',
-      '邀请回答',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /\S+/,
-        inputErrorMessage: '用户ID不能为空'
-      }
-    );
-    const response = await request.post('/api/auth/invite/byId', { id: userId, questionId: questionid });
-    ElMessage.success('邀请成功');
-  } 
+    if(inviteTypeError === 'cancel'){
+      const userId = await ElMessageBox.prompt(
+        '请输入要邀请的用户ID',
+        '邀请回答',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S+/,
+          inputErrorMessage: '用户ID不能为空'
+        }
+      );
+      const response = await request.post('/api/auth/invite/byId', { id: userId, questionId: questionid });
+      ElMessage.success('邀请成功');
+    } 
+  }
 
   
 };
