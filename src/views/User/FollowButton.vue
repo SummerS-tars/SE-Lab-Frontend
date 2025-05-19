@@ -13,7 +13,7 @@ const props=defineProps({
 const followed=ref(false);
 
 onMounted(() => {
-	if(useUserStore().token()&&props.authorId) {
+	if(useUserStore().isLogin()&&props.authorId) {
 		request.get('/api/auth/user/followed',{params:{ id:props.authorId}}).then(res=>{
 			followed.value=res.followed;
 		});
@@ -21,7 +21,7 @@ onMounted(() => {
 });
 
 watch(()=>props.authorId,(newVal) => {
-	if(useUserStore().token()&&newVal) {
+	if(useUserStore().isLogin()&&newVal) {
 		request.get('/api/auth/user/followed',{params:{ id:newVal}}).then(res=>{
 			followed.value=res.followed;
 		});
@@ -29,7 +29,7 @@ watch(()=>props.authorId,(newVal) => {
 });
 
 const followUser=async(userid) => {
-	if(!useUserStore().token()) {
+	if(!useUserStore().isLogin()) {
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}
@@ -45,7 +45,7 @@ const followUser=async(userid) => {
 };
 
 const unfollowUser=async(userid) => {
-	if(!useUserStore().token()) {
+	if(!useUserStore().isLogin()) {
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}
@@ -64,7 +64,7 @@ const unfollowUser=async(userid) => {
 
 
 <template>
-	<template v-if="useUserStore().token() && useUserStore().id===props.authorId">
+	<template v-if="useUserStore().isLogin() && useUserStore().id===props.authorId">
 		
 	</template>
 	<template v-else-if=followed>

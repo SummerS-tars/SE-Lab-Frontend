@@ -22,7 +22,7 @@ const loadpage=async(page) => {
 			const commmentRef=ref(item);
 			commmentRef.value.id=item.commentId;
 			commmentRef.value.answerId=props.answerId;
-			if(useUserStore().token()) {
+			if(useUserStore().isLogin()) {
 				request.get(`/api/auth/user/comment/like`,{params:{commentId:item.commentId}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});

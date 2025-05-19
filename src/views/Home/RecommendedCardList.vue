@@ -2,7 +2,7 @@
 import { onBeforeUpdate, onMounted, onUpdated, ref } from 'vue';
 import request from '@/request/http.js';
 import PageInfiniteScroll from '@/components/PageInfiniteScroll.vue';
-import QuestionCard from '../User/QuestionList/QuestionCard.vue';
+import QuestionCard from './QuestionCard.vue';
 
 let FetchSet = new Set();
 const tableData = ref([]);

@@ -34,7 +34,7 @@ const createReplyParams = computed(() => ({
 }))
 
 const showDelete = computed(() => {
-  if (!useUserStore().token()) return false
+  if (!useUserStore().isLogin()) return false
   return commentRef.value.userId === useUserStore().id
 })
 

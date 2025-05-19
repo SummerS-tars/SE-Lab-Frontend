@@ -20,7 +20,7 @@ const loadpage=async(page) => {
 	res.records.forEach(item=>{
 		const answerRef=ref(item);
 		answerRef.value.liked=false;
-		if(useUserStore().token()) {
+		if(useUserStore().isLogin()) {
 			request.get(`/api/auth/user/answer/like`,{params:{id:item.id}}).then(res=>{
 				answerRef.value.liked=res.liked;
 			});
@@ -42,7 +42,7 @@ const tableData = ref([]);
 let FetchSet = new Set();
 
 onMounted(async() => {
-  	if(useUserStore().token()) {
+  	if(useUserStore().isLogin()) {
 		infiniteScroll.value.setCallback(async() => {
 			await loadpage(infiniteScroll.value.getPage());
 		});

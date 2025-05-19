@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { useNotifyStore } from './notify';
+import { ElMessage } from 'element-plus';
 
 const jwtparse = (token) => {
     const parts =token.split('.');
@@ -17,7 +18,17 @@ const jwtparse = (token) => {
 
 export const useUserStore = defineStore('user',() => {
     const token = () => localStorage.getItem('user-tn');
-    const isLogin = () => {return !!token();}
+    const isLogin = () => {
+        if(!!token()){
+            if(isTimeout()){
+                ElMessage.error('登录超时，请重新登录');
+                delToken();
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
     const username = computed(() => {
         return jwtparse(token()).sub;
     });
@@ -27,6 +38,9 @@ export const useUserStore = defineStore('user',() => {
     const isadmin = computed(() => {
         return jwtparse(token()).roles[0].authority==='ROLE_ADMIN';
     });
+    const isTimeout = () => {
+        return jwtparse(token()).exp<Date.now()/1000;
+    }
     const login = (user_tn) => {
         localStorage.setItem('user-tn',user_tn);
         useNotifyStore().connect(id.value);
@@ -40,6 +54,7 @@ export const useUserStore = defineStore('user',() => {
     };
 
     if(isLogin()){
+        if(isTimeout())delToken();
         useNotifyStore().connect(id.value);
     }
 

@@ -5,6 +5,7 @@ import { nextTick, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue
 const props = defineProps({
 	id:{default:''},
 	content:{default:''},
+  maxHeight:{default:undefined}
 });
 
 watch(()=>props.content,() => {
@@ -26,6 +27,9 @@ onBeforeMount(async() => {
 
   cherryInstance.value.wrapperDom.style.boxShadow = 'none';
   cherryInstance.value.previewer.getDom().style.border = 'none';
+  if(props.maxHeight){
+    cherryInstance.value.previewer.getDom().style.maxHeight = props.maxHeight;
+  }
 });
 
 </script>

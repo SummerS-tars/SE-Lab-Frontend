@@ -22,7 +22,7 @@ const questionInfo = useQuestionStore().getQuestion(questionid);
 const answerEditBox = ref();
 
 const writeAnswer = () =>{
-  if(!useUserStore().token()) {
+  if(!useUserStore().isLogin()) {
     ElMessage.error('请先登录后再进行操作');
     return;
   }
@@ -65,7 +65,7 @@ const clearRouteQuery = () => {
 }
 
 const inviteAnswer = async () => {
-  if (!useUserStore().token()) {
+  if (!useUserStore().isLogin()) {
     ElMessage.error('请先登录后再进行操作');
     return;
   }

@@ -62,7 +62,7 @@ const handleSelect = (key, keyPath) => {
 									<span class="followlink_item">{{ user.following }}</span>
 								</router-link>
 							</div>
-							<template v-if="useUserStore().token()&&useUserStore().id==userid">
+							<template v-if="useUserStore().isLogin()&&useUserStore().id==userid">
 								<!-- <el-button type="primary" plain>编辑个人资料</el-button> -->
 							</template>
 							<template v-else>

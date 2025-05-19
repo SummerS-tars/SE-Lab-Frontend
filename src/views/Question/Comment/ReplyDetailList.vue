@@ -31,7 +31,7 @@ const loadpage=async(page) => {
 			commmentRef.value.answerId=answerId.value;
 			commmentRef.value.fatherCommentId=props.commentId;
 			commmentRef.value.id=item.replyId;
-			if(useUserStore().token()) {
+			if(useUserStore().isLogin()) {
 				request.get(`/api/auth/user/reply/like`,{params:{replyId:item.replyId}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});

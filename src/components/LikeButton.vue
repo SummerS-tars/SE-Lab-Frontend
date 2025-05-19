@@ -19,7 +19,7 @@ const liked=computed(() => props.info?.liked ?? false);
 const likes=computed(() => props.info?.likes ?? 0);
 
 const onClick=throttle(() => {
-	if(!useUserStore().token()) {
+	if(!useUserStore().isLogin()) {
 		return;
 	}
 	if(liked.value) {

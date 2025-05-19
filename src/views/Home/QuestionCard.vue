@@ -1,11 +1,11 @@
 <script setup>
-import QuestionEditBoxForm from './QuestionEditBoxForm.vue';
 import MarkdownContent from '@/components/MarkdownContent.vue';
 import request from '@/request/http';
 import { useUserStore } from '@/stores/user';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import QuestionEditBoxForm from '../User/QuestionList/QuestionEditBoxForm.vue';
 
 const route = useRoute();
 const userid =  route.params.id;
@@ -59,7 +59,7 @@ const EditBox = ref();
 			<div class="card-footer" style="display: flex;justify-content: space-between">
 				<span style="font-size: 16px;font-weight: bold;"> 回答数： {{ questionInfo.answerCount }}</span>
 				<div>
-					<template v-if="useUserStore().token()&&userid==useUserStore().id">
+					<template v-if="useUserStore().isLogin()&&userid==useUserStore().id">
 						<el-button type="primary" plain @click="EditBox.open()">编辑</el-button>
 						<el-button type="danger" plain @click="deleteQuestion">删除</el-button>
 					</template>

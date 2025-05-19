@@ -13,7 +13,7 @@ const props = defineProps({
 
 const commentContent=ref('');
 const createComment=async() =>{
-	if(!useUserStore().token()){
+	if(!useUserStore().isLogin()){
 		ElMessage.error('请先登录后再进行操作');
 		return;
 	}

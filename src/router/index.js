@@ -34,7 +34,7 @@ const router = createRouter({
       children:[
         {path:'login',         name:'Login',  component:LoginForm,
           beforeEnter: (to,from,next) => {
-            if(useUserStore().token()) {
+            if(useUserStore().isLogin()) {
               next(from);
             }else{
               next();

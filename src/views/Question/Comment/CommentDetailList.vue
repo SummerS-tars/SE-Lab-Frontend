@@ -7,7 +7,6 @@ import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import CommentCard from './CommentCard.vue';
 import { useAnswerStore } from '@/stores/answer';
 import MarkdownContent from '@/components/MarkdownContent.vue';
-import CommentCardv2 from './CommentCard.vue';
 
 const tableData = ref([]);
 let FetchSet = new Set();
@@ -31,7 +30,7 @@ const loadpage=async(page) => {
 			const commmentRef=ref(item);
 			commmentRef.value.id=item.commentId;
 			commmentRef.value.answerId=props.answerId;
-			if(useUserStore().token()) {
+			if(useUserStore().isLogin()) {
 				request.get(`/api/auth/user/comment/like`,{params:{commentId:item.commentId}}).then(res=>{
 					commmentRef.value.liked=res.liked;
 				});
@@ -110,12 +109,12 @@ const load = async() => {
 					<FollowButton :authorId="answerInfo"></FollowButton>
 				</div>
 			</div>
-			<MarkdownContent :id="`CommentDetail-answer-content${props.answerId}`" :content="answerInfo?.content"></MarkdownContent>
+			<MarkdownContent :id="`CommentDetail-answer-content${props.answerId}`" :content="answerInfo?.content" maxHeight="200px"></MarkdownContent>
 
 			<template #footer>
 				<ul v-infinite-scroll="load" infinite-scroll-distance="200" class="infinite-list" style="overflow: auto">
 					<li v-for="(item,index) in tableData" :key="item.id" style="list-style: none;overflow: auto;">
-						<CommentCardv2 :commentId="item.id"/>
+						<CommentCard :commentId="item.id"/>
 					</li>
 				</ul>
 			</template>
