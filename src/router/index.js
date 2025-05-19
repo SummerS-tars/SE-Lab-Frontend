@@ -18,6 +18,7 @@ import { useUserStore } from '@/stores/user';
 import { ElMessage } from 'element-plus';
 import LikeMessageList from '@/views/Notifications/LikeMessageList/LikeMessageList.vue';
 import CommentMessageList from '@/views/Notifications/CommentMessageList/CommentMessageList.vue';
+import InviteMessageList from '@/views/Notifications/InviteMessageList/InviteMessageList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -127,6 +128,7 @@ const router = createRouter({
       children:[
         {path:'',         name:'LikeMessageList',  component:LikeMessageList},
         {path:'comment',   name:'CommentMessageList',    component:CommentMessageList},
+        {path: 'invite',    name: 'InviteMessageList',  component: InviteMessageList}
       ],
       beforeEnter: async(to,from,next) => {
         if(to.name=='LikeMessageList'){
