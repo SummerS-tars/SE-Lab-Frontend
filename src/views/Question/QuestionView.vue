@@ -118,7 +118,7 @@ const inviteAnswer = async () => {
           inputErrorMessage: '用户ID不能为空'
         }
       );
-      const response = await request.post('/api/auth/invite/byId', { id: userId.value, questionId: questionid });
+      const response = await request.post('/api/auth/invite/byId', { userId: userId.value, questionId: questionid });
       ElMessage.success('邀请成功');
     } 
   }
