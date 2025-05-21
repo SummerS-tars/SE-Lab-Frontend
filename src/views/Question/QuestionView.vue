@@ -91,10 +91,14 @@ const inviteAnswer = async () => {
           inputErrorMessage: '用户名不能为空'
         }
       );
+      console.log({
+          username: username.value,
+          questionId: questionid
+        });
       const response = await request.post(
         '/api/auth/invite/byUsername', 
         {
-          username: username,
+          username: username.value,
           questionId: questionid
         }
       );
@@ -114,15 +118,13 @@ const inviteAnswer = async () => {
           inputErrorMessage: '用户ID不能为空'
         }
       );
-      const response = await request.post('/api/auth/invite/byId', { id: userId, questionId: questionid });
+      const response = await request.post('/api/auth/invite/byId', { id: userId.value, questionId: questionid });
       ElMessage.success('邀请成功');
     } 
   }
 
   
 };
-
-
 
 </script>
 
