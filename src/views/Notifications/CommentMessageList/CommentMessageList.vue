@@ -97,7 +97,7 @@ const hrefQuery = (item) => {
 				<div class="message-body">
 					<MarkdownContent
 					v-if="messageType(item) === '回答'"
-					:id="`message-answer-content-${index}`"
+					:id="`comment-message-answer-content-${index}`"
 					:content="content(item)"
 					class="markdown-content"
 					/>

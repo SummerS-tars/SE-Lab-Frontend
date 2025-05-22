@@ -24,9 +24,6 @@ const loadpage=async(page) => {
 	res.records.forEach(async(item)=>{
 		if(!FetchSet.has(item.id)){
 
-			let res=await request.get(`/api/public/question/byId/${item.questionId}`);
-			item.title=res.title;
-
 			item.liked=false;
 			if(useUserStore().isLogin()) {
 				let res=await request.get(`/api/auth/user/answer/like`,{params:{id:item.id}});
@@ -81,12 +78,12 @@ const deleteAnswer=async(answerInfo) => {
 				<el-card style="margin:10px;border:0px">
 					<template #header>
 						<a class="link" :href="`/question/${item.questionId}`">
-							<span style="font-weight: bold;">{{ item.title }}</span>
+							<span style="font-weight: bold;">{{ item.questionTitle }}</span>
 						</a>
 						<br/>
 						<span style="font-size: 14px;color: #999;">回答时间: {{  item.createdAt }}</span>
 					</template>
-					<MarkdownContent :id="item.id+` answer-content`" :content="item.content"/>
+					<MarkdownContent :id="`answer-content${item.id}`" :content="item.content"/>
 					<template #footer>
 						<div class="card-footer" style="display: flex;justify-content: space-between;">
 							<div>

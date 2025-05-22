@@ -76,7 +76,7 @@ const deleteQuestion=async(questionInfo) => {
 						<br/>
 						<span style="font-size: 14px;color: #999;">创建时间: {{ item.createdAt }}</span>
 					</template>
-					<MarkdownContent :id="` problem-content`+id" :content="item.content"/>
+					<MarkdownContent :id="`problem-content${item.id}`" :content="item.content"/>
 					<template #footer>
 						<div class="card-footer" style="display: flex;justify-content: space-between">
 							<span style="font-size: 16px;font-weight: bold;"> 回答数： {{ item.answerCount }}</span>
