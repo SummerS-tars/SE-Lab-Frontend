@@ -114,8 +114,18 @@ const inviteAnswer = async () => {
         {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /\S+/,
-          inputErrorMessage: '用户ID不能为空'
+          inputPattern: /^\-?\d+$/,
+          inputValidator: (value) => {
+            const num = Number(value);
+            if (!Number.isInteger(num)) {
+              return '用户ID不合法';
+            }
+            if (num < 0 || num > 2147483647) {
+              return '用户ID不合法';
+            }
+            return true;
+          },
+          inputErrorMessage: '用户ID不合法'
         }
       );
       const response = await request.post('/api/auth/invite/byId', { userId: userId.value, questionId: questionid });
