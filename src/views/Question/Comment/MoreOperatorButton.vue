@@ -15,9 +15,21 @@ const props=defineProps({
 });
 
 const onClickCopy = () => {
-	navigator.clipboard.writeText(props.copyContent).then(() => {
+	// navigator.clipboard.writeText(props.copyContent).then(() => {
+	// 	ElMessage.success('复制成功');
+	// })
+	const textArea = document.createElement("textarea");
+	textArea.value = props.copyContent;
+	document.body.appendChild(textArea);
+	textArea.select();
+	try {
+		const successful = document.execCommand('copy');
+		const msg = successful ? '成功' : '不成功';
 		ElMessage.success('复制成功');
-	})
+	} catch (err) {
+		ElMessage.error('复制失败');
+	}
+	document.body.removeChild(textArea);
 };
 
 const onClickDelete = () => {
