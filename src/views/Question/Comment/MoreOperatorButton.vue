@@ -8,7 +8,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { computed, onMounted, ref, watch } from 'vue';
 
 const props=defineProps({
-	deteteApi:{default:''},
+	deleteApi:{default:''},
 	params:{default:''},
 	showDelete:{default:true},
 	copyContent:{default:''},
@@ -36,7 +36,8 @@ const onClickDelete = () => {
 	if(!props.showDelete)return;
 
 	ElMessageBox.confirm('确认删除吗?').then(async() => {
-		await request.post(props.deteteApi,props.params);
+		// console.log(props.deleteApi)
+		await request.post(props.deleteApi,props.params);
 		ElMessage.success('删除成功');
 		window.location.reload();
 	});
