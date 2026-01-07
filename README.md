@@ -70,6 +70,7 @@
 
 1. **克隆项目**
 ```sh
+# 请替换为实际的仓库地址
 git clone https://github.com/SummerS-tars/SE-Lab-Frontend.git
 cd SE-Lab-Frontend
 ```
@@ -187,6 +188,10 @@ npm run test:unit -- --watch
 - `/api/public/*` - 公开接口
 - `/notify/*` - WebSocket 通知服务
 
+**注意**：
+- 在 Docker Compose 部署时，`backend:8080` 是 Docker 服务名称，会自动解析到后端容器
+- 在本地开发时，需要根据实际后端服务地址配置 Vite 代理或直接修改 API 基础 URL
+
 详细的 API 文档请参考后端项目说明。
 
 ### 环境变量配置
@@ -194,9 +199,12 @@ npm run test:unit -- --watch
 可以创建 `.env.local` 文件来配置本地环境变量：
 
 ```env
+# 示例配置，请根据实际后端服务地址修改
 VITE_API_BASE_URL=http://localhost:8080
 VITE_WEBSOCKET_URL=ws://localhost:8080/notify
 ```
+
+**注意**：以上端口和地址仅为示例，请根据实际后端服务配置进行调整。
 
 ## 部署说明
 
